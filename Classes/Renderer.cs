@@ -8,6 +8,8 @@ using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
 using Point = Microsoft.Xna.Framework.Point;
 using SamplerState = Microsoft.Xna.Framework.Graphics.SamplerState;
 using System.Diagnostics;
+using SharpDX.Direct3D9;
+using System.Reflection.Metadata;
 
 namespace HandsOnDeck.Classes { 
 
@@ -18,6 +20,8 @@ public sealed class Renderer
 
     private static Renderer renderer;
     private static object syncRoot = new object();
+    
+    Texture2D _boatTexture;
     private Renderer() { }
 
     internal void Initialize(GraphicsDeviceManager _graphics)
@@ -47,13 +51,16 @@ public sealed class Renderer
     public void LoadContent(ContentManager content, SpriteBatch _spriteBatch)
     {
         this._spriteBatch = _spriteBatch;
-    }
+            //temporary sprite initialization
+            _boatTexture = content.Load<Texture2D>("boatsheet");
+        }
         public void Update(GameTime gameTime)
         { }
 
     public void Draw()
     {
         Renderer.GetInstance._spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
+        _spriteBatch.Draw(_boatTexture, new Vector2(0, 0), Color.White);
         GetInstance._spriteBatch.End();
     }
 }
