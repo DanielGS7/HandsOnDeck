@@ -53,14 +53,19 @@ namespace HandsOnDeck.Classes.Managers
         public void LoadContent(ContentManager content, SpriteBatch _spriteBatch)
         {
             this._spriteBatch = _spriteBatch;
+            Background.GetInstance.LoadContent();
         }
         public void Update(GameTime gameTime)
-        { }
+        {
+            Background.GetInstance.Update(gameTime);
+        }
 
         public void Draw()
         {
             GetInstance._spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
-
+            //Alles dat getekend moet worden komt onder deze lijn
+            Background.GetInstance.Draw();
+            //Alles dat getekend moet worden komt boven deze lijn
             GetInstance._spriteBatch.End();
         }
     }
