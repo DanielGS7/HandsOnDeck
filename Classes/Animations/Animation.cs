@@ -46,14 +46,25 @@ namespace HandsOnDeck.Classes.Animations
             sourceRectangle = CalculateSourceRectangle(this.spriteIndex);
         }
 
-        public void Draw(SpriteBatch spriteBatch, Vector2 position)
+        public void Draw(Vector2 position)
         {
-            spriteBatch.Draw(
+            SpriteBatchManager.Instance.Draw(
                 spriteSheet,
                 position,
                 sourceRectangle,
                 Color.White
             );
+        }
+
+        public void Draw(Vector2 position, Vector2 totalSurface)
+        {
+            for(int i= 0; i < totalSurface.Y; i += sourceRectangle.Height)
+            {
+                for (int j = 0; i < totalSurface.X; j += sourceRectangle.Width)
+                {
+                    Draw(new Vector2(j, i));
+                }
+            }
         }
 
         private Rectangle CalculateSourceRectangle(int spriteIndex)
