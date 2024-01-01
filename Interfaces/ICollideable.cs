@@ -11,5 +11,11 @@ namespace HandsOnDeck.Interfaces
     internal interface ICollideable
     {
         public Hitbox Hitbox { get; set;}
+        public HitboxType type { get; set; }
+        
+        public void HitboxType(HitboxType giventype)
+        {
+            type = giventype;
+        }
     }
 }

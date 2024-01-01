@@ -16,6 +16,7 @@ namespace HandsOnDeck.Classes.Object
         internal AnimationHandler animationHandler = new AnimationHandler();
         public CollisionHandler CollisionHandler { get; set; }
         public Hitbox Hitbox { get; set; }
+        public HitboxType type { get ; set ; }
 
         public string _gameObjectTextureName;
         public Texture2D _gameObjectTexture;
