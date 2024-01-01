@@ -30,6 +30,8 @@ namespace HandsOnDeck
         protected override void Initialize()
         {
             Renderer.GetInstance.Initialize(_graphics);
+            IsFixedTimeStep = true;
+            TargetElapsedTime = TimeSpan.FromSeconds(1 / 5.0f);
             base.Initialize();
         }
 
