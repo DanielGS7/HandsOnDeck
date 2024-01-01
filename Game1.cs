@@ -34,8 +34,8 @@ namespace HandsOnDeck
             TargetElapsedTime = TimeSpan.FromSeconds(1 / 5.0f);
             ContentLoader.Initialize(Content);
             GraphicsDeviceSingleton.Initialize(_graphics.GraphicsDevice);
-            SpriteBatchManager.Initialize(_spriteBatch);
             base.Initialize();
+            SpriteBatchManager.Initialize(_spriteBatch);
         }
 
         protected override void LoadContent()
