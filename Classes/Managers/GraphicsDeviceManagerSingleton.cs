@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace HandsOnDeck.Classes.Managers
 {
-    public class GraphicsDeviceManagerSingleton
+    public class GraphicsDeviceSingleton
     {
-        private static GraphicsDeviceManager _graphicsDevice;
+        private static GraphicsDevice _graphicsDevice;
 
-        public static void Initialize(GraphicsDeviceManager graphicsDevice)
+        public static void Initialize(GraphicsDevice graphicsDevice)
         {
             _graphicsDevice = graphicsDevice;
         }
 
-        public static GraphicsDeviceManager Instance
+        public static GraphicsDevice Instance
         {
             get
             {
