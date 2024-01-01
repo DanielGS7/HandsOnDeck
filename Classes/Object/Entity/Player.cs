@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HandsOnDeck.Classes.Collisions;
 using HandsOnDeck.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -18,7 +19,12 @@ namespace HandsOnDeck.Classes.Object.Entity
         {
             this.texture = texture;
             spriteSelection = new Rectangle(0, 0, 180, 247);
+            Hitbox = new Hitbox(new Rectangle(0, 0, 128, 128));
+            type = new HitboxType();
         }
+
+        public Hitbox Hitbox { get; set ; }
+        public HitboxType type { get ; set ; }
 
         public void Draw()
         {
