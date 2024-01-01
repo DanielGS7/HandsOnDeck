@@ -10,14 +10,14 @@ namespace HandsOnDeck.Classes.Managers
 {
     public class GraphicsDeviceManagerSingleton
     {
-        private static GraphicsDevice _graphicsDevice;
+        private static GraphicsDeviceManager _graphicsDevice;
 
         public static void Initialize(GraphicsDeviceManager graphicsDevice)
         {
             _graphicsDevice = graphicsDevice;
         }
 
-        public static GraphicsDevice Instance
+        public static GraphicsDeviceManager Instance
         {
             get
             {
