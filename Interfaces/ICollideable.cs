@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,6 @@ namespace HandsOnDeck.Interfaces
 {
     internal interface ICollideable
     {
-        CollisionHandler CollisionHandler { get; }
-        bool CollidesWith(ICollideable other);
+        public Hitbox Hitbox { get; set;}
     }
 }
