@@ -33,6 +33,7 @@ namespace HandsOnDeck
             IsFixedTimeStep = true;
             TargetElapsedTime = TimeSpan.FromSeconds(1 / 5.0f);
             ContentLoader.Initialize(Content);
+            GraphicsDeviceManagerSingleton.Initialize(_graphics);
             base.Initialize();
         }
 
