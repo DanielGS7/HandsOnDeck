@@ -10,6 +10,7 @@ using SamplerState = Microsoft.Xna.Framework.Graphics.SamplerState;
 using System.Diagnostics;
 using SharpDX.Direct3D9;
 using System.Reflection.Metadata;
+using HandsOnDeck.Classes.Object.Static;
 
 namespace HandsOnDeck.Classes { 
 
@@ -21,15 +22,12 @@ public sealed class Renderer
     private static Renderer renderer;
     private static object syncRoot = new object();
     
-    Texture2D _boatTexture;
-    private Rectangle _spriteselection;
-    private int spriteWidth;
+    Background background;
     private Renderer() { }
 
     internal void Initialize(GraphicsDeviceManager _graphics)
     {
         PresentationParameters pp = _graphics.GraphicsDevice.PresentationParameters;
-            _spriteselection = new Rectangle(0, 0, 128, 128);
             Game1.RenderTarget = new RenderTarget2D(_graphics.GraphicsDevice, Game1.ProgramWidth, Game1.ProgramHeight, false,
     SurfaceFormat.Color, DepthFormat.None, pp.MultiSampleCount, RenderTargetUsage.DiscardContents);
             graphics = _graphics;
@@ -54,8 +52,6 @@ public sealed class Renderer
     public void LoadContent(ContentManager content, SpriteBatch _spriteBatch)
     {
         this._spriteBatch = _spriteBatch;
-            //temporary sprite initialization
-            _boatTexture = content.Load<Texture2D>("boatsheet");
         }
         public void Update(GameTime gameTime)
         { }
@@ -63,16 +59,8 @@ public sealed class Renderer
     public void Draw()
     {
         Renderer.GetInstance._spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
-        _spriteBatch.Draw(_boatTexture, new Vector2(0, 0), Color.White);
-        _spriteBatch.Draw(_boatTexture, new Vector2(0, 0), _spriteselection, Color.White);
-        GetInstance._spriteBatch.End();
-        spriteWidth += 128;
-        if (spriteWidth >= 640)
-        {
-            spriteWidth = 0;
-        }
-        _spriteselection.X = spriteWidth;
 
+        GetInstance._spriteBatch.End();
         }
     }
 }
