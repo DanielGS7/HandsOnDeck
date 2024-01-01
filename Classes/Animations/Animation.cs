@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using HandsOnDeck.Classes.Managers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -64,6 +65,11 @@ namespace HandsOnDeck.Classes.Animations
             int y = row * (int)spriteSize.Y;
 
             return new Rectangle(x, y, (int)spriteSize.X, (int)spriteSize.Y);
+        }
+
+        internal void LoadContent(String spriteSheetName)
+        {
+            spriteSheet = ContentLoader.Load<Texture2D>(spriteSheetName);
         }
     }
 
