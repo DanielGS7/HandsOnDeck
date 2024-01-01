@@ -55,7 +55,7 @@ public sealed class Renderer
     {
         this._spriteBatch = _spriteBatch;
             //temporary sprite initialization
-            _boatTexture = content.Load<Texture2D>("boatsheet");
+            _boatTexture = content.Load<Texture2D>("Sboat");
         }
         public void Update(GameTime gameTime)
         { }
