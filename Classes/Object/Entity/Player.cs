@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using HandsOnDeck.Classes.Animations;
 using HandsOnDeck.Classes.Collisions;
 using HandsOnDeck.Classes.Managers;
+using HandsOnDeck.Enums;
 using HandsOnDeck.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
