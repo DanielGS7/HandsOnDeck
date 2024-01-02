@@ -20,7 +20,7 @@ namespace HandsOnDeck.Classes.Object.Entity
             this.texture = texture;
             spriteSelection = new Rectangle(0, 0, 180, 247);
             Hitbox = new Hitbox(new Rectangle(0, 0, 128, 128));
-            type = new HitboxType();
+            type = HitboxType.Physical;
         }
 
         public Hitbox Hitbox { get; set ; }
