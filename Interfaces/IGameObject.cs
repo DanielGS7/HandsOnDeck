@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HandsOnDeck.Interfaces
 {
-    internal interface IGameObject:ICollideable
+    internal interface IGameObject
     {
         void Update(GameTime gameTime);
         void Draw();
