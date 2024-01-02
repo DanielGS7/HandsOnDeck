@@ -17,7 +17,7 @@ namespace HandsOnDeck.Classes.Object.Entity
         
         private Rectangle spriteSelection;
         private Vector2 size = new Vector2(128,128);
-        private Animation boot = new Animation("image1", new Vector2(672, 243), 0, 1, 1, 0, false);
+        private Animation boot = new Animation("image1", new Vector2(672, 242), 0, 1, 1, 0, false);
         public Player()
         {
             
@@ -38,8 +38,10 @@ namespace HandsOnDeck.Classes.Object.Entity
         public void Draw()
         {
             GraphicsDevice _graphics = GraphicsDeviceSingleton.Instance;
-            Vector2 position = new Vector2(_graphics.Viewport.Width / 2f-336, _graphics.Viewport.Height / 2f-121);
-            boot.Draw(position);
+            Vector2 position = new Vector2(_graphics.Viewport.Width / 2f-(336/5), _graphics.Viewport.Height / 2f-(121/5));
+            float scale = 0.2f;
+            float rotation = 0;
+            boot.Draw(position,scale, rotation);
         }
 
         public void Update(GameTime gameTime)
