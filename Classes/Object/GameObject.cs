@@ -29,5 +29,10 @@ namespace HandsOnDeck.Classes.Object
         {
            
         }
+
+        public void LoadContent()
+        {
+           
+        }
     }
 }
