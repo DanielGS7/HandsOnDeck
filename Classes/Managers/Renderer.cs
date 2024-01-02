@@ -11,7 +11,9 @@ using System.Diagnostics;
 using SharpDX.Direct3D9;
 using System.Reflection.Metadata;
 using HandsOnDeck.Classes.Object.Static;
+using HandsOnDeck.Classes.UI;
 using HandsOnDeck.Classes.Object.Entity;
+
 
 namespace HandsOnDeck.Classes.Managers
 {
@@ -32,8 +34,9 @@ namespace HandsOnDeck.Classes.Managers
         {
             PresentationParameters pp = _graphics.GraphicsDevice.PresentationParameters;
             Game1.RenderTarget = new RenderTarget2D(_graphics.GraphicsDevice, Game1.ProgramWidth, Game1.ProgramHeight, false,
-    SurfaceFormat.Color, DepthFormat.None, pp.MultiSampleCount, RenderTargetUsage.DiscardContents);
+            SurfaceFormat.Color, DepthFormat.None, pp.MultiSampleCount, RenderTargetUsage.DiscardContents);
             graphics = _graphics;
+            MapOverlay.GetInstance.Initialize();
         }
 
         public static Renderer GetInstance
@@ -56,8 +59,8 @@ namespace HandsOnDeck.Classes.Managers
         {
             this._spriteBatch = _spriteBatch;
             Background.GetInstance.LoadContent();
+            MapOverlay.GetInstance.LoadContent();
             player1.LoadContent();
-           
         }
         public void Update(GameTime gameTime)
         {
@@ -70,6 +73,7 @@ namespace HandsOnDeck.Classes.Managers
             GetInstance._spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
             //Alles dat getekend moet worden komt onder deze lijn
             Background.GetInstance.Draw();
+            MapOverlay.GetInstance.Draw();
             player1.Draw();
             //Alles dat getekend moet worden komt boven deze lijn
             GetInstance._spriteBatch.End();
