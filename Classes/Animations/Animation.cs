@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace HandsOnDeck.Classes.Animations
 {
@@ -55,6 +56,11 @@ namespace HandsOnDeck.Classes.Animations
                 sourceRectangle,
                 Color.White
             );
+        }
+
+        public void Draw(Vector2 position, float scale)
+        {
+            SpriteBatchManager.Instance.Draw(spriteSheet, position, sourceRectangle, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 1);
         }
 
         public void Draw(Vector2 position, Vector2 totalSurface)
