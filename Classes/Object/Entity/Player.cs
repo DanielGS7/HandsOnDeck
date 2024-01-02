@@ -40,7 +40,8 @@ namespace HandsOnDeck.Classes.Object.Entity
             GraphicsDevice _graphics = GraphicsDeviceSingleton.Instance;
             Vector2 position = new Vector2(_graphics.Viewport.Width / 2f-(336/5), _graphics.Viewport.Height / 2f-(121/5));
             float scale = 0.2f;
-            boot.Draw(position,scale);
+            float rotation = 0;
+            boot.Draw(position,scale, rotation);
         }
 
         public void Update(GameTime gameTime)

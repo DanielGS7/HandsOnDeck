@@ -41,7 +41,7 @@ namespace HandsOnDeck.Classes.UI
         }
         public void Draw()
         {
-            _overlay.Draw(Vector2.Zero, 2);
+            _overlay.Draw(Vector2.Zero, 2,0);
         }
 
         public void Update(GameTime gameTime)
