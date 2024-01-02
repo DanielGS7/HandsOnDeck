@@ -13,7 +13,6 @@ namespace HandsOnDeck.Classes.Object
 {
     internal class GameObject:IGameObject, ICollideable
     {
-        internal AnimationHandler animationHandler = new AnimationHandler();
         public CollisionHandler CollisionHandler { get; set; }
         public Hitbox Hitbox { get; set; }
         public HitboxType type { get ; set ; }
