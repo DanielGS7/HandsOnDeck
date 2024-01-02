@@ -17,7 +17,7 @@ namespace HandsOnDeck.Classes.Object.Entity
         
         private Rectangle spriteSelection;
         private Vector2 size = new Vector2(128,128);
-        private Animation boot = new Animation("image1", new Vector2(672, 243), 0, 1, 1, 0, false);
+        private Animation boot = new Animation("image1", new Vector2(672, 242), 0, 1, 1, 0, false);
         public Player()
         {
             
