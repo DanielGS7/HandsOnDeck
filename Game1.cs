@@ -2,8 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using HandsOnDeck.Classes;
 using System.Diagnostics;
+using HandsOnDeck.Classes.Managers;
 
 namespace HandsOnDeck
 {
@@ -32,7 +32,10 @@ namespace HandsOnDeck
             Renderer.GetInstance.Initialize(_graphics);
             IsFixedTimeStep = true;
             TargetElapsedTime = TimeSpan.FromSeconds(1 / 5.0f);
+            ContentLoader.Initialize(Content);
+            GraphicsDeviceSingleton.Initialize(_graphics.GraphicsDevice);
             base.Initialize();
+            SpriteBatchManager.Initialize(_spriteBatch);
         }
 
         protected override void LoadContent()
