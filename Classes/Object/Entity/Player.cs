@@ -61,51 +61,43 @@ namespace HandsOnDeck.Classes.Object.Entity
         }
         private void HandleMovement()
         {
-            
-            List<GameAction> pressedActions = InputManager.GetInstance().GetPressedActions();
+            List<GameAction> pressedActions = InputManager.GetInstance.GetPressedActions();
             Debug.WriteLine(pressedActions.Count);
-            bool isMoving = false;
 
-            foreach (var action in pressedActions)
+            bool sailsUpPressed = pressedActions.Contains(GameAction.SAILSUP);
+            bool sailsDownPressed = pressedActions.Contains(GameAction.SAILSDOWN);
+
+            if (sailsUpPressed && !sailsDownPressed)
             {
-                Debug.WriteLine("ping");
-                switch (action)
-                {
-                    case GameAction.SAILSUP:
-                        
-                        velocity += Vector2.Normalize(new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation))) * acceleration;
-                        isMoving = true;
-                        break;
+                velocity += Vector2.Normalize(new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation))) * acceleration;
 
-                    case GameAction.SAILSDOWN:
-                        
-                        velocity -= velocity * deceleration;
-                        break;
-
-                    case GameAction.TURNLEFT:
-                        
-                        rotation -= 0.05f; 
-                        break;
-
-                    case GameAction.TURNRIGHT:
-                        
-                        rotation += 0.05f; 
-                        break;
-                }
-            }
-
-            
-            if (isMoving)
-            {
-                
-                position += velocity;
-
-                
                 if (velocity.Length() > maxSpeed)
                 {
                     velocity = Vector2.Normalize(velocity) * maxSpeed;
                 }
+
+                
+                foreach (var action in pressedActions)
+                {
+                    switch (action)
+                    {
+                        case GameAction.TURNLEFT:
+                            rotation -= 0.05f;
+                            break;
+
+                        case GameAction.TURNRIGHT:
+                            rotation += 0.05f;
+                            break;
+                    }
+                }
             }
+            else if (!sailsUpPressed && sailsDownPressed)
+            {
+                velocity -= velocity * deceleration;
+            }
+
+            
+            position += velocity;
         }
     }
 }

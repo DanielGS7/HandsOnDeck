@@ -25,14 +25,12 @@ namespace HandsOnDeck
             _graphics.IsFullScreen = false;
             Content.RootDirectory = "Content";
             IsMouseVisible = false;
-            TargetElapsedTime = TimeSpan.FromSeconds(1d / 24);
-        }
-
+            TargetElapsedTime = TimeSpan.FromSeconds(1d / 60);
+            }
         protected override void Initialize()
         {
             Renderer.GetInstance.Initialize(_graphics);
             IsFixedTimeStep = true;
-            TargetElapsedTime = TimeSpan.FromSeconds(1 / 5.0f);
             ContentLoader.Initialize(Content);
             GraphicsDeviceSingleton.Initialize(_graphics.GraphicsDevice);
             base.Initialize();

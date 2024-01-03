@@ -13,10 +13,5 @@ namespace HandsOnDeck.Interfaces
     {
         public Hitbox Hitbox { get; set;}
         public HitboxType type { get; set; }
-        
-        public void HitboxType(HitboxType giventype)
-        {
-            type = giventype;
-        }
     }
 }

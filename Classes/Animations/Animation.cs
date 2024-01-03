@@ -23,6 +23,8 @@ namespace HandsOnDeck.Classes.Animations
         private float speed;
         private bool isLooping;
 
+        private double timeSinceLastFrame = 0;
+
         public Animation(String spriteSheetName, Vector2 spriteSize, int spriteIndex, int rowCount, int totalSprites, float speed, bool isLooping)
         {
             this.spriteSheetName = spriteSheetName;
@@ -36,17 +38,27 @@ namespace HandsOnDeck.Classes.Animations
             this.sourceRectangle = CalculateSourceRectangle(this.spriteIndex);
         }
 
-            public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
+        {
+            double elapsedMilliseconds = gameTime.ElapsedGameTime.TotalMilliseconds;
+            double frameTime = 1000.0 / speed;
+            timeSinceLastFrame += elapsedMilliseconds;
+            if (timeSinceLastFrame >= frameTime)
             {
-                float elapsedSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
-                spriteIndex += (int)(elapsedSeconds / speed/7);
+                spriteIndex++;
 
                 if (spriteIndex >= totalSprites)
                 {
-                spriteIndex = 0;
+                    if (isLooping)
+                    {
+                        spriteIndex = 0;
+                    }
                 }
-                sourceRectangle = CalculateSourceRectangle(this.spriteIndex);
+                timeSinceLastFrame = 0;
+                sourceRectangle = CalculateSourceRectangle(spriteIndex);
             }
+        }
+
 
         public void Draw(Vector2 position)
         {
