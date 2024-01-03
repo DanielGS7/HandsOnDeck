@@ -62,7 +62,7 @@ namespace HandsOnDeck.Classes.Object.Entity
         private void HandleMovement()
         {
             
-            List<GameAction> pressedActions = InputManager.GetInstance().GetPressedActions();
+            List<GameAction> pressedActions = InputManager.GetInstance.GetPressedActions();
             Debug.WriteLine(pressedActions.Count);
             bool isMoving = false;
 
