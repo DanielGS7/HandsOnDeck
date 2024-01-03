@@ -72,35 +72,35 @@ namespace HandsOnDeck.Classes.Object.Entity
                 switch (action)
                 {
                     case GameAction.SAILSUP:
-                        // Accelerate the ship when sails go up
+                        
                         velocity += Vector2.Normalize(new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation))) * acceleration;
                         isMoving = true;
                         break;
 
                     case GameAction.SAILSDOWN:
-                        // Decelerate the ship when sails go down
+                        
                         velocity -= velocity * deceleration;
                         break;
 
                     case GameAction.TURNLEFT:
-                        // Rotate the ship left
-                        rotation -= 0.05f; // Adjust the rotation speed as needed
+                        
+                        rotation -= 0.05f; 
                         break;
 
                     case GameAction.TURNRIGHT:
-                        // Rotate the ship right
-                        rotation += 0.05f; // Adjust the rotation speed as needed
+                        
+                        rotation += 0.05f; 
                         break;
                 }
             }
 
-            // Only rotate if the ship is moving
+            
             if (isMoving)
             {
-                // Update the player's position based on velocity
+                
                 position += velocity;
 
-                // Clamp the player's speed to the maximum speed
+                
                 if (velocity.Length() > maxSpeed)
                 {
                     velocity = Vector2.Normalize(velocity) * maxSpeed;
