@@ -69,24 +69,14 @@ namespace HandsOnDeck.Classes.Object.Entity
 
             if (sailsUpPressed && !sailsDownPressed)
             {
-                
                 velocity += Vector2.Normalize(new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation))) * acceleration;
 
-                
                 if (velocity.Length() > maxSpeed)
                 {
                     velocity = Vector2.Normalize(velocity) * maxSpeed;
                 }
-            }
-            else if (!sailsUpPressed && sailsDownPressed)
-            {
-                
-                velocity -= velocity * deceleration;
-            }
 
-            
-            if (velocity.LengthSquared() > 0)
-            {
+                
                 foreach (var action in pressedActions)
                 {
                     switch (action)
@@ -100,6 +90,10 @@ namespace HandsOnDeck.Classes.Object.Entity
                             break;
                     }
                 }
+            }
+            else if (!sailsUpPressed && sailsDownPressed)
+            {
+                velocity -= velocity * deceleration;
             }
 
             
