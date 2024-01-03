@@ -21,17 +21,20 @@ namespace HandsOnDeck.Classes.Managers
             keyMappings = new Dictionary<GameAction, Keys>();
         }
 
-        public static InputManager GetInstance()
+        public static InputManager GetInstance
         {
-            lock (lockObject)
+            get
             {
                 if (instance == null)
                 {
-                    instance = new InputManager();
+                    lock (lockObject)
+                    {
+                        if (instance == null)
+                            instance = new InputManager();
+                    }
                 }
+                return instance;
             }
-
-            return instance;
         }
 
         public void Initialize()
@@ -69,7 +72,7 @@ namespace HandsOnDeck.Classes.Managers
             }
             else
             {
-                throw new ArgumentException($"Action '{action}' not found.");
+                throw new ArgumentException($"Action '{action}' niet gevonden");
             }
         }
 

@@ -12,8 +12,8 @@ using SharpDX.Direct3D9;
 using System.Reflection.Metadata;
 using HandsOnDeck.Classes.Object.Static;
 using HandsOnDeck.Classes.UI;
+using Microsoft.Xna.Framework.Input;
 using HandsOnDeck.Classes.Object.Entity;
-
 
 namespace HandsOnDeck.Classes.Managers
 {
@@ -37,7 +37,7 @@ namespace HandsOnDeck.Classes.Managers
             SurfaceFormat.Color, DepthFormat.None, pp.MultiSampleCount, RenderTargetUsage.DiscardContents);
             graphics = _graphics;
             MapOverlay.GetInstance.Initialize();
-            InputManager.GetInstance().Initialize();
+            InputManager.GetInstance.Initialize();
         }
 
         public static Renderer GetInstance
@@ -67,6 +67,7 @@ namespace HandsOnDeck.Classes.Managers
         {
             Background.GetInstance.Update(gameTime);
             player1.Update(gameTime);
+            InputManager.GetInstance.SetCurrentKeyboardState(Keyboard.GetState());
         }
 
         public void Draw()
