@@ -15,6 +15,7 @@ namespace HandsOnDeck
         public static int TimeModifier = 1;
         public static float ScaleModifier = 6;
         public static float EntityStatesSpeed = 1;
+        public static SpriteFont DefaultFont { get; private set; }
 
         public const int ProgramWidth = 2048;
         public const int ProgramHeight = 1080;
@@ -42,6 +43,7 @@ namespace HandsOnDeck
         {
             _spriteBatch = new SpriteBatch(_graphics.GraphicsDevice);
             Renderer.GetInstance.LoadContent(Content, _spriteBatch);
+            DefaultFont = Content.Load<SpriteFont>("default");  
         }
 
         protected override void Update(GameTime gameTime)

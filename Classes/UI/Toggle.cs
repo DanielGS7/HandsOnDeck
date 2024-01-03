@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HandsOnDeck.Classes.UI
 {
-    public class Toggle : UIInteractable
+    internal class Toggle : UIInteractable
     {
         public override void Draw()
         {

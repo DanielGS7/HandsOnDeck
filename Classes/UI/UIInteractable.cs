@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HandsOnDeck.Classes.UI
 {
-    public abstract class UIInteractable : GameObject
+    internal abstract class UIInteractable : GameObject
     {
         public new abstract void Update(GameTime gameTime);
         public new abstract void Draw();
