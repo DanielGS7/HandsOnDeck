@@ -37,6 +37,7 @@ namespace HandsOnDeck.Classes.Managers
             SurfaceFormat.Color, DepthFormat.None, pp.MultiSampleCount, RenderTargetUsage.DiscardContents);
             graphics = _graphics;
             MapOverlay.GetInstance.Initialize();
+            InputManager.GetInstance().Initialize();
         }
 
         public static Renderer GetInstance

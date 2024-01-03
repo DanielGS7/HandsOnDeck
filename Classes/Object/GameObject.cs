@@ -1,4 +1,5 @@
 ﻿using HandsOnDeck.Classes.Collisions;
+using HandsOnDeck.Enums;
 using HandsOnDeck.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;

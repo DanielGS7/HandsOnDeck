@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HandsOnDeck.Classes.Collisions;
+using HandsOnDeck.Enums;
 
 namespace HandsOnDeck.Interfaces
 {
