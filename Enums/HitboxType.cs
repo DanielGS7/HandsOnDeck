@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HandsOnDeck.Classes.Collisions
+namespace HandsOnDeck.Enums
 {
     internal enum HitboxType
     {
-        Physical,Trigger
+        Physical, Trigger
     }
 }
