@@ -18,7 +18,7 @@ namespace HandsOnDeck.Classes.Object.Static
     {
         private static Background background;
         private static object syncRoot = new object();
-        private static Animation water = new Animation("Swater", new Vector2(128, 128), 1, 6, 39, 1 / 39f, true);
+        private static Animation water = new Animation("Swater", new Vector2(128, 128), 1, 6, 39, 15f, true);
 
 
         public void LoadContent()
@@ -50,7 +50,7 @@ namespace HandsOnDeck.Classes.Object.Static
         {
             GraphicsDevice _graphics = GraphicsDeviceSingleton.Instance;
             SpriteBatch _spriteBatch = SpriteBatchManager.Instance;
-            Vector2 position = Vector2.Zero; // Adjust the position as needed
+            Vector2 position = Vector2.Zero;
             Vector2 screenSize = new Vector2(_graphics.Viewport.Width, _graphics.Viewport.Height);
             water.Draw(position, screenSize);
         }
