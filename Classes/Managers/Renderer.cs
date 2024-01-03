@@ -13,6 +13,7 @@ using System.Reflection.Metadata;
 using HandsOnDeck.Classes.Object.Static;
 using HandsOnDeck.Classes.UI;
 using Microsoft.Xna.Framework.Input;
+using HandsOnDeck.Classes.Object.Entity;
 
 namespace HandsOnDeck.Classes.Managers
 {
@@ -26,6 +27,7 @@ namespace HandsOnDeck.Classes.Managers
         private static object syncRoot = new object();
 
         Background background;
+        Player player1 = new Player();
         private Renderer() { }
 
         internal void Initialize(GraphicsDeviceManager _graphics)
@@ -59,10 +61,12 @@ namespace HandsOnDeck.Classes.Managers
             this._spriteBatch = _spriteBatch;
             Background.GetInstance.LoadContent();
             MapOverlay.GetInstance.LoadContent();
+            player1.LoadContent();
         }
         public void Update(GameTime gameTime)
         {
             Background.GetInstance.Update(gameTime);
+            player1.Update(gameTime);
             InputManager.GetInstance.SetCurrentKeyboardState(Keyboard.GetState());
         }
 
@@ -72,6 +76,7 @@ namespace HandsOnDeck.Classes.Managers
             //Alles dat getekend moet worden komt onder deze lijn
             Background.GetInstance.Draw();
             MapOverlay.GetInstance.Draw();
+            player1.Draw();
             //Alles dat getekend moet worden komt boven deze lijn
             GetInstance._spriteBatch.End();
         }
