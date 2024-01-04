@@ -1,45 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HandsOnDeck.Classes.Animations;
-using HandsOnDeck.Classes.Collisions;
-using HandsOnDeck.Classes.Managers;
-using HandsOnDeck.Enums;
-using HandsOnDeck.Interfaces;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using HandsOnDeck.Classes.Animations;
+using HandsOnDeck.Enums;
+using HandsOnDeck.Classes.Managers;
+using HandsOnDeck.Interfaces;
+using HandsOnDeck.Classes.Collisions;
+using System.Collections.Generic;
+using System;
+using static System.Windows.Forms.Design.AxImporter;
 
 namespace HandsOnDeck.Classes.Object.Entity
 {
-    public class Player : IEntity
+    public class Player
     {
-        private const float MaxSpeed = 10f; 
-        private const float AccelerationRate = 0.1f;
-        private const float DecelerationRate = 0.2f;
-
         private Animation boatSprite;
         private Vector2 position;
-        private Vector2 velocity;
         private float rotation;
-        private bool sailsUp;
+        private float speed;
+        private float maxSpeed = 3.0f;
+        private bool sailsUp = false;
+        private bool toggleSailReleased = true;
+        private float accelerationRate = 0.02f;
+        private float decelerationRate = 0.03f;
+        private float turnSpeedCoefficient = 0.1f;
 
-        Hitbox ICollideable.Hitbox { get; set; }
-        HitboxType ICollideable.type { get; set; }
-
-        public Player()
+        public Player(Vector2 startPosition)
         {
+            position = startPosition;
             boatSprite = new Animation("image1", new Vector2(672, 242), 0, 1, 1, 0, false);
-            position = new Vector2(500,500);
-            rotation = 0f;
-            sailsUp = false;
-
-            ((ICollideable)this).Hitbox = new Hitbox(new Rectangle((int)position.X,(int)position.Y, 672, 242));
-            ((ICollideable)this).type = HitboxType.Physical;
-
-            InputManager.GetInstance.Initialize();
+            rotation = 0.0f;
+            speed = 0.0f;
         }
 
         public void LoadContent()
@@ -50,98 +41,60 @@ namespace HandsOnDeck.Classes.Object.Entity
         public void Update(GameTime gameTime)
         {
             HandleInput();
-
-            // Update boat position and rotation based on velocity
-            position += velocity;
-            rotation = MathHelper.WrapAngle(rotation + velocity.X * 0.01f);
-
-            // Update hitbox position
-            ((ICollideable)this).Hitbox.Update(position);
-
-            // Update boat sprite animation
+            UpdateMovement(gameTime);
             boatSprite.Update(gameTime);
         }
 
         public void Draw()
         {
-            boatSprite.Draw(position, 1f, rotation);
+            boatSprite.Draw(position, 0.2f, rotation, new Vector2(336, 121));
         }
 
         private void HandleInput()
         {
-            List<GameAction> pressedActions = InputManager.GetInstance.GetPressedActions();
-
-            foreach (var action in pressedActions)
+            List<GameAction> actions = InputManager.GetInstance.GetPressedActions();
+            if (actions.Contains(GameAction.TOGGLESAILS) && toggleSailReleased)
             {
-                switch (action)
-                {
-                    case GameAction.SAILSUP:
-                        sailsUp = true;
-                        Accelerate();
-                        break;
-                    case GameAction.SAILSDOWN:
-                        sailsUp = false;
-                        Decelerate();
-                        break;
-                    case GameAction.TURNLEFT:
-                        TurnLeft();
-                        break;
-                    case GameAction.TURNRIGHT:
-                        TurnRight();
-                        break;
-                }
+                sailsUp = !sailsUp;
+                toggleSailReleased = false;
+            }
+            else if (!actions.Contains(GameAction.TOGGLESAILS))
+            {
+                toggleSailReleased = true;
+            }
+
+            if (speed > 0)
+            {
+                if (actions.Contains(GameAction.TURNLEFT))
+                    rotation -= 0.01f;
+                if (actions.Contains(GameAction.TURNRIGHT))
+                    rotation += 0.01f;
             }
         }
 
-        private void Accelerate()
+        private void UpdateMovement(GameTime gameTime)
         {
-            float acceleration = Sigmoid(velocity.X, MaxSpeed) * AccelerationRate;
-            velocity.X += acceleration;
-            velocity.X = MathHelper.Clamp(velocity.X, 0f, MaxSpeed);
-        }
-
-        private void Decelerate()
-        {
-            float deceleration = Sigmoid(velocity.X, MaxSpeed) * DecelerationRate;
-            velocity.X -= deceleration;
-            velocity.X = MathHelper.Clamp(velocity.X, 0f, MaxSpeed);
-        }
-
-        private void TurnLeft()
-        {
-            if (sailsUp)
+            float targetSpeed = sailsUp ? maxSpeed : 0.0f;
+            if (speed < targetSpeed)
             {
-                rotation -= MathHelper.ToRadians(1f);
+                speed = Math.Min(speed + accelerationRate, targetSpeed);
             }
-        }
-
-        private void TurnRight()
-        {
-            if (sailsUp)
+            else if (speed > targetSpeed)
             {
-                rotation += MathHelper.ToRadians(1f);
+                speed = Math.Max(speed - decelerationRate, targetSpeed);
             }
+
+            float turnSpeed = speed * turnSpeedCoefficient;
+
+            Vector2 direction = new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation));
+            position += direction * speed;
         }
 
-        private float Sigmoid(float x, float maxSpeed)
+        private float SigmoidInterpolation(float current, float target, double time)
         {
-            // Sigmoid function for smooth acceleration and deceleration
-            return (float)(maxSpeed / (1 + Math.Exp(-x)));
+            float delta = target - current;
+            float rate = 0.1f;
+            return current + delta * (float)(1 / (1 + Math.Exp(-rate * time)));
         }
-
-        /*public void HandleCollision(Entity otherEntity)
-        {
-            if (otherEntity == HitboxType.Physical)
-            {
-                // Calculate new velocity based on collision response
-                Vector2 collisionNormal = Vector2.Normalize(position - otherObject.Position);
-                float relativeVelocity = Vector2.Dot(velocity, collisionNormal);
-
-                velocity -= 2 * relativeVelocity * collisionNormal / mass;
-
-                // Adjust rotation away from the collision
-                rotation += MathHelper.ToRadians(180f);
-            }
-        }*/
     }
 }
