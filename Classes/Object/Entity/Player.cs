@@ -14,10 +14,12 @@ namespace HandsOnDeck.Classes.Object.Entity
 {
     public class Player
     {
+        private static Player instance;
+
         private Animation boatSprite;
-        private Vector2 position;
-        private float rotation;
-        private float speed;
+        public Vector2 position;
+        public float rotation;
+        public float speed;
         private float maxSpeed = 3.0f;
         private bool sailsUp = false;
         private bool toggleSailReleased = true;
@@ -25,12 +27,21 @@ namespace HandsOnDeck.Classes.Object.Entity
         private float decelerationRate = 0.03f;
         private float turnSpeedCoefficient = 0.1f;
 
-        public Player(Vector2 startPosition)
+        private Player(Vector2 startPosition)
         {
             position = startPosition;
             boatSprite = new Animation("image1", new Vector2(672, 242), 0, 1, 1, 0, false);
             rotation = 0.0f;
             speed = 0.0f;
+        }
+
+        public static Player GetInstance(Vector2 startPosition)
+        {
+            if (instance == null)
+            {
+                instance = new Player(startPosition);
+            }
+            return instance;
         }
 
         public void LoadContent()
