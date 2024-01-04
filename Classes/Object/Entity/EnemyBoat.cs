@@ -54,32 +54,46 @@ namespace HandsOnDeck.Classes.Object.Entity
             Vector2 directionToPlayer = player.position - position;
             float distanceToPlayer = directionToPlayer.Length();
 
-            
-            float noise = ((float)random.NextDouble() - 0.5f) * 0.05f;
+           
+            float noise = ((float)random.NextDouble() - 0.5f) * 0.02f; 
 
+            
+            float targetRotation = (float)Math.Atan2(directionToPlayer.Y, directionToPlayer.X);
+
+            
             if (distanceToPlayer > EncircleDistanceMax || distanceToPlayer < EncircleDistanceMin)
             {
-                rotation = (float)Math.Atan2(directionToPlayer.Y, directionToPlayer.X) + noise;
+                
+                rotation = TurnTowards(rotation, targetRotation + noise, turnSpeedCoefficient);
 
                 
-                float targetSpeed = maxSpeed;
-                if (distanceToPlayer < EncircleDistanceMin)
-                    targetSpeed = -maxSpeed / 2; 
-
-                if (speed < targetSpeed)
-                    speed = Math.Min(speed + accelerationRate, targetSpeed);
-                else if (speed > targetSpeed)
-                    speed = Math.Max(speed - decelerationRate, targetSpeed);
+                float targetSpeed = (distanceToPlayer < EncircleDistanceMin) ? -maxSpeed / 3 : maxSpeed;
+                speed = AdjustSpeed(speed, targetSpeed);
             }
             else
             {
-               
-                rotation += turnSpeedCoefficient * speed + noise;
+                
+                rotation = TurnTowards(rotation, targetRotation + MathHelper.PiOver2 + noise, turnSpeedCoefficient); 
+                speed = AdjustSpeed(speed, maxSpeed / 2); 
             }
 
-           
+            
             Vector2 direction = new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation));
             position += direction * speed;
+        }
+
+        private float TurnTowards(float currentRotation, float targetRotation, float turnSpeed)
+        {
+            
+            float deltaRotation = MathHelper.WrapAngle(targetRotation - currentRotation);
+            return currentRotation + MathHelper.Clamp(deltaRotation, -turnSpeed, turnSpeed);
+        }
+
+        private float AdjustSpeed(float currentSpeed, float targetSpeed)
+        {
+            return currentSpeed < targetSpeed
+                ? Math.Min(currentSpeed + accelerationRate, targetSpeed)
+                : Math.Max(currentSpeed - decelerationRate, targetSpeed);
         }
     }
 }
