@@ -100,12 +100,5 @@ namespace HandsOnDeck.Classes.Object.Entity
             Vector2 direction = new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation));
             position += direction * speed;
         }
-
-        private float SigmoidInterpolation(float current, float target, double time)
-        {
-            float delta = target - current;
-            float rate = 0.1f;
-            return current + delta * (float)(1 / (1 + Math.Exp(-rate * time)));
-        }
     }
 }
