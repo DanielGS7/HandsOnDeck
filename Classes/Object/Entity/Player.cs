@@ -27,19 +27,19 @@ namespace HandsOnDeck.Classes.Object.Entity
         private float decelerationRate = 0.03f;
         private float turnSpeedCoefficient = 0.1f;
 
-        private Player(Vector2 startPosition)
+        private Player()
         {
-            position = startPosition;
+            position = new Vector2(500,500);
             boatSprite = new Animation("image1", new Vector2(672, 242), 0, 1, 1, 0, false);
             rotation = 0.0f;
             speed = 0.0f;
         }
 
-        public static Player GetInstance(Vector2 startPosition)
+        public static Player GetInstance()
         {
             if (instance == null)
             {
-                instance = new Player(startPosition);
+                instance = new Player();
             }
             return instance;
         }
