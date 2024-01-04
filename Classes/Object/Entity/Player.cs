@@ -15,7 +15,7 @@ namespace HandsOnDeck.Classes.Object.Entity
     public class Player
     {
         private Animation boatSprite;
-        private Vector2 position;
+        public Vector2 position;
         private float rotation;
         private float speed;
         private float maxSpeed = 3.0f;
