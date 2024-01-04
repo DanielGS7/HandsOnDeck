@@ -16,5 +16,8 @@ namespace HandsOnDeck.Classes.Collisions
             bounds = SourceRectangle;
         }
 
+        internal void Update(Vector2 position)
+        {
+        }
     }
 }
