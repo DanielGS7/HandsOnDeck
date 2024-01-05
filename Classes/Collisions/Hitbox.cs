@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace HandsOnDeck.Classes.Collisions
 {
-    internal class Hitbox
+    public class Hitbox
     {
         internal Rectangle bounds { get; set;}
 

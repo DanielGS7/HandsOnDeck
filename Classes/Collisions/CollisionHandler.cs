@@ -11,27 +11,28 @@ using System.Threading.Tasks;
 
 namespace HandsOnDeck.Classes
 {
-    internal class CollisionHandler
+    public class CollisionHandler
     {
-        internal List<GameObject> gameObjects;
+        internal List<CollidableGameObject> gameObjects;
         private static CollisionHandler collisionHandler;
         internal static CollisionHandler Instance => collisionHandler ??= new CollisionHandler();
+
         private CollisionHandler()
         {
-            this.gameObjects = new List<GameObject>();
+            this.gameObjects = new List<CollidableGameObject>();
         }
 
-        internal void AddHitbox(GameObject gameObject)
+        internal void AddHitbox(CollidableGameObject gameObject)
         {
             this.gameObjects.Add(gameObject);
         }
 
-        internal List<GameObject> CheckForCollisions(GameObject collider)
+        internal List<CollidableGameObject> CheckForCollisions(CollidableGameObject collider)
         {
-            List<GameObject> collisions = new();
+            List<CollidableGameObject> collisions = new();
             foreach (var gameObject in gameObjects)
             {
-                if (gameObject!= collider && collider.Hitbox.bounds.Intersects(gameObject.Hitbox.bounds))
+                if (gameObject != collider && collider.Hitbox.bounds.Intersects(gameObject.Hitbox.bounds))
                 {
                     collisions.Add(gameObject);
                 }
@@ -39,5 +40,5 @@ namespace HandsOnDeck.Classes
             return collisions;
         }
     }
-    
+
 }

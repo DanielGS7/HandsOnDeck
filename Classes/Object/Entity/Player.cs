@@ -12,7 +12,7 @@ using static System.Windows.Forms.Design.AxImporter;
 
 namespace HandsOnDeck.Classes.Object.Entity
 {
-    public class Player
+    public class Player : CollidableGameObject, IEntity
     {
         private static Player instance;
 
@@ -44,19 +44,19 @@ namespace HandsOnDeck.Classes.Object.Entity
             return instance;
         }
 
-        public void LoadContent()
+        public override void LoadContent()
         {
             boatSprite.LoadContent();
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             HandleInput();
             UpdateMovement(gameTime);
             boatSprite.Update(gameTime);
         }
 
-        public void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime)
         {
             boatSprite.Draw(position, 0.2f, rotation, new Vector2(336, 121));
         }
