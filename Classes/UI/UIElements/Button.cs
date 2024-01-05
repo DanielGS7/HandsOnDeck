@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 
-public class Button
+public class Button : UIElement
 {
     private string text;
     private Vector2 position;

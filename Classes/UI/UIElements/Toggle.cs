@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 
-public class Toggle
+public class Toggle : UIElement
 {
     private Vector2 position;
     private Action<bool> action;
