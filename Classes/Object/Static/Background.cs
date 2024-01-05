@@ -14,14 +14,14 @@ using System.Threading.Tasks;
 
 namespace HandsOnDeck.Classes.Object.Static
 {
-    internal class Background : IGameObject
+    internal class Background : GameObject
     {
         private static Background background;
         private static object syncRoot = new object();
         private static Animation water = new Animation("Swater", new Vector2(128, 128), 1, 6, 39, 15f, true);
 
 
-        public void LoadContent()
+        public override void LoadContent()
         {
             water.LoadContent();
         }
@@ -41,12 +41,12 @@ namespace HandsOnDeck.Classes.Object.Static
             }
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             water.Update(gameTime);
         }
 
-        public void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime)
         {
             GraphicsDevice _graphics = GraphicsDeviceSingleton.Instance;
             SpriteBatch _spriteBatch = SpriteBatchManager.Instance;

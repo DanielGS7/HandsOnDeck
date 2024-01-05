@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HandsOnDeck.Enums
 {
-    internal enum HitboxType
+    public enum HitboxType
     {
         Physical, Trigger
     }
