@@ -46,7 +46,7 @@ namespace HandsOnDeck.Classes.Object.Static
             water.Update(gameTime);
         }
 
-        public void Draw()
+        public void Draw(GameTime gameTime)
         {
             GraphicsDevice _graphics = GraphicsDeviceSingleton.Instance;
             SpriteBatch _spriteBatch = SpriteBatchManager.Instance;

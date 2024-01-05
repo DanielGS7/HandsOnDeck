@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace HandsOnDeck.Classes.Object
 {
-    internal class GameObject:IGameObject, ICollideable
+    internal abstract class GameObject:IGameObject, ICollideable
     {
         public CollisionHandler CollisionHandler { get; set; }
         public Hitbox Hitbox { get; set; }
@@ -26,7 +26,7 @@ namespace HandsOnDeck.Classes.Object
             
         }
 
-        public void Draw()
+        public void Draw(GameTime gameTime)
         {
            
         }

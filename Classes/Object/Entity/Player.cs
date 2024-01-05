@@ -56,7 +56,7 @@ namespace HandsOnDeck.Classes.Object.Entity
             boatSprite.Update(gameTime);
         }
 
-        public void Draw()
+        public void Draw(GameTime gameTime)
         {
             boatSprite.Draw(position, 0.2f, rotation, new Vector2(336, 121));
         }

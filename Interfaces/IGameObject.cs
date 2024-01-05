@@ -12,6 +12,6 @@ namespace HandsOnDeck.Interfaces
     {
         void LoadContent();
         void Update(GameTime gameTime);
-        void Draw();
+        void Draw(GameTime gameTime);
     }
 }
