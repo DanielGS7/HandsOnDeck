@@ -74,6 +74,10 @@ namespace HandsOnDeck.Classes.Animations
         {
             SpriteBatchManager.Instance.Draw(spriteSheet, position, sourceRectangle, Color.White, rotation, Vector2.Zero, scale, SpriteEffects.None, 1);
         }
+        public void Draw(Vector2 position, float scale, float rotation, Vector2 origin)
+        {
+            SpriteBatchManager.Instance.Draw(spriteSheet, position, sourceRectangle, Color.White, rotation, origin, scale, SpriteEffects.None, 1);
+        }
 
         public void Draw(Vector2 position, Vector2 totalSurface)
         {

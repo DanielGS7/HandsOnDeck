@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 namespace HandsOnDeck.Enums
 {    public enum GameState
     {
-        StartScreen,
-        SettingsScreen,
-        IngameScreen,
-        MapScreen,
-        PauseScreen,
-        GameOverScreen
+        Start,
+        Settings,
+        Game,
+        Pause,
+        GameOver
     }
 }

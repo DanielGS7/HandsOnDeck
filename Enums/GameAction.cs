@@ -8,8 +8,7 @@ namespace HandsOnDeck.Enums
 {
     public enum GameAction
     {
-        SAILSUP,
-        SAILSDOWN,
+        TOGGLESAILS,
         TURNLEFT,
         TURNRIGHT,
         TOGGLEANCHOR,

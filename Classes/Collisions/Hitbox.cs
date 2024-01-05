@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace HandsOnDeck.Classes.Collisions
 {
-    internal class Hitbox
+    public class Hitbox
     {
         internal Rectangle bounds { get; set;}
 
@@ -16,5 +16,8 @@ namespace HandsOnDeck.Classes.Collisions
             bounds = SourceRectangle;
         }
 
+        internal void Update(Vector2 position)
+        {
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace HandsOnDeck.Interfaces
 {
-    internal interface IEntity : IGameObject,ICollideable
+    internal interface IEntity : IGameObject
     {
 
     }
