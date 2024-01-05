@@ -27,7 +27,7 @@ namespace HandsOnDeck.Classes.Managers
         private static object syncRoot = new object();
 
         Background background;
-        Player player1 = new Player(new Vector2(Game1.ProgramWidth/2, Game1.ProgramHeight/2));
+        Player player1 = Player.GetInstance();
         EnemyBoat enemy1 = new EnemyBoat(new Vector2(Game1.ProgramWidth/3, Game1.ProgramHeight/3));
         KamikazeBoat enemy2= new KamikazeBoat(new Vector2(Game1.ProgramWidth/4, Game1.ProgramHeight/4));
         private Renderer() { }
@@ -76,12 +76,13 @@ namespace HandsOnDeck.Classes.Managers
             InputManager.GetInstance.SetCurrentKeyboardState(Keyboard.GetState());
         }
 
-        public void Draw()
+        public void Draw(GameTime gameTime)
         {
             GetInstance._spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
             //Alles dat getekend moet worden komt onder deze lijn
-            Background.GetInstance.Draw();
-            player1.Draw();
+
+            Background.GetInstance.Draw(gameTime);
+            player1.Draw(gameTime);
             enemy1.Draw();
             enemy2.Draw();
             MapOverlay.GetInstance.Draw();

@@ -12,28 +12,13 @@ using System.Threading.Tasks;
 
 namespace HandsOnDeck.Classes.Object
 {
-    internal class GameObject:IGameObject, ICollideable
+    public abstract class GameObject : IGameObject
     {
-        public CollisionHandler CollisionHandler { get; set; }
-        public Hitbox Hitbox { get; set; }
-        public HitboxType type { get ; set ; }
-
         public string _gameObjectTextureName;
         public Texture2D _gameObjectTexture;
 
-        public void Update(GameTime gameTime)
-        {
-            
-        }
-
-        public void Draw()
-        {
-           
-        }
-
-        public void LoadContent()
-        {
-           
-        }
+        public abstract void Update(GameTime gameTime);
+        public abstract void Draw(GameTime gameTime);
+        public abstract void LoadContent();
     }
 }

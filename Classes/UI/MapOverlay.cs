@@ -39,7 +39,7 @@ namespace HandsOnDeck.Classes.UI
         {
             _overlay.LoadContent();
         }
-        public void Draw()
+        public void Draw(GameTime gameTime)
         {
             _overlay.Draw(Vector2.Zero, 2,0);
         }

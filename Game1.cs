@@ -58,7 +58,7 @@ namespace HandsOnDeck
             GraphicsDevice.Clear(Color.Green);
             Window.AllowUserResizing = true;
 
-            Renderer.GetInstance.Draw();
+            Renderer.GetInstance.Draw(gameTime);
 
             float outputAspect = Window.ClientBounds.Width / (float)Window.ClientBounds.Height;
             float preferredAspect = ProgramWidth / (float)ProgramHeight;
