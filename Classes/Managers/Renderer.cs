@@ -27,7 +27,7 @@ namespace HandsOnDeck.Classes.Managers
         private static object syncRoot = new object();
 
         Background background;
-        Player player1 = new Player(new Vector2(Game1.ProgramWidth/2, Game1.ProgramHeight/2));
+        Player player1 = Player.GetInstance();
         private Renderer() { }
 
         internal void Initialize(GraphicsDeviceManager _graphics)
@@ -70,13 +70,13 @@ namespace HandsOnDeck.Classes.Managers
             InputManager.GetInstance.SetCurrentKeyboardState(Keyboard.GetState());
         }
 
-        public void Draw()
+        public void Draw(GameTime gameTime)
         {
             GetInstance._spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
             //Alles dat getekend moet worden komt onder deze lijn
-            Background.GetInstance.Draw();
-            player1.Draw();
-            MapOverlay.GetInstance.Draw();
+            Background.GetInstance.Draw(gameTime);
+            player1.Draw(gameTime);
+            MapOverlay.GetInstance.Draw(gameTime);
             //Alles dat getekend moet worden komt boven deze lijn
             GetInstance._spriteBatch.End();
         }
