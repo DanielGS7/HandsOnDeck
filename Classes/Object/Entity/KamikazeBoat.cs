@@ -14,10 +14,10 @@ namespace HandsOnDeck.Classes.Object.Entity
         private Vector2 position;
         private float rotation;
         private float speed;
-        private readonly float maxSpeed = 2.0f;
+        private readonly float maxSpeed = 3.1f;
         private readonly float accelerationRate = 0.02f;
         private readonly float decelerationRate = 0.03f;
-        private readonly float turnSpeedCoefficient = 0.1f;
+        private readonly float turnSpeedCoefficient = 0.01f;
         private readonly Random random;
         private const float EncircleDistanceMin = 100f;
         private const float EncircleDistanceMax = 200f;

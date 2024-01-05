@@ -23,7 +23,7 @@ namespace HandsOnDeck.Classes.Object.Entity
         private bool toggleSailReleased = true;
         private float accelerationRate = 0.02f;
         private float decelerationRate = 0.03f;
-        private float turnSpeedCoefficient = 0.1f;
+        private float turnSpeedCoefficient = 0.5f;
 
         public Player(Vector2 startPosition)
         {
