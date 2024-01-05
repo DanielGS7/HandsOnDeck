@@ -85,7 +85,7 @@ namespace HandsOnDeck.Classes.Managers
             player1.Draw(gameTime);
             enemy1.Draw();
             enemy2.Draw();
-            MapOverlay.GetInstance.Draw();
+            MapOverlay.GetInstance.Draw(gameTime);
             //Alles dat getekend moet worden komt boven deze lijn
             GetInstance._spriteBatch.End();
         }
