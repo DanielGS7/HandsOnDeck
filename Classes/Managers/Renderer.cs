@@ -66,6 +66,7 @@ namespace HandsOnDeck.Classes.Managers
             player1.LoadContent();
             enemy1.LoadContent();
             enemy2.LoadContent();
+            
         }
         public void Update(GameTime gameTime)
         {
