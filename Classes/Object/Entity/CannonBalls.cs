@@ -37,5 +37,10 @@ namespace HandsOnDeck.Classes.Object.Entity
                 cb.Draw(gameTime);
             }
         }
+
+        internal void Reset()
+        {
+            this.Clear();
+        }
     }
 }

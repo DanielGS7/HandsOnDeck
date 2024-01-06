@@ -17,7 +17,29 @@ namespace HandsOnDeck.Classes.UI
         private EnemyBoat enemy1;
         private KamikazeBoat enemy2;
 
-        public GameScreen()
+        public bool isPaused;
+
+        private static GameScreen instance;
+
+        public static GameScreen Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new GameScreen();
+                    instance.Initialize();
+                }
+                return instance;
+            }
+        }
+
+        public void TogglePause()
+        {
+            isPaused = !isPaused;
+        }
+
+        private GameScreen()
         {
             gameObjects = new List<GameObject>();
             player = Player.GetInstance();
@@ -46,8 +68,8 @@ namespace HandsOnDeck.Classes.UI
 
         public override void Update(GameTime gameTime)
         {
+            if (isPaused) return;
             base.Update(gameTime);
-
             foreach (var gameObject in gameObjects)
             {
                 gameObject.Update(gameTime);
@@ -67,5 +89,14 @@ namespace HandsOnDeck.Classes.UI
 
         }
 
+        public void ResetGame()
+        {
+            gameObjects.Clear();
+            player = Player.GetInstance();
+            player.Reset();
+            bg = Background.GetInstance;
+            gameObjects.Add(player);
+            gameObjects.Add(bg);
+        }
     }
 }

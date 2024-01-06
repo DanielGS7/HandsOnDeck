@@ -18,11 +18,14 @@ namespace HandsOnDeck.Classes.Managers
         private GameState currentState;
         private Dictionary<GameState, UIScreen> screens;
 
+        private bool pausePreviouslyPressed = false;
+
         private GameStateManager()
         {
             screens = new Dictionary<GameState, UIScreen>();
-            AddScreen(GameState.Game, new GameScreen());
+            AddScreen(GameState.Game, GameScreen.Instance);
             AddScreen(GameState.Start, StartScreen.Instance);
+            AddScreen(GameState.Pause, new PauseScreen());
             ChangeState(GameState.Start);
         }
 
@@ -61,6 +64,15 @@ namespace HandsOnDeck.Classes.Managers
 
         public void Update(GameTime gameTime)
         {
+            bool pausePressed = InputManager.GetInstance.GetPressedActions().Contains(GameAction.PAUSE);
+
+            if (pausePressed && !pausePreviouslyPressed)
+            {
+                TogglePause();
+            }
+
+            pausePreviouslyPressed = pausePressed;
+
             if (screens.ContainsKey(currentState) && screens[currentState] != null)
             {
                 screens[currentState].Update(gameTime);
@@ -72,6 +84,20 @@ namespace HandsOnDeck.Classes.Managers
             if (screens.ContainsKey(currentState) && screens[currentState] != null)
             {
                 screens[currentState].Draw(gameTime);
+            }
+        }
+
+        public void TogglePause()
+        {
+            if (currentState == GameState.Game)
+            {
+                ChangeState(GameState.Pause);
+                GameScreen.Instance.isPaused = true;
+            }
+            else if (currentState == GameState.Pause)
+            {
+                ChangeState(GameState.Game);
+                GameScreen.Instance.isPaused = false;
             }
         }
     }
