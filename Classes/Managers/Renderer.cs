@@ -76,7 +76,7 @@ namespace HandsOnDeck.Classes.Managers
             GetInstance._spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
             //Alles dat getekend moet worden komt onder deze lijn
             Background.GetInstance.Draw(gameTime);
-            player1.Draw(gameTime);
+            GameStateManager.Instance.Draw(gameTime);
             MapOverlay.GetInstance.Draw(gameTime);
             //Alles dat getekend moet worden komt boven deze lijn
             GetInstance._spriteBatch.End();
