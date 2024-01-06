@@ -122,5 +122,15 @@ namespace HandsOnDeck.Classes.Object.Entity
             Vector2 direction = new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation));
             position += direction * speed;
         }
+
+        public void Reset()
+        {
+            position = new Vector2(500, 500);
+            rotation = 0.0f;
+            speed = 0.0f;
+            sailsUp = false;
+            toggleSailReleased = true;
+            cannonBalls.Reset();
+        }
     }
 }

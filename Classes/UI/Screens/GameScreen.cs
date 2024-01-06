@@ -82,5 +82,14 @@ namespace HandsOnDeck.Classes.UI
 
         }
 
+        public void ResetGame()
+        {
+            gameObjects.Clear();
+            player = Player.GetInstance();
+            player.Reset();
+            bg = Background.GetInstance;
+            gameObjects.Add(player);
+            gameObjects.Add(bg);
+        }
     }
 }

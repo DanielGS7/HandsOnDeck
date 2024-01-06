@@ -47,6 +47,8 @@ namespace HandsOnDeck.Classes.UI.Screens
 
         private void ExitToMainMenu()
         {
+            GameScreen.Instance.ResetGame();
+            GameScreen.Instance.isPaused = false;
             GameStateManager.Instance.ChangeState(GameState.Start);
         }
     }
