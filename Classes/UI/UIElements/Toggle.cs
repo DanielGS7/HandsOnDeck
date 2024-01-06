@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using static System.Net.Mime.MediaTypeNames;
 
 public class Toggle : UIElement
 {
@@ -17,11 +18,11 @@ public class Toggle : UIElement
     private bool isToggled;
     private bool isHovered;
     private bool isClicked;
-    private string label;
+    private string text;
 
-    public Toggle(string label, Vector2 position, bool initialState, Action<bool> action)
+    public Toggle(string text, Vector2 position, bool initialState, Action<bool> action)
     {
-        this.label = label;
+        this.text = text;
         this.position = position;
         this.action = action;
         this.font = Game1.DefaultFont;
@@ -29,9 +30,23 @@ public class Toggle : UIElement
         this.hoverTexture = ContentLoader.Load<Texture2D>("buttonH");
         this.isToggled = initialState;
 
-        Vector2 size = font.MeasureString(label);
+        Vector2 size = font.MeasureString(text);
         this.bounds = new Rectangle((int)position.X, (int)position.Y, (int)size.X + 20, (int)size.Y);
     }
+
+    internal override void LoadContent()
+    {
+        this.texture = ContentLoader.Load<Texture2D>("button");
+        this.hoverTexture = ContentLoader.Load<Texture2D>("buttonH");
+    }
+
+    internal override void Initialize()
+    {
+        this.font = Game1.DefaultFont ?? throw new InvalidOperationException("DefaultFont not loaded.");
+        Vector2 size = font.MeasureString(text);
+        this.bounds = new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y);
+    }
+
 
     public override void Update(GameTime gameTime)
     {
@@ -54,9 +69,9 @@ public class Toggle : UIElement
     public override void Draw(GameTime gameTime)
     {
         Color toggleColor = isToggled ? Color.Green : Color.Red;
-        Color labelColor = isHovered ? Color.Gray : Color.White;
-        SpriteBatchManager.Instance.Draw(texture, bounds, labelColor);
-        SpriteBatchManager.Instance.DrawString(font, label, position, Color.Black);
+        Color textColor = isHovered ? Color.Gray : Color.White;
+        SpriteBatchManager.Instance.Draw(texture, bounds, textColor);
+        SpriteBatchManager.Instance.DrawString(font, text, position, Color.Black);
 
         Rectangle toggleButtonBounds = new Rectangle(bounds.Right + 5, bounds.Y, bounds.Height, bounds.Height);
         SpriteBatchManager.Instance.Draw(texture, toggleButtonBounds, toggleColor);

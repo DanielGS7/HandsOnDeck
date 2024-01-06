@@ -1,6 +1,8 @@
-﻿using HandsOnDeck.Classes.UI.UIElements;
+﻿using HandsOnDeck.Classes.Managers;
+using HandsOnDeck.Classes.UI.UIElements;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 
 namespace HandsOnDeck.Classes.UI.Screens
@@ -8,7 +10,7 @@ namespace HandsOnDeck.Classes.UI.Screens
     public abstract class UIScreen
     {
         protected List<UIElement> uiElements;
-
+        protected Texture2D buttonTexture;
         public UIScreen()
         {
             uiElements = new List<UIElement>();
@@ -37,6 +39,11 @@ namespace HandsOnDeck.Classes.UI.Screens
         protected void AddUIElement(UIElement element)
         {
             uiElements.Add(element);
+        }
+
+        internal void LoadContent()
+        {
+            buttonTexture = ContentLoader.Load<Texture2D>("button/button");
         }
     }
 }

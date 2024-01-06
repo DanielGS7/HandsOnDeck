@@ -14,6 +14,7 @@ using HandsOnDeck.Classes.Object.Static;
 using HandsOnDeck.Classes.UI;
 using Microsoft.Xna.Framework.Input;
 using HandsOnDeck.Classes.Object.Entity;
+using HandsOnDeck.Classes.Managers.HandsOnDeck.Classes.Managers;
 
 namespace HandsOnDeck.Classes.Managers
 {
@@ -22,12 +23,10 @@ namespace HandsOnDeck.Classes.Managers
     {
         internal SpriteBatch _spriteBatch;
         GraphicsDeviceManager graphics;
+        private MousePositionDisplay mousePositionDisplay;
 
         private static Renderer renderer;
         private static object syncRoot = new object();
-
-        Background background;
-        Player player1 = Player.GetInstance();
         private Renderer() { }
 
         internal void Initialize(GraphicsDeviceManager _graphics)
@@ -60,23 +59,25 @@ namespace HandsOnDeck.Classes.Managers
         {
             this._spriteBatch = _spriteBatch;
             Background.GetInstance.LoadContent();
+            GameStateManager.Instance.LoadContent();
             MapOverlay.GetInstance.LoadContent();
-            player1.LoadContent();
+            mousePositionDisplay = new MousePositionDisplay();
         }
         public void Update(GameTime gameTime)
         {
             Background.GetInstance.Update(gameTime);
-            player1.Update(gameTime);
             InputManager.GetInstance.SetCurrentKeyboardState(Keyboard.GetState());
+            GameStateManager.Instance.Update(gameTime);
+            mousePositionDisplay.Update(gameTime);
         }
 
         public void Draw(GameTime gameTime)
         {
             GetInstance._spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
             //Alles dat getekend moet worden komt onder deze lijn
-            Background.GetInstance.Draw(gameTime);
-            player1.Draw(gameTime);
+            GameStateManager.Instance.Draw(gameTime);
             MapOverlay.GetInstance.Draw(gameTime);
+            mousePositionDisplay.Draw(_spriteBatch);
             //Alles dat getekend moet worden komt boven deze lijn
             GetInstance._spriteBatch.End();
         }

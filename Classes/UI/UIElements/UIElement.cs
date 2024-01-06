@@ -1,6 +1,7 @@
 ﻿using HandsOnDeck.Classes.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace HandsOnDeck.Classes.UI.UIElements
 {
@@ -46,6 +47,8 @@ namespace HandsOnDeck.Classes.UI.UIElements
             SpriteBatchManager.Instance.Draw(texture, new Rectangle(destination.X + borderSize, destination.Y + borderSize, destCenterWidth, destCenterHeight), centerSource, Color.White);
         }
 
+        internal abstract void Initialize();
+        internal abstract void LoadContent();
     }
 
 }
