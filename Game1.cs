@@ -67,7 +67,7 @@ namespace HandsOnDeck
         protected override void Draw(GameTime gameTime)
         {
             _graphics.GraphicsDevice.SetRenderTarget(RenderTarget);
-            GraphicsDevice.Clear(Color.Beige);
+            GraphicsDevice.Clear(Color(98, 91, 88));
             Window.AllowUserResizing = true;
 
             Renderer.GetInstance.Draw(gameTime);
