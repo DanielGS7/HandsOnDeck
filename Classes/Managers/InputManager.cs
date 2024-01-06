@@ -45,7 +45,8 @@ namespace HandsOnDeck.Classes.Managers
                 AddMapping(GameAction.TOGGLEANCHOR, Keys.LeftShift);
                 AddMapping(GameAction.SELECT, Keys.Space);
                 AddMapping(GameAction.PAUSE, Keys.Escape);
-                AddMapping(GameAction.SHOOT, Keys.LeftControl);
+                AddMapping(GameAction.SHOOTLEFT, Keys.Left);
+                AddMapping(GameAction.SHOOTRIGHT, Keys.Right);
                 AddMapping(GameAction.RELOAD, Keys.A);
                 AddMapping(GameAction.REPAIR, Keys.H);
             }

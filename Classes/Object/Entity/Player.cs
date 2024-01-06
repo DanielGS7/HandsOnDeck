@@ -26,6 +26,7 @@ namespace HandsOnDeck.Classes.Object.Entity
         private float accelerationRate = 0.02f;
         private float decelerationRate = 0.03f;
         private float turnSpeedCoefficient = 0.5f;
+        CannonBalls cannonBalls= new CannonBalls();
 
         private Player()
         {
@@ -53,12 +54,14 @@ namespace HandsOnDeck.Classes.Object.Entity
         {
             HandleInput();
             UpdateMovement(gameTime);
+            cannonBalls.Update(gameTime);
             boatSprite.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
         {
             boatSprite.Draw(position, 0.2f, rotation, new Vector2(336, 121));
+            cannonBalls.Draw(gameTime);
         }
 
         private void HandleInput()
@@ -81,6 +84,25 @@ namespace HandsOnDeck.Classes.Object.Entity
                 if (actions.Contains(GameAction.TURNRIGHT))
                     rotation += 0.01f;
             }
+
+            if (actions.Contains(GameAction.SHOOTLEFT))
+            {
+                Vector2 leftDirection = new Vector2((float)Math.Cos(rotation - MathHelper.PiOver2), (float)Math.Sin(rotation - MathHelper.PiOver2));
+                ShootCannonBall(leftDirection);
+            }
+
+            if (actions.Contains(GameAction.SHOOTRIGHT))
+            {
+                Vector2 rightDirection = new Vector2((float)Math.Cos(rotation + MathHelper.PiOver2), (float)Math.Sin(rotation + MathHelper.PiOver2));
+                ShootCannonBall(rightDirection);
+            }
+        }
+
+        private void ShootCannonBall(Vector2 direction)
+        {
+            cannonBalls.AddCannonball(position, direction * (speed + CannonBall.BaseSpeed));
+            
+            
         }
 
         private void UpdateMovement(GameTime gameTime)
