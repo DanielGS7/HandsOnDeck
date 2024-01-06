@@ -17,8 +17,8 @@ namespace HandsOnDeck.Classes.Object
         public string _gameObjectTextureName;
         public Texture2D _gameObjectTexture;
 
+        public abstract void LoadContent();
         public abstract void Update(GameTime gameTime);
         public abstract void Draw(GameTime gameTime);
-        public abstract void LoadContent();
     }
 }

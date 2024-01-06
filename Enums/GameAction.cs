@@ -14,8 +14,9 @@ namespace HandsOnDeck.Enums
         TOGGLEANCHOR,
         SELECT,
         PAUSE,
-        SHOOT,
         RELOAD,
-        REPAIR
+        REPAIR,
+        SHOOTLEFT,
+        SHOOTRIGHT
     }
 }
