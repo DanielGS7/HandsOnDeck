@@ -1,5 +1,4 @@
 ﻿using HandsOnDeck.Classes.Managers;
-using HandsOnDeck.Classes.Managers.HandsOnDeck.Classes.Managers;
 using HandsOnDeck.Classes.UI.UIElements;
 using HandsOnDeck.Enums;
 using Microsoft.Xna.Framework;
@@ -44,7 +43,7 @@ namespace HandsOnDeck.Classes.UI.Screens
             AddUIElement(exitButton);
         }
 
-        internal void LoadContent()
+        internal override void LoadContent()
         {
             titlePosition = new Vector2(400, 100);
             startButton.LoadContent();
@@ -56,9 +55,15 @@ namespace HandsOnDeck.Classes.UI.Screens
         public override void Draw(GameTime gameTime)
         {
             titleFont = Game1.DefaultFont;
+            float scale = 5.0f;
+            Vector2 textSize = titleFont.MeasureString(titleText) * scale;
+            Vector2 textPosition = new Vector2(1000, 400) - textSize / 2;
+            Color goldColor = new Color(255, 215, 0);
+
+            SpriteBatchManager.Instance.DrawString(titleFont, titleText, textPosition, goldColor, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
             base.Draw(gameTime);
-            SpriteBatchManager.Instance.DrawString(titleFont, titleText, titlePosition, Color.White);
         }
+
 
         private void StartGame()
         {
