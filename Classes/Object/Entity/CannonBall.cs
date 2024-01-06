@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HandsOnDeck.Classes.Object.Entity
 {
-    internal class CannonBall : CollidableGameObject, IEntity
+    internal class CannonBall : CollideableGameObject, IEntity
     {
         private Animation cannonBall;
         public Vector2 velocity { get; private set; }

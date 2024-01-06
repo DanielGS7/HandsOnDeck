@@ -23,7 +23,7 @@ namespace HandsOnDeck.Classes.Managers
     {
         internal SpriteBatch _spriteBatch;
         GraphicsDeviceManager graphics;
-        private MousePositionDisplay mousePositionDisplay;
+        //private MousePositionDisplay mousePositionDisplay;
 
         private static Renderer renderer;
         private static object syncRoot = new object();
@@ -61,14 +61,14 @@ namespace HandsOnDeck.Classes.Managers
             Background.GetInstance.LoadContent();
             GameStateManager.Instance.LoadContent();
             MapOverlay.GetInstance.LoadContent();
-            mousePositionDisplay = new MousePositionDisplay();
+            //mousePositionDisplay = new MousePositionDisplay();
         }
         public void Update(GameTime gameTime)
         {
             Background.GetInstance.Update(gameTime);
             InputManager.GetInstance.SetCurrentKeyboardState(Keyboard.GetState());
             GameStateManager.Instance.Update(gameTime);
-            mousePositionDisplay.Update(gameTime);
+            //mousePositionDisplay.Update(gameTime);
         }
 
         public void Draw(GameTime gameTime)

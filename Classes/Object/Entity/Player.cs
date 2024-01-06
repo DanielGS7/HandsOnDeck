@@ -12,7 +12,7 @@ using static System.Windows.Forms.Design.AxImporter;
 
 namespace HandsOnDeck.Classes.Object.Entity
 {
-    public class Player : CollidableGameObject, IEntity
+    public class Player : CollideableGameObject, IEntity
     {
         private static Player instance;
 

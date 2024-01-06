@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace HandsOnDeck.Classes.Object
 {
-    public abstract class CollidableGameObject : GameObject, ICollideable
+    public abstract class CollideableGameObject : GameObject, ICollideable
     {
         public CollisionHandler CollisionHandler { get; set; }
         public Hitbox Hitbox { get; set; }
