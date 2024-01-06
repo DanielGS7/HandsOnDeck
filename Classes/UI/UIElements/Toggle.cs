@@ -5,12 +5,14 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using static System.Net.Mime.MediaTypeNames;
 
 public class Toggle : UIElement
 {
+    private const float ScaleFactor = 3.0f;
+    private const int Padding = 10;
+    private string text;
     private Vector2 position;
-    private Action<bool> action;
+    private Action action;
     private SpriteFont font;
     private Texture2D texture;
     private Texture2D hoverTexture;
@@ -18,26 +20,28 @@ public class Toggle : UIElement
     private bool isToggled;
     private bool isHovered;
     private bool isClicked;
-    private string text;
 
-    public Toggle(string text, Vector2 position, bool initialState, Action<bool> action)
+    public Toggle(string text, Vector2 centerPosition, bool initialState, Action action)
     {
         this.text = text;
-        this.position = position;
         this.action = action;
         this.font = Game1.DefaultFont;
-        this.texture = ContentLoader.Load<Texture2D>("button");
-        this.hoverTexture = ContentLoader.Load<Texture2D>("buttonH");
         this.isToggled = initialState;
 
-        Vector2 size = font.MeasureString(text);
-        this.bounds = new Rectangle((int)position.X, (int)position.Y, (int)size.X + 20, (int)size.Y);
+        Vector2 size = (font.MeasureString(text) + new Vector2(Padding * 2, Padding * 2)) * ScaleFactor;
+        this.bounds = new Rectangle(
+            (int)(centerPosition.X - size.X / 2),
+            (int)(centerPosition.Y - size.Y / 2),
+            (int)size.X + 200,
+            (int)size.Y
+        );
+        this.position = new Vector2(bounds.X + Padding * ScaleFactor, bounds.Y + Padding * ScaleFactor);
     }
 
     internal override void LoadContent()
     {
-        this.texture = ContentLoader.Load<Texture2D>("button");
-        this.hoverTexture = ContentLoader.Load<Texture2D>("buttonH");
+        this.texture = ContentLoader.Load<Texture2D>("button/button");
+        this.hoverTexture = ContentLoader.Load<Texture2D>("button/buttonH");
     }
 
     internal override void Initialize()
@@ -62,18 +66,28 @@ public class Toggle : UIElement
         {
             isClicked = false;
             isToggled = !isToggled;
-            action.Invoke(isToggled);
+            action.Invoke();
         }
     }
 
     public override void Draw(GameTime gameTime)
     {
-        Color toggleColor = isToggled ? Color.Green : Color.Red;
-        Color textColor = isHovered ? Color.Gray : Color.White;
-        SpriteBatchManager.Instance.Draw(texture, bounds, textColor);
-        SpriteBatchManager.Instance.DrawString(font, text, position, Color.Black);
+        Texture2D buttonSprite = isHovered ? Game1.ButtonHoverSprite : Game1.ButtonSprite;
+        Draw9Slice(buttonSprite, bounds, null, (int)(10 * ScaleFactor));
 
-        Rectangle toggleButtonBounds = new Rectangle(bounds.Right + 5, bounds.Y, bounds.Height, bounds.Height);
-        SpriteBatchManager.Instance.Draw(texture, toggleButtonBounds, toggleColor);
+        Vector2 textPosition = new Vector2(
+            bounds.X + bounds.Width / 2 - font.MeasureString(text).X / 2 * ScaleFactor - 50,
+            bounds.Y + bounds.Height / 2 - font.MeasureString(text).Y / 2 * ScaleFactor
+        );
+        SpriteBatchManager.Instance.DrawString(font, text, textPosition, Color.White, 0f, Vector2.Zero, ScaleFactor, SpriteEffects.None, 0f);
+
+        Color toggleColor = isToggled ? Color.Green : Color.Red;
+        Rectangle toggleIndicatorBounds = new Rectangle(
+            bounds.X + bounds.Width - (int)(Padding * 1.5f) -125,
+            bounds.Y + (int)(Padding * 0.5f * ScaleFactor) +25,
+            (int)(bounds.Height - Padding * ScaleFactor)-50,
+            (int)(bounds.Height - Padding * ScaleFactor)-50
+        );
+        SpriteBatchManager.Instance.Draw(Game1.ButtonSprite, toggleIndicatorBounds, toggleColor);
     }
 }
