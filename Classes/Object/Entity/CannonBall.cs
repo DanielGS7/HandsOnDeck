@@ -15,9 +15,11 @@ namespace HandsOnDeck.Classes.Object.Entity
         public Vector2 velocity { get; private set; }
         public Vector2  position { get; set; }
         public static float BaseSpeed = 5.0f;
+        public float TimeTillRemoval = 1.0f;
+        public float TimeExisting = 0.0f;
         public CannonBall(Vector2 initialPosition, Vector2 initialVelocity)
         {
-            cannonBall = new Animation("cannonball",new Vector2(287,175),0,1,1,0,false);
+            cannonBall = new Animation("cannonball1",new Vector2(600,562),0,1,1,0,false);
             position = initialPosition;
             velocity = initialVelocity;
         }
@@ -35,7 +37,7 @@ namespace HandsOnDeck.Classes.Object.Entity
 
         public override void Draw(GameTime gameTime)
         {
-            cannonBall.Draw(position,0.2f,0,new Vector2(96,58));
+            cannonBall.Draw(position,0.04f,0,new Vector2(300,281));
         }
     }
 }
