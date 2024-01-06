@@ -14,7 +14,7 @@ using HandsOnDeck.Classes.Object.Static;
 using HandsOnDeck.Classes.UI;
 using Microsoft.Xna.Framework.Input;
 using HandsOnDeck.Classes.Object.Entity;
-using HandsOnDeck.Classes.Managers.HandsOnDeck.Classes.Managers;
+using HandsOnDeck.Classes.Managers;
 
 namespace HandsOnDeck.Classes.Managers
 {
