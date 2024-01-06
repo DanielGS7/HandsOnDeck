@@ -13,23 +13,23 @@ namespace HandsOnDeck.Classes
 {
     public class CollisionHandler
     {
-        internal List<CollidableGameObject> gameObjects;
+        internal List<CollideableGameObject> gameObjects;
         private static CollisionHandler collisionHandler;
         internal static CollisionHandler Instance => collisionHandler ??= new CollisionHandler();
 
         private CollisionHandler()
         {
-            this.gameObjects = new List<CollidableGameObject>();
+            this.gameObjects = new List<CollideableGameObject>();
         }
 
-        internal void AddHitbox(CollidableGameObject gameObject)
+        internal void AddHitbox(CollideableGameObject gameObject)
         {
             this.gameObjects.Add(gameObject);
         }
 
-        internal List<CollidableGameObject> CheckForCollisions(CollidableGameObject collider)
+        internal List<CollideableGameObject> CheckForCollisions(CollideableGameObject collider)
         {
-            List<CollidableGameObject> collisions = new();
+            List<CollideableGameObject> collisions = new();
             foreach (var gameObject in gameObjects)
             {
                 if (gameObject != collider && collider.Hitbox.bounds.Intersects(gameObject.Hitbox.bounds))

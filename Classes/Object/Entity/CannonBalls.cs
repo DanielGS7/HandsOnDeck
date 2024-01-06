@@ -19,9 +19,14 @@ namespace HandsOnDeck.Classes.Object.Entity
       
         public void Update(GameTime gameTime) 
         {
-            foreach (CannonBall cb in this) 
+            foreach (CannonBall cb in this.ToList()) 
             {
                 cb.Update(gameTime);
+                cb.TimeExisting += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if(cb.TimeExisting>= cb.TimeTillRemoval)
+                {
+                    this.Remove(cb);
+                }
             }
         }
 

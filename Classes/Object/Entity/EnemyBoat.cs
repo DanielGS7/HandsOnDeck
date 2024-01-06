@@ -4,13 +4,14 @@ using HandsOnDeck.Enums;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace HandsOnDeck.Classes.Object.Entity
 {
-    public class EnemyBoat
+    public class EnemyBoat:GameObject
     {
         private Animation boatSprite;
         private Vector2 position;
@@ -27,26 +28,27 @@ namespace HandsOnDeck.Classes.Object.Entity
         public EnemyBoat(Vector2 startPosition)
         {
             position = startPosition;
-            boatSprite = new Animation("image1", new Vector2(672, 242), 0, 1, 1, 0, false);
+            boatSprite = new Animation("PirateShip", new Vector2(1195, 706), 0, 1, 1, 0, false);
             rotation = 0.0f;
             speed = 0.0f;
             random = new Random();
         }
 
-        public void LoadContent()
+        public override void LoadContent()
         {
             boatSprite.LoadContent();
         }
 
-        public void Update(GameTime gameTime, Player player)
+        public override void Update(GameTime gameTime)
         {
-            UpdateMovement(gameTime, player);
+            Debug.WriteLine(position);
+            UpdateMovement(gameTime, Player.GetInstance());
             boatSprite.Update(gameTime);
         }
 
-        public void Draw()
+        public override void Draw(GameTime gameTime)
         {
-            boatSprite.Draw(position, 0.2f, rotation, new Vector2(336, 121));
+            boatSprite.Draw(position, 0.2f, rotation, new Vector2(597, 353));
         }
 
         private void UpdateMovement(GameTime gameTime, Player player)

@@ -14,6 +14,8 @@ namespace HandsOnDeck.Classes.UI
         private List<GameObject> gameObjects;
         private Background bg;
         private Player player;
+        private EnemyBoat enemy1;
+        private KamikazeBoat enemy2;
 
         public bool isPaused;
 
@@ -42,8 +44,13 @@ namespace HandsOnDeck.Classes.UI
             gameObjects = new List<GameObject>();
             player = Player.GetInstance();
             bg = Background.GetInstance;
-            gameObjects.Add(player);
+            enemy1 = new EnemyBoat(new Vector2(1000,500));
+            enemy2 = new KamikazeBoat(new Vector2(1200,600));
             gameObjects.Add(bg);
+            gameObjects.Add(enemy1);
+            gameObjects.Add(enemy2);
+            gameObjects.Add(player);
+            
         }
 
         public override void Initialize()
