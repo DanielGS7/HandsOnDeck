@@ -1,44 +1,54 @@
-﻿using Microsoft.Xna.Framework;
-using HandsOnDeck.Classes.UI;
-using HandsOnDeck.Classes.Managers;
-using HandsOnDeck.Classes.UI.Screens;
+﻿using HandsOnDeck.Classes.Managers;
 using HandsOnDeck.Enums;
-using HandsOnDeck;
+using Microsoft.Xna.Framework;
+using System;
+using System.Collections.Generic;
 
-public class PauseScreen : UIScreen
+namespace HandsOnDeck.Classes.UI.Screens
 {
-    private Button resumeButton;
-    private Button settingsButton;
-    private Button exitButton;
+    using Microsoft.Xna.Framework;
+    using System;
+    using System.Configuration;
 
-    public override void Initialize()
+    public class PauseScreen : UIScreen
     {
-        base.Initialize();
-        resumeButton = new Button("Resume", new Vector2(100, 100), ResumeGame);
-        settingsButton = new Button("Settings", new Vector2(100, 200), OpenSettings);
-        exitButton = new Button("Exit to Main Menu", new Vector2(100, 300), ExitToMainMenu);
+        private Button resumeButton;
+        private Toggle musicToggle;
+        private Toggle soundToggle;
+        private Button exitButton;
 
-        AddUIElement(resumeButton);
-        AddUIElement(settingsButton);
-        AddUIElement(exitButton);
+        public PauseScreen()
+        {
+            resumeButton = new Button("Resume", new Vector2(Game1.ProgramWidth / 2, Game1.ProgramHeight / 2 - 200), ResumeGame);
+            musicToggle = new Toggle("Music", new Vector2(Game1.ProgramWidth / 2 - 350, Game1.ProgramHeight / 2),true, ToggleMusic);
+            soundToggle = new Toggle("Sound", new Vector2(Game1.ProgramWidth / 2 + 150, Game1.ProgramHeight / 2),true, ToggleSound);
+            exitButton = new Button("Exit to Main Menu", new Vector2(Game1.ProgramWidth / 2, Game1.ProgramHeight / 2 + 200), ExitToMainMenu);
+
+            AddUIElement(resumeButton);
+            AddUIElement(musicToggle);
+            AddUIElement(soundToggle);
+            AddUIElement(exitButton);
+        }
+
+        internal override void LoadContent() { }
+        private void ResumeGame()
+        {
+            GameScreen.Instance.isPaused = false;
+            GameStateManager.Instance.ChangeState(GameState.Game);
+        }
+
+        private void ToggleMusic()
+        {
+        }
+
+        private void ToggleSound()
+        {
+        }
+
+        private void ExitToMainMenu()
+        {
+            GameStateManager.Instance.ChangeState(GameState.Start);
+        }
     }
 
-    internal override void LoadContent()
-    {
-
-    }
-    private void ResumeGame()
-    {
-        GameStateManager.Instance.ChangeState(GameState.Game);
-    }
-
-    private void OpenSettings()
-    {
-        GameStateManager.Instance.ChangeState(GameState.Settings);
-    }
-
-    private void ExitToMainMenu()
-    {
-        GameStateManager.Instance.ChangeState(GameState.Start);
-    }
 }

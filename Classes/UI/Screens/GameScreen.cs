@@ -15,7 +15,29 @@ namespace HandsOnDeck.Classes.UI
         private Background bg;
         private Player player;
 
-        public GameScreen()
+        public bool isPaused;
+
+        private static GameScreen instance;
+
+        public static GameScreen Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new GameScreen();
+                    instance.Initialize();
+                }
+                return instance;
+            }
+        }
+
+        public void TogglePause()
+        {
+            isPaused = !isPaused;
+        }
+
+        private GameScreen()
         {
             gameObjects = new List<GameObject>();
             player = Player.GetInstance();
@@ -39,8 +61,8 @@ namespace HandsOnDeck.Classes.UI
 
         public override void Update(GameTime gameTime)
         {
+            if (isPaused) return;
             base.Update(gameTime);
-
             foreach (var gameObject in gameObjects)
             {
                 gameObject.Update(gameTime);
