@@ -28,7 +28,7 @@ namespace HandsOnDeck.Classes.Object.Entity
         public EnemyBoat(Vector2 startPosition)
         {
             position = startPosition;
-            boatSprite = new Animation("image1", new Vector2(672, 242), 0, 1, 1, 0, false);
+            boatSprite = new Animation("PirateShip", new Vector2(1195, 706), 0, 1, 1, 0, false);
             rotation = 0.0f;
             speed = 0.0f;
             random = new Random();
@@ -48,7 +48,7 @@ namespace HandsOnDeck.Classes.Object.Entity
 
         public override void Draw(GameTime gameTime)
         {
-            boatSprite.Draw(position, 0.2f, rotation, new Vector2(336, 121));
+            boatSprite.Draw(position, 0.2f, rotation, new Vector2(597, 353));
         }
 
         private void UpdateMovement(GameTime gameTime, Player player)
