@@ -16,6 +16,9 @@ namespace HandsOnDeck
         public static float ScaleModifier = 6;
         public static float EntityStatesSpeed = 1;
         public static SpriteFont DefaultFont { get; private set; }
+        public static Texture2D ButtonSprite { get; private set; }
+        public static Texture2D ButtonHoverSprite { get; private set; }
+        public static Point transformedMousePosition;
 
         public const int ProgramWidth = 2048;
         public const int ProgramHeight = 1080;
@@ -24,7 +27,7 @@ namespace HandsOnDeck
             _graphics = new GraphicsDeviceManager(this);
             _graphics.IsFullScreen = false;
             Content.RootDirectory = "Content";
-            IsMouseVisible = false;
+            IsMouseVisible = true;
             TargetElapsedTime = TimeSpan.FromSeconds(1d / 60);
             }
         protected override void Initialize()
@@ -40,8 +43,10 @@ namespace HandsOnDeck
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(_graphics.GraphicsDevice);
+            DefaultFont = Content.Load<SpriteFont>("default");
+            ButtonSprite = Content.Load<Texture2D>("button/button");
+            ButtonHoverSprite = Content.Load<Texture2D>("button/buttonH");
             Renderer.GetInstance.LoadContent(Content, _spriteBatch);
-            DefaultFont = Content.Load<SpriteFont>("default");  
         }
 
         protected override void Update(GameTime gameTime)
@@ -49,13 +54,20 @@ namespace HandsOnDeck
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             Renderer.GetInstance.Update(gameTime);
+            MouseState mouseState = Mouse.GetState();
+            transformedMousePosition = Game1.TransformMousePosition(
+                mouseState,
+                _graphics.GraphicsDevice.Viewport.Width,
+                _graphics.GraphicsDevice.Viewport.Height,
+                Game1.RenderTarget.Width,
+                Game1.RenderTarget.Height);
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             _graphics.GraphicsDevice.SetRenderTarget(RenderTarget);
-            GraphicsDevice.Clear(Color.Green);
+            GraphicsDevice.Clear(new Microsoft.Xna.Framework.Color(98, 91, 88));
             Window.AllowUserResizing = true;
 
             Renderer.GetInstance.Draw(gameTime);
@@ -83,6 +95,17 @@ namespace HandsOnDeck
             _spriteBatch.Draw(RenderTarget, dst, Color.White);
             _spriteBatch.End();
             base.Draw(gameTime);
+        }
+
+        public static Point TransformMousePosition(MouseState mouseState, int windowWidth, int windowHeight, int renderTargetWidth, int renderTargetHeight)
+        {
+            float scaleX = renderTargetWidth / (float)windowWidth;
+            float scaleY = renderTargetHeight / (float)windowHeight;
+
+            return new Point(
+                (int)(mouseState.X * scaleX),
+                (int)(mouseState.Y * scaleY)
+            );
         }
     }
 }
