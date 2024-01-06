@@ -11,16 +11,12 @@ namespace HandsOnDeck.Classes.Object.Entity
     {
         public void AddCannonball(Vector2 initialPosition, Vector2 initialVelocity) 
         {
-            this.Add(new CannonBall(initialPosition, initialVelocity));
+            CannonBall cannonBall= new CannonBall(initialPosition, initialVelocity);
+            cannonBall.LoadContent();
+            this.Add(cannonBall);
         }
 
-        public void loadContent() 
-        {
-            foreach (CannonBall cb in this) 
-            {
-                cb.LoadContent();
-            }
-        }
+      
         public void Update(GameTime gameTime) 
         {
             foreach (CannonBall cb in this) 
