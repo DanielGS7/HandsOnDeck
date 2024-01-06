@@ -24,10 +24,11 @@ namespace HandsOnDeck.Classes.UI
             bg = Background.GetInstance;
             enemy1 = new EnemyBoat(new Vector2(1000,500));
             enemy2 = new KamikazeBoat(new Vector2(1200,600));
+            gameObjects.Add(bg);
             gameObjects.Add(enemy1);
             gameObjects.Add(enemy2);
             gameObjects.Add(player);
-            gameObjects.Add(bg);
+            
         }
 
         public override void Initialize()

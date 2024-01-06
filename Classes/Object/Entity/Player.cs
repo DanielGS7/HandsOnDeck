@@ -27,6 +27,9 @@ namespace HandsOnDeck.Classes.Object.Entity
         private float decelerationRate = 0.03f;
         private float turnSpeedCoefficient = 0.5f;
         CannonBalls cannonBalls= new CannonBalls();
+        bool canShoot = true;
+        private float shotCooldown = 1.0f;
+        private float currentCooldown = 0.0f;
 
         private Player()
         {
@@ -56,6 +59,17 @@ namespace HandsOnDeck.Classes.Object.Entity
             UpdateMovement(gameTime);
             cannonBalls.Update(gameTime);
             boatSprite.Update(gameTime);
+            
+            if (!canShoot)
+            {
+                currentCooldown -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (currentCooldown <= 0)
+                {
+                    canShoot = true;
+                    currentCooldown = 0;
+                }
+            }
         }
 
         public override void Draw(GameTime gameTime)
@@ -85,13 +99,13 @@ namespace HandsOnDeck.Classes.Object.Entity
                     rotation += 0.01f;
             }
 
-            if (actions.Contains(GameAction.SHOOTLEFT))
+            if (actions.Contains(GameAction.SHOOTLEFT) && canShoot)
             {
                 Vector2 leftDirection = new Vector2((float)Math.Cos(rotation - MathHelper.PiOver2), (float)Math.Sin(rotation - MathHelper.PiOver2));
                 ShootCannonBall(leftDirection);
             }
 
-            if (actions.Contains(GameAction.SHOOTRIGHT))
+            if (actions.Contains(GameAction.SHOOTRIGHT) && canShoot)
             {
                 Vector2 rightDirection = new Vector2((float)Math.Cos(rotation + MathHelper.PiOver2), (float)Math.Sin(rotation + MathHelper.PiOver2));
                 ShootCannonBall(rightDirection);
@@ -101,7 +115,8 @@ namespace HandsOnDeck.Classes.Object.Entity
         private void ShootCannonBall(Vector2 direction)
         {
             cannonBalls.AddCannonball(position, direction * (speed + CannonBall.BaseSpeed));
-            
+            canShoot = false;
+            currentCooldown = shotCooldown;
             
         }
 

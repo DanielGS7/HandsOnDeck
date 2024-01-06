@@ -4,6 +4,7 @@ using HandsOnDeck.Enums;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,6 +41,7 @@ namespace HandsOnDeck.Classes.Object.Entity
 
         public override void Update(GameTime gameTime)
         {
+            Debug.WriteLine(position);
             UpdateMovement(gameTime, Player.GetInstance());
             boatSprite.Update(gameTime);
         }
