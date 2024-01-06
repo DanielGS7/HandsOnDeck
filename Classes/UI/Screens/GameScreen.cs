@@ -29,7 +29,7 @@ namespace HandsOnDeck.Classes.UI
             base.Initialize();
         }
 
-        internal void LoadContent()
+        internal override void LoadContent()
         {
             foreach (var gameObject in gameObjects)
             {

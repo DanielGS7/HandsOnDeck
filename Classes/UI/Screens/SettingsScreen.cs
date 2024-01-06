@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using HandsOnDeck.Classes.UI;
-using HandsOnDeck.Classes.Managers.HandsOnDeck.Classes.Managers;
+using HandsOnDeck.Classes.Managers;
 using HandsOnDeck.Classes.UI.Screens;
 using HandsOnDeck.Enums;
 using HandsOnDeck;
@@ -16,7 +16,7 @@ public class SettingsScreen : UIScreen
         base.Initialize();
     }
 
-    internal void LoadContent()
+    internal override void LoadContent()
     {
 
     }

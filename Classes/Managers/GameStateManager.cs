@@ -12,71 +12,68 @@ using System.Windows.Forms;
 
 namespace HandsOnDeck.Classes.Managers
 {
-
-    namespace HandsOnDeck.Classes.Managers
+    public class GameStateManager
     {
-        public class GameStateManager
+        private static GameStateManager instance;
+        private GameState currentState;
+        private Dictionary<GameState, UIScreen> screens;
+
+        private GameStateManager()
         {
-            private static GameStateManager instance;
-            private GameState currentState;
-            private Dictionary<GameState, UIScreen> screens;
+            screens = new Dictionary<GameState, UIScreen>();
+            AddScreen(GameState.Game, new GameScreen());
+            AddScreen(GameState.Start, StartScreen.Instance);
+            ChangeState(GameState.Start);
+        }
 
-            private GameStateManager()
+        public static GameStateManager Instance
+        {
+            get
             {
-                screens = new Dictionary<GameState, UIScreen>();
-                //this.AddScreen(GameState.Game, new GameScreen());
-                this.AddScreen(GameState.Start, StartScreen.Instance);
-                this.ChangeState(GameState.Start);
-            }
-
-
-            public static GameStateManager Instance
-            {
-                get
+                if (instance == null)
                 {
-                    if (instance == null)
-                    {
-                        instance = new GameStateManager();
-                    }
-                    return instance;
+                    instance = new GameStateManager();
                 }
+                return instance;
             }
+        }
 
-            public void AddScreen(GameState state, UIScreen screen)
-            {
-                screens[state] = screen;
-            }
+        public void AddScreen(GameState state, UIScreen screen)
+        {
+            screens[state] = screen;
+        }
 
-            public void ChangeState(GameState newState)
+        public void ChangeState(GameState newState)
+        {
+            if (screens.ContainsKey(newState))
             {
-                if (screens.ContainsKey(newState))
-                {
-                    currentState = newState;
-                }
+                currentState = newState;
             }
+        }
 
-            public void LoadContent()
+        public void LoadContent()
+        {
+            foreach (var screen in screens.Values)
             {
-                if (screens.ContainsKey(currentState))
-                {
-                    screens[currentState].LoadContent();
-                }
+                screen.LoadContent();
             }
-            public void Update(GameTime gameTime)
-            {
-                if (screens.ContainsKey(currentState))
-                {
-                    screens[currentState].Update(gameTime);
-                }
-            }
+        }
 
-            public void Draw(GameTime gameTime)
+        public void Update(GameTime gameTime)
+        {
+            if (screens.ContainsKey(currentState) && screens[currentState] != null)
             {
-                if (screens.ContainsKey(currentState))
-                {
-                    screens[currentState].Draw(gameTime);
-                }
+                screens[currentState].Update(gameTime);
+            }
+        }
+
+        public void Draw(GameTime gameTime)
+        {
+            if (screens.ContainsKey(currentState) && screens[currentState] != null)
+            {
+                screens[currentState].Draw(gameTime);
             }
         }
     }
+
 }
