@@ -41,9 +41,6 @@ namespace HandsOnDeck.Classes.UI.Screens
             uiElements.Add(element);
         }
 
-        internal void LoadContent()
-        {
-            buttonTexture = ContentLoader.Load<Texture2D>("button/button");
-        }
+        internal abstract void LoadContent();
     }
 }
