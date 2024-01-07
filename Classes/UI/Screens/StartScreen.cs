@@ -1,4 +1,5 @@
 ﻿using HandsOnDeck.Classes.Managers;
+using HandsOnDeck.Classes.MonogameAccessibility;
 using HandsOnDeck.Enums;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

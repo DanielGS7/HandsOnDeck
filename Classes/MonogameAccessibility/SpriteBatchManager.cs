@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 
-namespace HandsOnDeck.Classes.Managers
+namespace HandsOnDeck.Classes.MonogameAccessibility
 {
     public class SpriteBatchManager
     {

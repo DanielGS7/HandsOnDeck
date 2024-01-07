@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Content;
 
-namespace HandsOnDeck.Classes.Managers
+namespace HandsOnDeck.Classes.MonogameAccessibility
 {
     public class ContentLoader
     {
