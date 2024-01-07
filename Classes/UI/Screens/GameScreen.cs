@@ -22,6 +22,7 @@ namespace HandsOnDeck.Classes.UI
         private Player player;
         private EnemyBoat enemy1;
         private KamikazeBoat enemy2;
+        private ExplosiveBarrel barrel;
 
         public bool isPaused;
 
@@ -47,9 +48,12 @@ namespace HandsOnDeck.Classes.UI
             bg = Background.GetInstance;
             enemy1 = new EnemyBoat(new Vector2(1000,500));
             enemy2 = new KamikazeBoat(new Vector2(1200,600));
+            barrel = new ExplosiveBarrel(new Vector2(700, 700));
             gameObjects.Add(enemy1);
             gameObjects.Add(enemy2);
+            gameObjects.Add(barrel);
             gameObjects.Add(player);
+            
             
         }
 
