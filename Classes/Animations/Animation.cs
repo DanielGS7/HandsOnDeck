@@ -89,7 +89,6 @@ namespace HandsOnDeck.Classes.Animations
                 }
             }
         }
-
         private Rectangle CalculateSourceRectangle(int spriteIndex)
         {
             int col = spriteIndex % rowCount;

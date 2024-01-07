@@ -17,7 +17,6 @@ namespace HandsOnDeck.Classes.Object.Entity
         private static Player instance;
 
         private Animation boatSprite;
-        public Vector2 position;
         public float rotation;
         public float speed;
         private float maxSpeed = 3.0f;
@@ -73,6 +72,10 @@ namespace HandsOnDeck.Classes.Object.Entity
         }
 
         public override void Draw(GameTime gameTime)
+        {
+            Draw(gameTime, position);
+        }
+        public override void Draw(GameTime gameTime, Vector2 position)
         {
             boatSprite.Draw(position, 0.2f, rotation, new Vector2(336, 121));
             cannonBalls.Draw(gameTime);

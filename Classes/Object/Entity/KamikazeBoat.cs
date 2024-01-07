@@ -11,7 +11,6 @@ namespace HandsOnDeck.Classes.Object.Entity
     internal class KamikazeBoat: GameObject
     {
         private Animation boatSprite;
-        private Vector2 position;
         private float rotation;
         private float speed;
         private readonly float maxSpeed = 3.1f;
@@ -43,6 +42,10 @@ namespace HandsOnDeck.Classes.Object.Entity
         }
 
         public override void Draw(GameTime gameTime)
+        {
+            Draw(gameTime, position);
+        }
+        public override void Draw(GameTime gameTime, Vector2 position)
         {
             boatSprite.Draw(position, 0.2f, rotation, new Vector2(336, 121));
         }
