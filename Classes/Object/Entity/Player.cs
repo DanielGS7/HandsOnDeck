@@ -6,6 +6,7 @@ using HandsOnDeck.Interfaces;
 using System.Collections.Generic;
 using System;
 using HandsOnDeck.Classes.UI;
+using System.Diagnostics;
 
 namespace HandsOnDeck.Classes.Object.Entity
 {
@@ -13,7 +14,6 @@ namespace HandsOnDeck.Classes.Object.Entity
     {
         private static Player instance;
 
-        private Animation boatSprite;
         public float rotation;
         public float speed;
         private float maxSpeed = 3.0f;
@@ -169,6 +169,11 @@ namespace HandsOnDeck.Classes.Object.Entity
             sailsUp = false;
             toggleSailReleased = true;
             cannonBalls.Reset();
+        }
+
+        public override void onCollision(CollideableGameObject other)
+        {
+            Debug.WriteLine("player collided");
         }
     }
 }

@@ -2,10 +2,11 @@
 using HandsOnDeck.Classes.UI;
 using Microsoft.Xna.Framework;
 using System;
+using System.Diagnostics;
 
 namespace HandsOnDeck.Classes.Object.Entity
 {
-    internal class KamikazeBoat: GameObject
+    internal class KamikazeBoat: CollideableGameObject
     {
         private Animation boatSprite;
         private float rotation;
@@ -98,6 +99,11 @@ namespace HandsOnDeck.Classes.Object.Entity
             return currentSpeed < targetSpeed
                 ? Math.Min(currentSpeed + accelerationRate, targetSpeed)
                 : Math.Max(currentSpeed - decelerationRate, targetSpeed);
+        }
+
+        public override void onCollision(CollideableGameObject other)
+        {
+            Debug.WriteLine("Kamikaze collided!");
         }
     }
 }

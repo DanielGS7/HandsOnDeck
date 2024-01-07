@@ -2,10 +2,11 @@
 using HandsOnDeck.Classes.UI;
 using Microsoft.Xna.Framework;
 using System;
+using System.Diagnostics;
 
 namespace HandsOnDeck.Classes.Object.Entity
 {
-    public class EnemyBoat:GameObject
+    public class EnemyBoat: CollideableGameObject
     {
         private Animation boatSprite;
         private float rotation;
@@ -150,6 +151,10 @@ namespace HandsOnDeck.Classes.Object.Entity
                     : Math.Max(currentSpeed - decelerationRate, targetSpeed);
             }
 
+        public override void onCollision(CollideableGameObject other)
+        {
+            Debug.WriteLine("EnemyBoat collided!");
+        }
     }
 }
 

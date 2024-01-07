@@ -37,5 +37,10 @@ namespace HandsOnDeck.Classes.Object.Entity
         {
             cannonBall.Draw(position,0.04f,0,new Vector2(300,281));
         }
+
+        public override void onCollision(CollideableGameObject other)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -29,5 +29,10 @@ namespace HandsOnDeck.Classes.Object.Entity
         {
 
         }
+
+        public override void onCollision(CollideableGameObject other)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
