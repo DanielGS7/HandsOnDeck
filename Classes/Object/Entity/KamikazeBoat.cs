@@ -1,4 +1,5 @@
 ﻿using HandsOnDeck.Classes.Animations;
+using HandsOnDeck.Classes.UI;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,7 @@ namespace HandsOnDeck.Classes.Object.Entity
             rotation = 0.0f;
             speed = 0.0f;
             random = new Random();
+            _gameObjectTextureName = "kamikaze";
         }
 
         public override void LoadContent()
@@ -52,13 +54,25 @@ namespace HandsOnDeck.Classes.Object.Entity
 
         private void UpdateMovement(GameTime gameTime, Player player)
         {
-            Vector2 directionToPlayer = player.position - position;
+
+            Vector2 directDirectionToPlayer = player.position - position;
+            Vector2 wrappedDirectionToPlayer = directDirectionToPlayer;
+
+            if (Math.Abs(directDirectionToPlayer.X) > GameScreen.WorldSize.X / 2)
+            {
+                wrappedDirectionToPlayer.X -= Math.Sign(directDirectionToPlayer.X) * GameScreen.WorldSize.X;
+            }
+            if (Math.Abs(directDirectionToPlayer.Y) > GameScreen.WorldSize.Y / 2)
+            {
+                wrappedDirectionToPlayer.Y -= Math.Sign(directDirectionToPlayer.Y) * GameScreen.WorldSize.Y;
+            }
+
+            
+            Vector2 directionToPlayer = (wrappedDirectionToPlayer.LengthSquared() < directDirectionToPlayer.LengthSquared()) ?
+                                        wrappedDirectionToPlayer : directDirectionToPlayer;
+
             float distanceToPlayer = directionToPlayer.Length();
-
-
             float noise = ((float)random.NextDouble() - 0.5f) * 0.02f;
-
-
             float targetRotation = (float)Math.Atan2(directionToPlayer.Y, directionToPlayer.X);
 
 
@@ -72,6 +86,8 @@ namespace HandsOnDeck.Classes.Object.Entity
 
             Vector2 direction = new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation));
             position += direction * speed;
+            position.X = (position.X + GameScreen.WorldSize.X) % GameScreen.WorldSize.X;
+            position.Y = (position.Y + GameScreen.WorldSize.Y) % GameScreen.WorldSize.Y;
         }
 
         private float TurnTowards(float currentRotation, float targetRotation, float turnSpeed)

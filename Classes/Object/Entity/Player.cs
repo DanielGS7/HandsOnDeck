@@ -139,6 +139,8 @@ namespace HandsOnDeck.Classes.Object.Entity
 
             Vector2 direction = new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation));
             position += direction * speed;
+            position.X = (position.X + GameScreen.WorldSize.X) % GameScreen.WorldSize.X;
+            position.Y = (position.Y + GameScreen.WorldSize.Y) % GameScreen.WorldSize.Y;
         }
 
         public void Reset()
