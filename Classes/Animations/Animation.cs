@@ -81,15 +81,17 @@ namespace HandsOnDeck.Classes.Animations
 
         public void Draw(Vector2 position, Vector2 totalSurface)
         {
-            for(int i= 0; i < totalSurface.Y; i += sourceRectangle.Height)
+            Vector2 extendedSurface = new Vector2(totalSurface.X + sourceRectangle.Width*2, totalSurface.Y + sourceRectangle.Height*2);
+
+            for (int i = 0; i <= extendedSurface.Y; i += sourceRectangle.Height)
             {
-                for (int j = 0; j < totalSurface.X; j += sourceRectangle.Width)
+                for (int j = 0; j <= extendedSurface.X; j += sourceRectangle.Width)
                 {
-                    Draw(new Vector2(j, i));
+                    Vector2 tilePosition = new Vector2(j, i) - position-new Vector2(128,128);
+                    Draw(tilePosition);
                 }
             }
         }
-
         private Rectangle CalculateSourceRectangle(int spriteIndex)
         {
             int col = spriteIndex % rowCount;
