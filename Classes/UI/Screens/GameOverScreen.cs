@@ -1,9 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using HandsOnDeck.Classes.UI;
 using HandsOnDeck.Classes.Managers;
 using HandsOnDeck.Classes.UI.Screens;
 using HandsOnDeck.Enums;
-using HandsOnDeck;
 
 public class GameOverScreen : UIScreen
 {

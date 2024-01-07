@@ -1,10 +1,7 @@
 ﻿using HandsOnDeck.Classes.Managers;
-using HandsOnDeck.Classes.UI.UIElements;
 using HandsOnDeck.Enums;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Diagnostics;
-using System.Xml.Linq;
 
 namespace HandsOnDeck.Classes.UI.Screens
 {

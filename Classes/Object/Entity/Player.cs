@@ -1,14 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using HandsOnDeck.Classes.Animations;
 using HandsOnDeck.Enums;
 using HandsOnDeck.Classes.Managers;
 using HandsOnDeck.Interfaces;
-using HandsOnDeck.Classes.Collisions;
 using System.Collections.Generic;
 using System;
-using static System.Windows.Forms.Design.AxImporter;
 using HandsOnDeck.Classes.UI;
 
 namespace HandsOnDeck.Classes.Object.Entity

@@ -1,9 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using HandsOnDeck.Classes.UI;
-using HandsOnDeck.Classes.Managers;
-using HandsOnDeck.Classes.UI.Screens;
-using HandsOnDeck.Enums;
-using HandsOnDeck;
+﻿using HandsOnDeck.Classes.UI.Screens;
 
 public class SettingsScreen : UIScreen
 {   //Not yet implemented but needed to verify if buttons do change states correctly ;)

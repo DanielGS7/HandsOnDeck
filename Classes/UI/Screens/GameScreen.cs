@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using HandsOnDeck.Classes.Object;
 using System.Collections.Generic;
 using HandsOnDeck.Classes.Object.Entity;

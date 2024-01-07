@@ -2,13 +2,7 @@
 using HandsOnDeck.Classes.UI.Screens;
 using HandsOnDeck.Enums;
 using Microsoft.Xna.Framework;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace HandsOnDeck.Classes.Managers
 {

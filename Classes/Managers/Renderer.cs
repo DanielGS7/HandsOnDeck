@@ -1,20 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
 using RenderTargetUsage = Microsoft.Xna.Framework.Graphics.RenderTargetUsage;
 using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
-using Point = Microsoft.Xna.Framework.Point;
 using SamplerState = Microsoft.Xna.Framework.Graphics.SamplerState;
-using System.Diagnostics;
-using SharpDX.Direct3D9;
-using System.Reflection.Metadata;
 using HandsOnDeck.Classes.Object.Static;
 using HandsOnDeck.Classes.UI;
 using Microsoft.Xna.Framework.Input;
-using HandsOnDeck.Classes.Object.Entity;
-using HandsOnDeck.Classes.Managers;
 
 namespace HandsOnDeck.Classes.Managers
 {

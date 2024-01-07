@@ -1,15 +1,9 @@
 ﻿using HandsOnDeck.Classes.Managers;
 using HandsOnDeck.Enums;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
 
 namespace HandsOnDeck.Classes.UI.Screens
 {
-    using Microsoft.Xna.Framework;
-    using System;
-    using System.Configuration;
-
     public class PauseScreen : UIScreen
     {
         private Button resumeButton;
