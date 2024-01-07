@@ -38,12 +38,6 @@ public class Toggle : UIElement
         this.position = new Vector2(bounds.X + Padding * ScaleFactor, bounds.Y + Padding * ScaleFactor);
     }
 
-    internal override void LoadContent()
-    {
-        this.texture = ContentLoader.Load<Texture2D>("button/button");
-        this.hoverTexture = ContentLoader.Load<Texture2D>("button/buttonH");
-    }
-
     internal override void Initialize()
     {
         this.font = Game1.DefaultFont ?? throw new InvalidOperationException("DefaultFont not loaded.");
@@ -51,6 +45,11 @@ public class Toggle : UIElement
         this.bounds = new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y);
     }
 
+    internal override void LoadContent()
+    {
+        this.texture = ContentLoader.Load<Texture2D>("button/button");
+        this.hoverTexture = ContentLoader.Load<Texture2D>("button/buttonH");
+    }
 
     public override void Update(GameTime gameTime)
     {

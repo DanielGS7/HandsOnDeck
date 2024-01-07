@@ -41,14 +41,14 @@ namespace HandsOnDeck.Classes.Object.Static
 
         public override void Draw(GameTime gameTime)
         {
-            Vector2 viewportOffset = GameScreen.Instance.viewportPosition;
+            Vector2 viewportOffset = GameScreen.GetInstance.viewportPosition;
             Vector2 startPosition = new Vector2(-viewportOffset.X % 128, -viewportOffset.Y % 128);
             Draw(gameTime, startPosition);
         }
 
         public override void Draw(GameTime gameTime, Vector2 position)
         {
-            GraphicsDevice _graphics = GraphicsDeviceSingleton.Instance;
+            GraphicsDevice _graphics = GraphicsDeviceSingleton.GetInstance;
             SpriteBatch _spriteBatch = SpriteBatchManager.Instance;
             Vector2 screenSize = new Vector2(_graphics.Viewport.Width, _graphics.Viewport.Height);
             water.Draw(position, screenSize);

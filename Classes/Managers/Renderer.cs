@@ -5,7 +5,6 @@ using RenderTargetUsage = Microsoft.Xna.Framework.Graphics.RenderTargetUsage;
 using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
 using SamplerState = Microsoft.Xna.Framework.Graphics.SamplerState;
 using HandsOnDeck.Classes.Object.Static;
-using HandsOnDeck.Classes.UI;
 using Microsoft.Xna.Framework.Input;
 
 namespace HandsOnDeck.Classes.Managers
@@ -13,23 +12,14 @@ namespace HandsOnDeck.Classes.Managers
 
     public sealed class Renderer
     {
+        private static Renderer renderer;
+        private static object syncRoot = new object();
+
         internal SpriteBatch _spriteBatch;
         GraphicsDeviceManager graphics;
         //private MousePositionDisplay mousePositionDisplay;
 
-        private static Renderer renderer;
-        private static object syncRoot = new object();
         private Renderer() { }
-
-        internal void Initialize(GraphicsDeviceManager _graphics)
-        {
-            PresentationParameters pp = _graphics.GraphicsDevice.PresentationParameters;
-            Game1.RenderTarget = new RenderTarget2D(_graphics.GraphicsDevice, Game1.ProgramWidth, Game1.ProgramHeight, false,
-            SurfaceFormat.Color, DepthFormat.None, pp.MultiSampleCount, RenderTargetUsage.DiscardContents);
-            graphics = _graphics;
-            MapOverlay.GetInstance.Initialize();
-            InputManager.GetInstance.Initialize();
-        }
 
         public static Renderer GetInstance
         {
@@ -47,11 +37,21 @@ namespace HandsOnDeck.Classes.Managers
             }
         }
 
+        internal void Initialize(GraphicsDeviceManager _graphics)
+        {
+            PresentationParameters pp = _graphics.GraphicsDevice.PresentationParameters;
+            Game1.RenderTarget = new RenderTarget2D(_graphics.GraphicsDevice, Game1.ProgramWidth, Game1.ProgramHeight, false,
+            SurfaceFormat.Color, DepthFormat.None, pp.MultiSampleCount, RenderTargetUsage.DiscardContents);
+            graphics = _graphics;
+            MapOverlay.GetInstance.Initialize();
+            InputManager.GetInstance.Initialize();
+        }
+
         public void LoadContent(ContentManager content, SpriteBatch _spriteBatch)
         {
             this._spriteBatch = _spriteBatch;
             Background.GetInstance.LoadContent();
-            GameStateManager.Instance.LoadContent();
+            GameStateManager.GetInstance.LoadContent();
             MapOverlay.GetInstance.LoadContent();
             //mousePositionDisplay = new MousePositionDisplay();
         }
@@ -59,7 +59,7 @@ namespace HandsOnDeck.Classes.Managers
         {
             Background.GetInstance.Update(gameTime);
             InputManager.GetInstance.SetCurrentKeyboardState(Keyboard.GetState());
-            GameStateManager.Instance.Update(gameTime);
+            GameStateManager.GetInstance.Update(gameTime);
             //mousePositionDisplay.Update(gameTime);
         }
 
@@ -68,7 +68,7 @@ namespace HandsOnDeck.Classes.Managers
             GetInstance._spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
             //Alles dat getekend moet worden komt onder deze lijn
             Background.GetInstance.Draw(gameTime);
-            GameStateManager.Instance.Draw(gameTime);
+            GameStateManager.GetInstance.Draw(gameTime);
             MapOverlay.GetInstance.Draw(gameTime);
             //Alles dat getekend moet worden komt boven deze lijn
             GetInstance._spriteBatch.End();

@@ -6,7 +6,7 @@ public class SettingsScreen : UIScreen
     private Toggle musicToggle;
     private Button backButton;
 
-    public override void Initialize()
+    public void Initialize()
     {
         base.Initialize();
     }

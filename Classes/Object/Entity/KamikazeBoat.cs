@@ -16,7 +16,7 @@ namespace HandsOnDeck.Classes.Object.Entity
         private readonly float turnSpeedCoefficient = 0.01f;
         private readonly Random random;
         private const float EncircleDistanceMin = 100f;
-        private const float EncircleDistanceMax = 200f;
+        private const float EncircleDistanceMax = 200f; // TODO let the boat circle between 2 ranges
 
         public KamikazeBoat(Vector2 startPosition)
         {

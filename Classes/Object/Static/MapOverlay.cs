@@ -2,7 +2,7 @@
 using HandsOnDeck.Interfaces;
 using Microsoft.Xna.Framework;
 
-namespace HandsOnDeck.Classes.UI
+namespace HandsOnDeck.Classes.Object.Static
 {
     internal class MapOverlay : IGameObject
     {
@@ -36,12 +36,9 @@ namespace HandsOnDeck.Classes.UI
         }
         public void Draw(GameTime gameTime)
         {
-            _overlay.Draw(Vector2.Zero, 2,0);
+            _overlay.Draw(Vector2.Zero, 2, 0, Vector2.Zero);
         }
 
-        public void Update(GameTime gameTime)
-        {
-            //doesn't need update logic
-        }
+        public void Update(GameTime gameTime){} //No update logic needed for this
     }
 }

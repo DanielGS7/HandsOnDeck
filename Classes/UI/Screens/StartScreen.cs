@@ -9,14 +9,13 @@ namespace HandsOnDeck.Classes.UI.Screens
     {
         private SpriteFont titleFont;
         private string titleText = "Hands On Deck";
-        private Vector2 titlePosition;
         private Button startButton;
         private Button settingsButton;
         private Button exitButton;
 
         private static StartScreen instance;
 
-        public static StartScreen Instance
+        public static StartScreen GetInstance
         {
             get
             {
@@ -29,8 +28,9 @@ namespace HandsOnDeck.Classes.UI.Screens
             }
         }
 
-        public override void Initialize()
+        public void Initialize()
         {
+            base.Initialize();
             startButton = new Button("Start", new Vector2(1000, 650), StartGame);
             settingsButton = new Button("Settings", new Vector2(900, 850), OpenSettings);
             exitButton = new Button("Exit", new Vector2(1200, 850), ExitGame);
@@ -42,7 +42,6 @@ namespace HandsOnDeck.Classes.UI.Screens
 
         internal override void LoadContent()
         {
-            titlePosition = new Vector2(400, 100);
             startButton.LoadContent();
             settingsButton.LoadContent();
             exitButton.LoadContent();
@@ -64,13 +63,13 @@ namespace HandsOnDeck.Classes.UI.Screens
 
         private void StartGame()
         {
-            GameStateManager.Instance.ChangeState(GameState.Game);
+            GameStateManager.GetInstance.ChangeState(GameState.Game);
         }
 
         private void OpenSettings()
         {
-            GameStateManager.Instance.AddScreen(GameState.Settings, new SettingsScreen());
-            GameStateManager.Instance.ChangeState(GameState.Settings);
+            GameStateManager.GetInstance.AddScreen(GameState.Settings, new SettingsScreen());
+            GameStateManager.GetInstance.ChangeState(GameState.Settings);
         }
         private void ExitGame()
         {

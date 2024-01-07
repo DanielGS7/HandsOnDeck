@@ -11,12 +11,6 @@ namespace HandsOnDeck.Classes.Managers
             _spriteBatch = spriteBatch;
         }
 
-        public static SpriteBatch Instance
-        {
-            get
-            {
-                return _spriteBatch;
-            }
-        }
+        public static SpriteBatch Instance { get { return _spriteBatch; } }
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace HandsOnDeck.Classes.Object.Entity
 {
-    internal class CannonBalls: List<CannonBall>
+    internal class CannonBallFactory: List<CannonBall>
     {
         public void AddCannonball(Vector2 initialPosition, Vector2 initialVelocity) 
         {

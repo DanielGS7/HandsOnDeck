@@ -38,7 +38,5 @@ namespace HandsOnDeck.Classes.UI.Screens
         {
             uiElements.Add(element);
         }
-
-        internal abstract void LoadContent();
     }
 }

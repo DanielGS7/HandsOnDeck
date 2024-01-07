@@ -10,13 +10,6 @@ namespace HandsOnDeck.Classes.Managers
             _graphicsDevice = graphicsDevice;
         }
 
-        public static GraphicsDevice Instance
-        {
-            get
-            {
-                return _graphicsDevice;
-            }
-        }
+        public static GraphicsDevice GetInstance { get { return _graphicsDevice; } }
     }
-
 }
