@@ -9,6 +9,5 @@ namespace HandsOnDeck.Classes.Object
     {
         public abstract void onCollision(CollideableGameObject other);
         public Hitbox Hitbox { get; set; }
-        public HitboxType Type { get; set; }
     }
 }
