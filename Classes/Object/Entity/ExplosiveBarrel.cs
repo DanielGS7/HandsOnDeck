@@ -1,17 +1,24 @@
 ﻿using HandsOnDeck.Classes.Animations;
+using HandsOnDeck.Classes.Collisions;
+using HandsOnDeck.Enums;
 using Microsoft.Xna.Framework;
+using System.Diagnostics;
 
 namespace HandsOnDeck.Classes.Object.Entity
 {
     internal class ExplosiveBarrel : CollideableGameObject
     {
-        private Animation explosiveBarrel = new Animation("Unstable_Barrel",new Vector2(360,360),0,1,1,0, false);
+        private Animation explosiveBarrel;
         private float activationRange = 300f;
         private bool detectedByPlayer = false;
 
         public ExplosiveBarrel(Vector2 startPosition) 
         {
             position = startPosition;
+            size = new Vector2(360, 360);
+            _gameObjectTextureName = "Unstable_Barrel";
+            Hitbox = new Hitbox(new Rectangle(position.ToPoint(), size.ToPoint()), HitboxType.Trigger);
+            explosiveBarrel = new Animation(_gameObjectTextureName, size, 0, 1, 1, 0, false);
         }
 
         public override void LoadContent()
@@ -23,11 +30,7 @@ namespace HandsOnDeck.Classes.Object.Entity
         {
             explosiveBarrel.Update(gameTime);
         }
-        public override void Draw(GameTime gameTime)
-        {
-            
-            
-        }
+        public override void Draw(GameTime gameTime) {} //Draw method unnecessary
 
         public override void Draw(GameTime gameTime, Vector2 position)
         {
@@ -44,7 +47,7 @@ namespace HandsOnDeck.Classes.Object.Entity
 
         public override void onCollision(CollideableGameObject other)
         {
-            throw new System.NotImplementedException();
+            Debug.WriteLine("Explosivebarrel hit!");
         }
     }
 }
