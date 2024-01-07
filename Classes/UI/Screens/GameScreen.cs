@@ -86,6 +86,7 @@ namespace HandsOnDeck.Classes.UI
                 gameObject.Update(gameTime);
             }
             player.Update(gameTime);
+            CollisionManager.GetInstance.CheckForCollisions();
         }
 
         public override void Draw(GameTime gameTime)
