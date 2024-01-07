@@ -14,7 +14,7 @@ namespace HandsOnDeck.Classes.Object.Entity
         private Animation cannonBall;
         public Vector2 velocity { get; private set; }
         public static float BaseSpeed = 5.0f;
-        public float TimeTillRemoval = 1.0f;
+        public float TimeTillRemoval = 3.0f;
         public float TimeExisting = 0.0f;
         public CannonBall(Vector2 initialPosition, Vector2 initialVelocity)
         {

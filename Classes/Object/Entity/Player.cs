@@ -30,11 +30,14 @@ namespace HandsOnDeck.Classes.Object.Entity
         bool canShoot = true;
         private float shotCooldown = 1.0f;
         private float currentCooldown = 0.0f;
+        private Animation moving;
+        private Animation stationary;
 
         private Player()
         {
+            moving = new Animation("movingBoat", new Vector2(672, 243), 0, 6, 5, 1, true);
+            stationary = new Animation("movingBoat", new Vector2(672, 243), 5, 6, 6, 0, false);
             position = new Vector2(Game1.ProgramWidth/2,Game1.ProgramHeight/2);
-            boatSprite = new Animation("image1", new Vector2(672, 242), 0, 1, 1, 0, false);
             rotation = 0.0f;
             speed = 0.0f;
             _gameObjectTextureName = "player";
@@ -51,7 +54,9 @@ namespace HandsOnDeck.Classes.Object.Entity
 
         public override void LoadContent()
         {
-            boatSprite.LoadContent();
+            
+            moving.LoadContent();
+            stationary.LoadContent();
         }
 
         public override void Update(GameTime gameTime)
@@ -59,8 +64,15 @@ namespace HandsOnDeck.Classes.Object.Entity
             HandleInput();
             UpdateMovement(gameTime);
             cannonBalls.Update(gameTime);
-            boatSprite.Update(gameTime);
             
+            if(speed > 0) 
+            {
+               moving.Update(gameTime);
+            }
+            else 
+            {
+                stationary.Update(gameTime);
+            }
             if (!canShoot)
             {
                 currentCooldown -= (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -77,9 +89,17 @@ namespace HandsOnDeck.Classes.Object.Entity
         {
             Draw(gameTime, position);
         }
+
         public override void Draw(GameTime gameTime, Vector2 position)
         {
-            boatSprite.Draw(position, 0.2f, rotation, new Vector2(336, 121));
+            if (speed > 0)
+            {
+                moving.Draw(position, 0.2f, rotation, new Vector2(336, 121));
+            }
+            else
+            {
+                stationary.Draw(position, 0.2f, rotation, new Vector2(336, 121));
+            }
             cannonBalls.Draw(gameTime);
         }
 
