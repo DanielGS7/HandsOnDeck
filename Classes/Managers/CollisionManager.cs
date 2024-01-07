@@ -1,4 +1,5 @@
 ﻿using HandsOnDeck.Classes.Object;
+using System;
 using System.Collections.Generic;
 
 namespace HandsOnDeck.Classes.Managers
@@ -9,6 +10,7 @@ namespace HandsOnDeck.Classes.Managers
         private static readonly object lockObject = new object();
 
         internal List<CollideableGameObject> gameObjects;
+        HashSet<Tuple<GameObject, GameObject>> recordedCollisions = new HashSet<Tuple<GameObject, GameObject>>();
         public static CollisionManager GetInstance
         {
             get
@@ -48,15 +50,25 @@ namespace HandsOnDeck.Classes.Managers
                 {
                     var gameObjectA = gameObjects[i];
                     var gameObjectB = gameObjects[j];
+                    var collisionPair = new Tuple<GameObject, GameObject>(gameObjectA, gameObjectB);
 
                     if (gameObjectA.Hitbox.bounds.Intersects(gameObjectB.Hitbox.bounds))
                     {
-                        gameObjectA.onCollision(gameObjectB);
-                        gameObjectB.onCollision(gameObjectA);
+                        if (!recordedCollisions.Contains(collisionPair))
+                        {
+                            gameObjectA.onCollision(gameObjectB);
+                            gameObjectB.onCollision(gameObjectA);
+                            recordedCollisions.Add(collisionPair);
+                        }
+                    }
+                    else
+                    {
+                        recordedCollisions.Remove(collisionPair);
                     }
                 }
             }
         }
+
     }
 
 }
