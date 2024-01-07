@@ -21,6 +21,11 @@ namespace HandsOnDeck.Classes.Object.Entity
             
         }
 
+        public override void Draw(GameTime gameTime, Vector2 position)
+        {
+
+        }
+
         public override void LoadContent()
         {
 
