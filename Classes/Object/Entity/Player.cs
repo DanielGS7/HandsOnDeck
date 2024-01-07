@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System;
 using HandsOnDeck.Classes.UI;
 using System.Diagnostics;
+using HandsOnDeck.Classes.Collisions;
 
 namespace HandsOnDeck.Classes.Object.Entity
 {
@@ -32,12 +33,14 @@ namespace HandsOnDeck.Classes.Object.Entity
 
         private Player()
         {
-            moving = new Animation("movingBoat", new Vector2(672, 243), 0, 6, 5, 1, true);
-            stationary = new Animation("movingBoat", new Vector2(672, 243), 5, 6, 6, 0, false);
+            size = new Vector2(672, 243);
             position = new Vector2(Game1.ProgramWidth/2,Game1.ProgramHeight/2);
+            _gameObjectTextureName = "movingBoat";
+            Hitbox = new Hitbox(new Rectangle(position.ToPoint(), size.ToPoint()), HitboxType.Physical);
+            moving = new Animation(_gameObjectTextureName,size, 0, 6, 5, 1, true);
+            stationary = new Animation(_gameObjectTextureName, size, 5, 6, 6, 0, false);
             rotation = 0.0f;
             speed = 0.0f;
-            _gameObjectTextureName = "player";
         }
 
         public static Player GetInstance
@@ -72,6 +75,7 @@ namespace HandsOnDeck.Classes.Object.Entity
             if(speed > 0) 
             {
                moving.Update(gameTime);
+                Hitbox.bounds = new Rectangle(position.ToPoint(), size.ToPoint());
             }
             else 
             {
