@@ -35,6 +35,11 @@ namespace HandsOnDeck.Classes.Managers
             gameObjects.Add(gameObject);
         }
 
+        internal void RemoveCollideableObject(CollideableGameObject gameObject)
+        {
+            gameObjects.Remove(gameObject);
+        }
+
         internal void CheckForCollisions()
         {
             for (int i = 0; i < gameObjects.Count; i++)
