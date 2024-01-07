@@ -31,7 +31,7 @@ namespace HandsOnDeck.Classes.Object.Entity
 
         public override void Draw(GameTime gameTime, Vector2 position)
         {
-            float distanceToPlayer = Vector2.Distance(Player.GetInstance().position, position);
+            float distanceToPlayer = Vector2.Distance(Player.GetInstance.position, position);
             if (distanceToPlayer < activationRange)
             {
                 detectedByPlayer |= true;
