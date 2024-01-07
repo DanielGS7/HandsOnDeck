@@ -1,15 +1,9 @@
 ﻿using HandsOnDeck.Classes.Managers;
 using HandsOnDeck.Enums;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
 
 namespace HandsOnDeck.Classes.UI.Screens
 {
-    using Microsoft.Xna.Framework;
-    using System;
-    using System.Configuration;
-
     public class PauseScreen : UIScreen
     {
         private Button resumeButton;
@@ -33,8 +27,8 @@ namespace HandsOnDeck.Classes.UI.Screens
         internal override void LoadContent() { }
         private void ResumeGame()
         {
-            GameScreen.Instance.isPaused = false;
-            GameStateManager.Instance.ChangeState(GameState.Game);
+            GameScreen.GetInstance.isPaused = false;
+            GameStateManager.GetInstance.ChangeState(GameState.Game);
         }
 
         private void ToggleMusic()
@@ -47,10 +41,12 @@ namespace HandsOnDeck.Classes.UI.Screens
 
         private void ExitToMainMenu()
         {
-            GameScreen.Instance.ResetGame();
-            GameScreen.Instance.isPaused = false;
-            GameStateManager.Instance.ChangeState(GameState.Start);
+            GameScreen.GetInstance.ResetGame();
+            GameScreen.GetInstance.isPaused = false;
+            GameStateManager.GetInstance.ChangeState(GameState.Start);
         }
+
+        public void Initialize() { base.Initialize(); } //no logic needed
     }
 
 }

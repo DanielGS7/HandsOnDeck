@@ -1,13 +1,7 @@
-﻿using HandsOnDeck.Classes.Managers;
+﻿using HandsOnDeck.Classes.MonogameAccessibility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace HandsOnDeck.Classes.Animations
 {
@@ -38,6 +32,10 @@ namespace HandsOnDeck.Classes.Animations
             this.sourceRectangle = CalculateSourceRectangle(this.spriteIndex);
         }
 
+        internal void LoadContent()
+        {
+            spriteSheet = ContentLoader.Load<Texture2D>(spriteSheetName);
+        }
         public void Update(GameTime gameTime)
         {
             double elapsedMilliseconds = gameTime.ElapsedGameTime.TotalMilliseconds;
@@ -70,10 +68,6 @@ namespace HandsOnDeck.Classes.Animations
             );
         }
 
-        public void Draw(Vector2 position, float scale,float rotation)
-        {
-            SpriteBatchManager.Instance.Draw(spriteSheet, position, sourceRectangle, Color.White, rotation, Vector2.Zero, scale, SpriteEffects.None, 1);
-        }
         public void Draw(Vector2 position, float scale, float rotation, Vector2 origin)
         {
             SpriteBatchManager.Instance.Draw(spriteSheet, position, sourceRectangle, Color.White, rotation, origin, scale, SpriteEffects.None, 1);
@@ -101,11 +95,5 @@ namespace HandsOnDeck.Classes.Animations
             int y = row * (int)spriteSize.Y;
             return new Rectangle(x, y, (int)spriteSize.X, (int)spriteSize.Y);
         }
-
-        internal void LoadContent()
-        {
-            spriteSheet = ContentLoader.Load<Texture2D>(spriteSheetName);
-        }
     }
-
 }

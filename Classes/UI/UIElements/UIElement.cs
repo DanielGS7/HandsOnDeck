@@ -1,7 +1,6 @@
-﻿using HandsOnDeck.Classes.Managers;
+﻿using HandsOnDeck.Classes.MonogameAccessibility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 
 namespace HandsOnDeck.Classes.UI.UIElements
 {

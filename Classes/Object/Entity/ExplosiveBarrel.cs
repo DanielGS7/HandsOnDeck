@@ -1,10 +1,5 @@
 ﻿using HandsOnDeck.Classes.Animations;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HandsOnDeck.Classes.Object.Entity
 {
@@ -16,11 +11,6 @@ namespace HandsOnDeck.Classes.Object.Entity
 
         }
 
-        public override void Draw(GameTime gameTime)
-        {
-            
-        }
-
         public override void LoadContent()
         {
 
@@ -28,7 +18,16 @@ namespace HandsOnDeck.Classes.Object.Entity
 
         public override void Update(GameTime gameTime)
         {
+
+        }
+        public override void Draw(GameTime gameTime)
+        {
             
+        }
+
+        public override void Draw(GameTime gameTime, Vector2 position)
+        {
+
         }
     }
 }

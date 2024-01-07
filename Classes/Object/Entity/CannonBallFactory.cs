@@ -1,13 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HandsOnDeck.Classes.Object.Entity
 {
-    internal class CannonBalls: List<CannonBall>
+    internal class CannonBallFactory: List<CannonBall>
     {
         public void AddCannonball(Vector2 initialPosition, Vector2 initialVelocity) 
         {
