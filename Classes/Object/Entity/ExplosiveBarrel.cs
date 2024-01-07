@@ -1,11 +1,5 @@
 ﻿using HandsOnDeck.Classes.Animations;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace HandsOnDeck.Classes.Object.Entity
 {
@@ -19,25 +13,22 @@ namespace HandsOnDeck.Classes.Object.Entity
             position = startPosition;
         }
 
-       
-
         public override void LoadContent()
         {
-            explosiveBarrel.LoadContent();
+
         }
 
         public override void Update(GameTime gameTime)
         {
-            explosiveBarrel.Update(gameTime);
+
+        }
+        public override void Draw(GameTime gameTime)
+        {
+            
         }
 
-
-        public override void Draw(GameTime gameTime, Player player)
+        public override void Draw(GameTime gameTime, Vector2 position)
         {
-            if(player.position - position< activationRange)
-            {
-                explosiveBarrel.Draw(position);
-            }
 
         }
     }

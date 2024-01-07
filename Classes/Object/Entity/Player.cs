@@ -1,14 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using HandsOnDeck.Classes.Animations;
 using HandsOnDeck.Enums;
 using HandsOnDeck.Classes.Managers;
 using HandsOnDeck.Interfaces;
-using HandsOnDeck.Classes.Collisions;
 using System.Collections.Generic;
 using System;
-using static System.Windows.Forms.Design.AxImporter;
 using HandsOnDeck.Classes.UI;
 
 namespace HandsOnDeck.Classes.Object.Entity
@@ -26,7 +22,7 @@ namespace HandsOnDeck.Classes.Object.Entity
         private float accelerationRate = 0.02f;
         private float decelerationRate = 0.03f;
         private float turnSpeedCoefficient = 0.5f;
-        CannonBalls cannonBalls= new CannonBalls();
+        CannonBallFactory cannonBalls= new CannonBallFactory();
         bool canShoot = true;
         private float shotCooldown = 1.0f;
         private float currentCooldown = 0.0f;
@@ -103,6 +99,26 @@ namespace HandsOnDeck.Classes.Object.Entity
             cannonBalls.Draw(gameTime);
         }
 
+        private void UpdateMovement(GameTime gameTime)
+        {
+            float targetSpeed = sailsUp ? maxSpeed : 0.0f;
+            if (speed < targetSpeed)
+            {
+                speed = Math.Min(speed + accelerationRate, targetSpeed);
+            }
+            else if (speed > targetSpeed)
+            {
+                speed = Math.Max(speed - decelerationRate, targetSpeed);
+            }
+
+            float turnSpeed = speed * turnSpeedCoefficient;
+
+            Vector2 direction = new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation));
+            position += direction * speed;
+            position.X = (position.X + GameScreen.WorldSize.X) % GameScreen.WorldSize.X;
+            position.Y = (position.Y + GameScreen.WorldSize.Y) % GameScreen.WorldSize.Y;
+        }
+
         private void HandleInput()
         {
             List<GameAction> actions = InputManager.GetInstance.GetPressedActions();
@@ -143,26 +159,6 @@ namespace HandsOnDeck.Classes.Object.Entity
             canShoot = false;
             currentCooldown = shotCooldown;
             
-        }
-
-        private void UpdateMovement(GameTime gameTime)
-        {
-            float targetSpeed = sailsUp ? maxSpeed : 0.0f;
-            if (speed < targetSpeed)
-            {
-                speed = Math.Min(speed + accelerationRate, targetSpeed);
-            }
-            else if (speed > targetSpeed)
-            {
-                speed = Math.Max(speed - decelerationRate, targetSpeed);
-            }
-
-            float turnSpeed = speed * turnSpeedCoefficient;
-
-            Vector2 direction = new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation));
-            position += direction * speed;
-            position.X = (position.X + GameScreen.WorldSize.X) % GameScreen.WorldSize.X;
-            position.Y = (position.Y + GameScreen.WorldSize.Y) % GameScreen.WorldSize.Y;
         }
 
         public void Reset()

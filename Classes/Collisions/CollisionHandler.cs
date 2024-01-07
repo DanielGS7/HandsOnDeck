@@ -1,13 +1,5 @@
-﻿using HandsOnDeck.Classes.Collisions;
-using HandsOnDeck.Classes.Object;
-using Microsoft.Xna.Framework;
-using SharpDX.Direct3D9;
-using System;
+﻿using HandsOnDeck.Classes.Object;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HandsOnDeck.Classes
 {

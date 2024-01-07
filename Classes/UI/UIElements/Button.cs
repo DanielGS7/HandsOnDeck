@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using HandsOnDeck.Classes.Managers;
 using System;
 using HandsOnDeck.Classes.UI.UIElements;
 using HandsOnDeck;
+using HandsOnDeck.Classes.MonogameAccessibility;
 
 public class Button : UIElement
 {

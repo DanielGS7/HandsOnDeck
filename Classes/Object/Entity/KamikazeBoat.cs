@@ -2,10 +2,6 @@
 using HandsOnDeck.Classes.UI;
 using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HandsOnDeck.Classes.Object.Entity
 {
@@ -20,7 +16,7 @@ namespace HandsOnDeck.Classes.Object.Entity
         private readonly float turnSpeedCoefficient = 0.01f;
         private readonly Random random;
         private const float EncircleDistanceMin = 100f;
-        private const float EncircleDistanceMax = 200f;
+        private const float EncircleDistanceMax = 200f; // TODO let the boat circle between 2 ranges
 
         public KamikazeBoat(Vector2 startPosition)
         {

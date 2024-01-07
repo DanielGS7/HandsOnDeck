@@ -2,8 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Diagnostics;
 using HandsOnDeck.Classes.Managers;
+using HandsOnDeck.Classes.MonogameAccessibility;
 
 namespace HandsOnDeck
 {

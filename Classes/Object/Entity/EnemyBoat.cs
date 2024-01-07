@@ -1,14 +1,7 @@
 ﻿using HandsOnDeck.Classes.Animations;
-using HandsOnDeck.Classes.Managers;
 using HandsOnDeck.Classes.UI;
-using HandsOnDeck.Enums;
 using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HandsOnDeck.Classes.Object.Entity
 {
@@ -27,7 +20,7 @@ namespace HandsOnDeck.Classes.Object.Entity
         bool canShoot = true;
         private float shotCooldown = 2.0f;
         private float currentCooldown = 0.0f;
-        CannonBalls cannonBalls = new CannonBalls();
+        CannonBallFactory cannonBalls = new CannonBallFactory();
         public EnemyBoat(Vector2 startPosition)
         {
             position = startPosition;
