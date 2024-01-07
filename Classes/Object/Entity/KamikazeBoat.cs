@@ -36,7 +36,7 @@ namespace HandsOnDeck.Classes.Object.Entity
 
         public override void Update(GameTime gameTime)
         {
-            UpdateMovement(gameTime, Player.GetInstance());
+            UpdateMovement(gameTime, Player.GetInstance);
             boatSprite.Update(gameTime);
         }
 

@@ -28,6 +28,7 @@ namespace HandsOnDeck.Classes.Object.Entity
         private float currentCooldown = 0.0f;
         private Animation moving;
         private Animation stationary;
+        private static object lockObject;
 
         private Player()
         {
@@ -39,13 +40,20 @@ namespace HandsOnDeck.Classes.Object.Entity
             _gameObjectTextureName = "player";
         }
 
-        public static Player GetInstance()
+        public static Player GetInstance
         {
-            if (instance == null)
+            get
             {
-                instance = new Player();
+                if (instance == null)
+                {
+                    lock (lockObject)
+                    {
+                        if (instance == null)
+                            instance = new Player();
+                    }
+                }
+                return instance;
             }
-            return instance;
         }
 
         public override void LoadContent()
