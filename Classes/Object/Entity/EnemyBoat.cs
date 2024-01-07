@@ -117,7 +117,12 @@ namespace HandsOnDeck.Classes.Object.Entity
 
         private void ShootCannonBall(Vector2 direction)
         {
-            cannonBalls.AddCannonball(position, direction * (speed + CannonBall.BaseSpeed));
+            float randomAngleRadians = (float)(random.NextDouble() * 0.5236 - 0.2618);
+
+            float angle = (float)Math.Atan2(direction.Y, direction.X) + randomAngleRadians;
+            Vector2 adjustedDirection = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
+
+            cannonBalls.AddCannonball(position, adjustedDirection * (speed + CannonBall.BaseSpeed));
             canShoot = false;
             currentCooldown = shotCooldown;
         }
