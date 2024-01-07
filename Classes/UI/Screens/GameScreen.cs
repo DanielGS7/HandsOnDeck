@@ -103,7 +103,7 @@ namespace HandsOnDeck.Classes.UI
         private void UpdateViewportPosition()
         {
             Vector2 playerPosition = Player.GetInstance().position;
-            Vector2 threshold = new Vector2(400, 400);
+            Vector2 threshold = new Vector2(500, 400);
             Vector2 relativePlayerPosition = playerPosition - viewportPosition;
 
             if (relativePlayerPosition.X < threshold.X)
@@ -130,7 +130,7 @@ namespace HandsOnDeck.Classes.UI
             if (Math.Abs(directDistance) < Math.Abs(wrappedDistance))
                 return currentViewport + directDistance * 0.1f;
             else
-                return currentViewport + wrappedDistance * 0.1f;
+                return currentViewport + wrappedDistance * 0.05f;
         }
 
         private Vector2 AdjustForWorldWrapping(Vector2 drawPosition, Vector2 originalPosition)
