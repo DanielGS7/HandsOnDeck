@@ -2,6 +2,7 @@
 using HandsOnDeck.Classes.Collisions;
 using HandsOnDeck.Interfaces;
 using Microsoft.Xna.Framework;
+using System.Diagnostics;
 
 namespace HandsOnDeck.Classes.Object.Entity
 {
@@ -45,7 +46,7 @@ namespace HandsOnDeck.Classes.Object.Entity
 
         public override void onCollision(CollideableGameObject other)
         {
-            throw new System.NotImplementedException();
+            Debug.WriteLine("Cannonball collided");
         }
     }
 }
