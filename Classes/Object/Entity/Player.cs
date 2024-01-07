@@ -13,6 +13,7 @@ namespace HandsOnDeck.Classes.Object.Entity
     public class Player : CollideableGameObject, IEntity
     {
         private static Player instance;
+        private static readonly object lockObject = new object();
 
         public float rotation;
         public float speed;
@@ -28,7 +29,6 @@ namespace HandsOnDeck.Classes.Object.Entity
         private float currentCooldown = 0.0f;
         private Animation moving;
         private Animation stationary;
-        private static object lockObject;
 
         private Player()
         {
