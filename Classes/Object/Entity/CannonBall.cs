@@ -1,4 +1,5 @@
 ﻿using HandsOnDeck.Classes.Animations;
+using HandsOnDeck.Classes.Collisions;
 using HandsOnDeck.Interfaces;
 using Microsoft.Xna.Framework;
 
@@ -13,8 +14,11 @@ namespace HandsOnDeck.Classes.Object.Entity
         public float TimeExisting = 0.0f;
         public CannonBall(Vector2 initialPosition, Vector2 initialVelocity)
         {
-            cannonBall = new Animation("cannonball1",new Vector2(600,562),0,1,1,0,false);
             position = initialPosition;
+            size = new Vector2(600, 562);
+            Hitbox = new Hitbox(new Rectangle(position.ToPoint(), size.ToPoint()),Enums.HitboxType.Trigger);
+            _gameObjectTextureName = "cannonball1";
+            cannonBall = new Animation(_gameObjectTextureName,size,0,1,1,0,false);
             velocity = initialVelocity;
         }
 
@@ -27,6 +31,7 @@ namespace HandsOnDeck.Classes.Object.Entity
         {
             position += velocity;
             cannonBall.Update(gameTime);
+            Hitbox.bounds = new Rectangle(position.ToPoint, size);
         }
 
         public override void Draw(GameTime gameTime)
