@@ -3,6 +3,7 @@ using HandsOnDeck.Classes.UI.Screens;
 using HandsOnDeck.Enums;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace HandsOnDeck.Classes.Managers
 {
@@ -39,6 +40,7 @@ namespace HandsOnDeck.Classes.Managers
         {
             foreach (var screen in screens.Values)
             {
+                Debug.WriteLine("meow");
                 screen.LoadContent();
             }
         }
