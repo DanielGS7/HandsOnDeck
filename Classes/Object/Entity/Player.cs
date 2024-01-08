@@ -196,10 +196,12 @@ namespace HandsOnDeck.Classes.Object.Entity
                 case "HandsOnDeck.Classes.Object.Entity.ExplosiveBarrel":
                     {
                         TakeDamage();
+                        TakeDamage();
                         break;
                     }
                 case "HandsOnDeck.Classes.Object.Entity.KamikazeBoat":
                     {
+                        TakeDamage();
                         TakeDamage();
                         break;
                     }
