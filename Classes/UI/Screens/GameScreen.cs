@@ -97,7 +97,7 @@ namespace HandsOnDeck.Classes.UI
         {
             base.Draw(gameTime);
             bg.Draw(gameTime, new Vector2(viewportPosition.X % 128, viewportPosition.Y % 128));
-
+            IslandManager.GetInstance.Draw(gameTime);
             foreach (var gameObject in gameObjects)
             {
                 Vector2 drawPosition = gameObject.position - viewportPosition;
@@ -112,7 +112,6 @@ namespace HandsOnDeck.Classes.UI
                     gameObject.Draw(gameTime, wrappedPosition);
                 }
             }
-            IslandManager.GetInstance.Draw(gameTime);
         }
 
         private void UpdateViewportPosition()
