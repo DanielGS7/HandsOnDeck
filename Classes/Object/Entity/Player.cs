@@ -216,5 +216,10 @@ namespace HandsOnDeck.Classes.Object.Entity
             }
             Debug.WriteLine(lifePoints);
         }
+
+        public void ResetLives()
+        {
+            lifePoints = 5;
+        }
     }
 }
