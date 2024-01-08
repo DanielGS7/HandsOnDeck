@@ -15,7 +15,7 @@ namespace HandsOnDeck.Classes.Object.Entity
     {
         private static Player instance;
         private static readonly object lockObject = new object();
-
+        public int lifePoints = 5;
         public float rotation;
         public float speed;
         private float maxSpeed = 3.0f;
@@ -185,7 +185,36 @@ namespace HandsOnDeck.Classes.Object.Entity
 
         public override void onCollision(CollideableGameObject other)
         {
-            Debug.WriteLine("player collided");
+            Debug.WriteLine(other.GetType().ToString());
+            switch (other.GetType().ToString())
+            {
+                case "HandsOnDeck.Classes.Object.Entity.CannonBall":
+                    {
+                        TakeDamage();
+                        break;
+                    }
+                case "HandsOnDeck.Classes.Object.Entity.ExplosiveBarrel":
+                    {
+                        TakeDamage();
+                        break;
+                    }
+                case "HandsOnDeck.Classes.Object.Entity.KamikazeBoat":
+                    {
+                        TakeDamage();
+                        break;
+                    }
+            }
+            
+
+        }
+
+        public void TakeDamage()
+        {
+            if (lifePoints > 0)
+            {
+                lifePoints--;
+            }
+            Debug.WriteLine(lifePoints);
         }
     }
 }
