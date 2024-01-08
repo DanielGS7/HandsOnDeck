@@ -10,10 +10,10 @@ public class GameOverScreen : UIScreen
 {
     private SpriteFont titleFont;
     private string gameOverText = "GAME OVER :(";
-    private string winText = "YOU WON!!!";
+    private string winText = " YOU WON!!!";
     private Button quitButton;
     private Button exitButton;
-    private bool hasWon = false;
+    private bool hasWon = true;
 
     private static GameOverScreen instance;
 
@@ -32,8 +32,8 @@ public class GameOverScreen : UIScreen
     public void Initialize()
     {
         base.Initialize();
-        quitButton = new Button("Quit", new Vector2(100, 100), QuitGame);
-        exitButton = new Button("Exit to Main Menu", new Vector2(100, 200), ExitToMainMenu);
+        quitButton = new Button("Quit", new Vector2(1000, 850), QuitGame);
+        exitButton = new Button("Exit to Main Menu", new Vector2(1000, 650), ExitToMainMenu);
 
         AddUIElement(quitButton);
         AddUIElement(exitButton);
