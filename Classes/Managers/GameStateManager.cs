@@ -40,7 +40,6 @@ namespace HandsOnDeck.Classes.Managers
         {
             foreach (var screen in screens.Values)
             {
-                Debug.WriteLine("meow");
                 screen.LoadContent();
             }
         }
@@ -50,7 +49,6 @@ namespace HandsOnDeck.Classes.Managers
             bool pausePressed = InputManager.GetInstance.GetPressedActions().Contains(GameAction.PAUSE);
             if (pausePressed && !pausePreviouslyPressed)
             {
-                Debug.WriteLine("Pause Toggled");
                 TogglePause();
             }
             pausePreviouslyPressed = pausePressed;
