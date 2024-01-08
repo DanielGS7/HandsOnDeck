@@ -38,8 +38,6 @@ namespace HandsOnDeck.Classes.Object.Entity
         {
             foreach(CannonBall cb in this) 
             {
-                cb.Draw(gameTime);
-
                 Vector2 drawPosition = cb.position - GameScreen.GetInstance.viewportPosition;
                 Vector2 wrappedPosition = GameScreen.GetInstance.AdjustForWorldWrapping(drawPosition, cb.position);
 
