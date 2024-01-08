@@ -36,7 +36,7 @@ namespace HandsOnDeck.Classes.Object.Entity
             size = new Vector2(672, 243);
             position = new Vector2(Game1.ProgramWidth/2,Game1.ProgramHeight/2);
             _gameObjectTextureName = "movingBoat";
-            Hitbox = new Hitbox(new Rectangle(position.ToPoint(), size.ToPoint()), HitboxType.Physical);
+            Hitbox = new Hitbox(new Rectangle(position.ToPoint(), size.ToPoint()/new Point(5,5)), HitboxType.Physical);
             moving = new Animation(_gameObjectTextureName,size, 0, 6, 5, 1, true);
             stationary = new Animation(_gameObjectTextureName, size, 5, 6, 6, 0, false);
             rotation = 0.0f;
