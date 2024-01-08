@@ -1,11 +1,14 @@
 ﻿using HandsOnDeck.Classes.Animations;
+using HandsOnDeck.Classes.Collisions;
 using HandsOnDeck.Classes.UI;
+using HandsOnDeck.Enums;
 using Microsoft.Xna.Framework;
 using System;
+using System.Diagnostics;
 
 namespace HandsOnDeck.Classes.Object.Entity
 {
-    internal class KamikazeBoat: GameObject
+    internal class KamikazeBoat: CollideableGameObject
     {
         private Animation boatSprite;
         private float rotation;
@@ -21,11 +24,13 @@ namespace HandsOnDeck.Classes.Object.Entity
         public KamikazeBoat(Vector2 startPosition)
         {
             position = startPosition;
-            boatSprite = new Animation("image1", new Vector2(672, 242), 0, 1, 1, 0, false);
+            size = new Vector2(672, 242);
+            _gameObjectTextureName = "image1";
+            Hitbox = new Hitbox(new Rectangle(position.ToPoint(), size.ToPoint()), HitboxType.Physical);
+            boatSprite = new Animation(_gameObjectTextureName, size, 0, 1, 1, 0, false);
             rotation = 0.0f;
             speed = 0.0f;
             random = new Random();
-            _gameObjectTextureName = "kamikaze";
         }
 
         public override void LoadContent()
@@ -35,7 +40,8 @@ namespace HandsOnDeck.Classes.Object.Entity
 
         public override void Update(GameTime gameTime)
         {
-            UpdateMovement(gameTime, Player.GetInstance());
+            UpdateMovement(gameTime, Player.GetInstance);
+            Hitbox.bounds = new Rectangle(position.ToPoint(), size.ToPoint());
             boatSprite.Update(gameTime);
         }
 
@@ -98,6 +104,11 @@ namespace HandsOnDeck.Classes.Object.Entity
             return currentSpeed < targetSpeed
                 ? Math.Min(currentSpeed + accelerationRate, targetSpeed)
                 : Math.Max(currentSpeed - decelerationRate, targetSpeed);
+        }
+
+        public override void onCollision(CollideableGameObject other)
+        {
+            Debug.WriteLine("Kamikaze collided!");
         }
     }
 }

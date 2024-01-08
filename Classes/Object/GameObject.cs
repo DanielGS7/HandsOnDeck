@@ -7,8 +7,8 @@ namespace HandsOnDeck.Classes.Object
     public abstract class GameObject : IGameObject
     {
         public string _gameObjectTextureName;
-        public Texture2D _gameObjectTexture;
         public Vector2 position;
+        public Vector2 size;
 
         public abstract void LoadContent();
         public abstract void Update(GameTime gameTime);

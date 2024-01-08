@@ -1,11 +1,14 @@
 ﻿using HandsOnDeck.Classes.Animations;
+using HandsOnDeck.Classes.Collisions;
 using HandsOnDeck.Classes.UI;
+using HandsOnDeck.Enums;
 using Microsoft.Xna.Framework;
 using System;
+using System.Diagnostics;
 
 namespace HandsOnDeck.Classes.Object.Entity
 {
-    public class EnemyBoat:GameObject
+    public class EnemyBoat: CollideableGameObject
     {
         private Animation boatSprite;
         private float rotation;
@@ -24,11 +27,13 @@ namespace HandsOnDeck.Classes.Object.Entity
         public EnemyBoat(Vector2 startPosition)
         {
             position = startPosition;
-            boatSprite = new Animation("PirateShip", new Vector2(1195, 706), 0, 1, 1, 0, false);
+            size = new Vector2(1195, 706);
+            _gameObjectTextureName = "PirateShip";
+            Hitbox = new Hitbox(new Rectangle(position.ToPoint(), size.ToPoint()), HitboxType.Physical);
+            boatSprite = new Animation(_gameObjectTextureName,size , 0, 1, 1, 0, false);
             rotation = 0.0f;
             speed = 0.0f;
             random = new Random();
-            _gameObjectTextureName = "enemy";
         }
 
         public override void LoadContent()
@@ -38,7 +43,8 @@ namespace HandsOnDeck.Classes.Object.Entity
 
         public override void Update(GameTime gameTime)
         {
-            UpdateMovement(gameTime, Player.GetInstance());
+            UpdateMovement(gameTime, Player.GetInstance);
+            Hitbox.bounds = new Rectangle(position.ToPoint(), size.ToPoint());
             boatSprite.Update(gameTime);
             cannonBalls.Update(gameTime);
 
@@ -150,6 +156,10 @@ namespace HandsOnDeck.Classes.Object.Entity
                     : Math.Max(currentSpeed - decelerationRate, targetSpeed);
             }
 
+        public override void onCollision(CollideableGameObject other)
+        {
+            Debug.WriteLine("EnemyBoat collided!");
+        }
     }
 }
 

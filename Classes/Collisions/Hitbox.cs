@@ -1,18 +1,16 @@
-﻿using Microsoft.Xna.Framework;
+﻿using HandsOnDeck.Enums;
+using Microsoft.Xna.Framework;
 
 namespace HandsOnDeck.Classes.Collisions
 {
     public class Hitbox
     {
         internal Rectangle bounds { get; set;}
-
-        public Hitbox(Rectangle SourceRectangle)
+        internal HitboxType type { get; set; }
+        public Hitbox(Rectangle SourceRectangle, HitboxType hitboxType)
         {
             bounds = SourceRectangle;
-        }
-
-        internal void Update(Vector2 position)
-        {
+            type = hitboxType;
         }
     }
 }

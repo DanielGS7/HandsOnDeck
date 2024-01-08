@@ -49,12 +49,12 @@ namespace HandsOnDeck.Classes.Managers
         public void Update(GameTime gameTime)
         {
             bool pausePressed = InputManager.GetInstance.GetPressedActions().Contains(GameAction.PAUSE);
-            pausePreviouslyPressed = pausePressed;
-
             if (pausePressed && !pausePreviouslyPressed)
             {
+                Debug.WriteLine("Pause Toggled");
                 TogglePause();
             }
+            pausePreviouslyPressed = pausePressed;
 
             if (screens.ContainsKey(currentState) && screens[currentState] != null)
             {

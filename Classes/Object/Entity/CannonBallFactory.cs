@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using HandsOnDeck.Classes.Managers;
+using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,7 +11,9 @@ namespace HandsOnDeck.Classes.Object.Entity
         {
             CannonBall cannonBall= new CannonBall(initialPosition, initialVelocity);
             cannonBall.LoadContent();
+            CollisionManager.GetInstance.AddCollideableObject(cannonBall);
             this.Add(cannonBall);
+
         }
 
       
@@ -22,6 +25,7 @@ namespace HandsOnDeck.Classes.Object.Entity
                 cb.TimeExisting += (float)gameTime.ElapsedGameTime.TotalSeconds;
                 if(cb.TimeExisting>= cb.TimeTillRemoval)
                 {
+                    CollisionManager.GetInstance.RemoveCollideableObject(cb);
                     this.Remove(cb);
                 }
             }

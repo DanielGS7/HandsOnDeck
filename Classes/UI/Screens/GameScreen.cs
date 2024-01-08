@@ -5,6 +5,7 @@ using HandsOnDeck.Classes.Object.Entity;
 using HandsOnDeck.Classes.UI.Screens;
 using System;
 using HandsOnDeck.Classes.Object.Static;
+using HandsOnDeck.Classes.Managers;
 
 namespace HandsOnDeck.Classes.UI
 {
@@ -43,7 +44,7 @@ namespace HandsOnDeck.Classes.UI
         private GameScreen()
         {
             gameObjects = new List<GameObject>();
-            player = Player.GetInstance();
+            player = Player.GetInstance;
             bg = Background.GetInstance;
             enemy1 = new EnemyBoat(new Vector2(1000,500));
             enemy2 = new KamikazeBoat(new Vector2(1200,600));
@@ -61,6 +62,14 @@ namespace HandsOnDeck.Classes.UI
             base.Initialize();
             ViewportSize = new Vector2(2048, 1080);
             WorldSize = new Vector2(20480, 10800);
+            foreach (GameObject obj in gameObjects)
+            {
+                if (obj is CollideableGameObject collidableObj)
+                {
+                    CollisionManager.GetInstance.AddCollideableObject(collidableObj);
+                }
+            }
+
         }
 
         internal override void LoadContent()
@@ -81,6 +90,7 @@ namespace HandsOnDeck.Classes.UI
                 gameObject.Update(gameTime);
             }
             player.Update(gameTime);
+            CollisionManager.GetInstance.CheckForCollisions();
         }
 
         public override void Draw(GameTime gameTime)
@@ -106,7 +116,7 @@ namespace HandsOnDeck.Classes.UI
 
         private void UpdateViewportPosition()
         {
-            Vector2 playerPosition = Player.GetInstance().position;
+            Vector2 playerPosition = Player.GetInstance.position;
             Vector2 threshold = new Vector2(500, 400);
             Vector2 relativePlayerPosition = playerPosition - viewportPosition;
 
@@ -164,7 +174,7 @@ namespace HandsOnDeck.Classes.UI
         public void ResetGame()
         {
             gameObjects.Clear();
-            player = Player.GetInstance();
+            player = Player.GetInstance;
             player.Reset();
             bg = Background.GetInstance;
             gameObjects.Add(player);
