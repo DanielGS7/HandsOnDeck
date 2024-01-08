@@ -6,6 +6,7 @@ using HandsOnDeck.Classes.UI.Screens;
 using System;
 using HandsOnDeck.Classes.Object.Static;
 using HandsOnDeck.Classes.Managers;
+using HandsOnDeck.Classes.UI.UIElements;
 
 namespace HandsOnDeck.Classes.UI
 {
@@ -23,6 +24,7 @@ namespace HandsOnDeck.Classes.UI
         private EnemyBoat enemy1;
         private KamikazeBoat enemy2;
         private ExplosiveBarrel barrel;
+        private HeartContainer hearts;
 
         public bool isPaused;
 
@@ -49,12 +51,15 @@ namespace HandsOnDeck.Classes.UI
             enemy1 = new EnemyBoat(new Vector2(1000,500));
             enemy2 = new KamikazeBoat(new Vector2(1200,600));
             barrel = new ExplosiveBarrel(new Vector2(700, 700));
+            hearts = new HeartContainer(new Vector2(150,250));
             gameObjects.Add(enemy1);
             gameObjects.Add(enemy2);
             gameObjects.Add(barrel);
             gameObjects.Add(player);
-            
-            
+            uiElements.Add(hearts);
+
+
+
         }
 
         public void Initialize()
@@ -78,6 +83,8 @@ namespace HandsOnDeck.Classes.UI
             {
                 gameObject.LoadContent();
             }
+            hearts.LoadContent();
+
         }
 
         public override void Update(GameTime gameTime)
@@ -90,6 +97,7 @@ namespace HandsOnDeck.Classes.UI
                 gameObject.Update(gameTime);
             }
             player.Update(gameTime);
+            hearts.Update(gameTime);
             CollisionManager.GetInstance.CheckForCollisions();
         }
 
@@ -97,6 +105,7 @@ namespace HandsOnDeck.Classes.UI
         {
             base.Draw(gameTime);
             bg.Draw(gameTime, new Vector2(viewportPosition.X % 128, viewportPosition.Y % 128));
+            hearts.Draw(gameTime);
 
             foreach (var gameObject in gameObjects)
             {
