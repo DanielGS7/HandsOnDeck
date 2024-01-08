@@ -33,6 +33,7 @@ namespace HandsOnDeck.Classes.Managers
             AddScreen(GameState.Start, StartScreen.GetInstance);
             AddScreen(GameState.Game, GameScreen.GetInstance);
             AddScreen(GameState.Pause, new PauseScreen());
+            AddScreen(GameState.GameOver,GameOverScreen.GetInstance);
             ChangeState(GameState.Start);
         }
 
