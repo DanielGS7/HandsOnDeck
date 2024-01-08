@@ -14,7 +14,6 @@ namespace HandsOnDeck.Classes.Object.Static
 {
     internal class Island : CollideableGameObject
     {
-        static Vector2 size = new Vector2(480, 480);
         bool isLevelStart = false;
         bool isLevelDestination = false;
         Texture2D islandSheet;
@@ -24,9 +23,10 @@ namespace HandsOnDeck.Classes.Object.Static
 
         public Island(Vector2 position, int islandIndex, int rotation)
         {
-            islandSprite = new Animation("islands", size, islandIndex, 4, 16, 0, false);
+            this.size = new Vector2(480, 480);
             this.position = position;
             this.rotation = rotation;
+            islandSprite = new Animation("islands", size, islandIndex, 4, 16, 0, false);
             Hitbox = new Hitbox(new Rectangle(position.ToPoint(), size.ToPoint()), Enums.HitboxType.Physical);
         }
         public override void LoadContent()
@@ -35,12 +35,10 @@ namespace HandsOnDeck.Classes.Object.Static
         }
 
         public override void Update(GameTime gameTime) {
-        if(playerNearby && (isLevelStart)) 
+        
         }
 
-        public override void Draw(GameTime gameTime)
-        {
-        }
+        public override void Draw(GameTime gameTime) { }
 
         public override void Draw(GameTime gameTime, Vector2 position)
         {

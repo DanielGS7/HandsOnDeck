@@ -1,4 +1,5 @@
-﻿using HandsOnDeck.Classes.Object.Static;
+﻿using HandsOnDeck.Classes.Object.Entity;
+using HandsOnDeck.Classes.Object.Static;
 using HandsOnDeck.Classes.UI;
 using Microsoft.Xna.Framework;
 using System;
@@ -20,12 +21,23 @@ namespace HandsOnDeck.Classes.Managers
             InitializeIslands();
         }
 
+        public static IslandManager GetInstance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new IslandManager();
+                }
+                return instance;
+            }
+        }
+
         private void InitializeIslands()
         {
             const int islandCount = 16;
             float minDistance = GameScreen.WorldSize.X / 6;
-
-            for (int i = 0; i < islandCount; i++)
+            for (int i = 0; i < islandCount - 1; i++)
             {
                 Vector2 position;
                 int rotation = random.Next(0, 360);
@@ -55,7 +67,18 @@ namespace HandsOnDeck.Classes.Managers
         {
             foreach (var island in islands)
             {
-                island.Draw(gameTime);
+
+                Vector2 drawPosition = island.position - GameScreen.GetInstance.viewportPosition;
+                Vector2 wrappedPosition = GameScreen.GetInstance.AdjustForWorldWrapping(drawPosition, island.position);
+
+                if (drawPosition == wrappedPosition)
+                {
+                    island.Draw(gameTime, drawPosition);
+                }
+                else if (drawPosition != wrappedPosition)
+                {
+                    island.Draw(gameTime, wrappedPosition);
+                }
             }
         }
 

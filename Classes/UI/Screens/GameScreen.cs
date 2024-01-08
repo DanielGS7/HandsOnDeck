@@ -52,16 +52,14 @@ namespace HandsOnDeck.Classes.UI
             gameObjects.Add(enemy1);
             gameObjects.Add(enemy2);
             gameObjects.Add(barrel);
-            gameObjects.Add(player);
-            
-            
+            gameObjects.Add(player);            
         }
 
         public void Initialize()
         {
             base.Initialize();
             ViewportSize = new Vector2(2048, 1080);
-            WorldSize = new Vector2(20480, 10800);
+            WorldSize = new Vector2(10240, 5400);
             foreach (GameObject obj in gameObjects)
             {
                 if (obj is CollideableGameObject collidableObj)
@@ -74,6 +72,7 @@ namespace HandsOnDeck.Classes.UI
 
         internal override void LoadContent()
         {
+            IslandManager.GetInstance.LoadContent();
             foreach (var gameObject in gameObjects)
             {
                 gameObject.LoadContent();
@@ -82,6 +81,7 @@ namespace HandsOnDeck.Classes.UI
 
         public override void Update(GameTime gameTime)
         {
+            IslandManager.GetInstance.Update(gameTime);
             if (isPaused) return;
             UpdateViewportPosition();
             base.Update(gameTime);
@@ -112,6 +112,7 @@ namespace HandsOnDeck.Classes.UI
                     gameObject.Draw(gameTime, wrappedPosition);
                 }
             }
+            IslandManager.GetInstance.Draw(gameTime);
         }
 
         private void UpdateViewportPosition()
