@@ -1,5 +1,8 @@
 ﻿using HandsOnDeck.Classes.Managers;
+using HandsOnDeck.Classes.UI;
+using HandsOnDeck.Interfaces;
 using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -36,9 +39,20 @@ namespace HandsOnDeck.Classes.Object.Entity
             foreach(CannonBall cb in this) 
             {
                 cb.Draw(gameTime);
+
+                Vector2 drawPosition = cb.position - GameScreen.GetInstance.viewportPosition;
+                Vector2 wrappedPosition = GameScreen.GetInstance.AdjustForWorldWrapping(drawPosition, cb.position);
+
+                if (drawPosition == wrappedPosition)
+                {
+                    cb.Draw(gameTime, drawPosition);
+                }
+                else if (drawPosition != wrappedPosition)
+                {
+                    cb.Draw(gameTime, wrappedPosition);
+                }
             }
         }
-
         internal void Reset()
         {
             this.Clear();

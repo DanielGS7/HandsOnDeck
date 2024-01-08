@@ -147,7 +147,7 @@ namespace HandsOnDeck.Classes.UI
                 return currentViewport + wrappedDistance * 0.05f;
         }
 
-        private Vector2 AdjustForWorldWrapping(Vector2 drawPosition, Vector2 originalPosition)
+        public Vector2 AdjustForWorldWrapping(Vector2 drawPosition, Vector2 originalPosition)
         {
             Vector2 adjustedPosition = drawPosition;
 
