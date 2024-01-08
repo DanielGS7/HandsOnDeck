@@ -37,11 +37,10 @@ namespace HandsOnDeck.Classes.Managers
         {
             const int islandCount = 16;
             float minDistance = GameScreen.WorldSize.X / 6;
-            for (int i = 0; i < islandCount - 1; i++)
+            for (int i = 0; i < islandCount; i++)
             {
                 Vector2 position;
                 int rotation = random.Next(0, 360);
-
                 do
                 {
                     position = new Vector2(
@@ -50,8 +49,9 @@ namespace HandsOnDeck.Classes.Managers
                     );
                 }
                 while (!IsPositionSufficientlyFar(position, (int)minDistance));
-
-                islands.Add(new Island(position, i, rotation));
+                Island island = new Island(position, i, rotation);
+                islands.Add(island);
+                CollisionManager.GetInstance.AddCollideableObject(island);
             }
         }
 
