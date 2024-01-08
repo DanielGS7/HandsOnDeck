@@ -183,6 +183,10 @@ namespace HandsOnDeck.Classes.UI
             return adjustedPosition;
         }
 
+        public void RemoveGameObject(GameObject gameObject)
+        {
+            this.gameObjects.Remove(gameObject);
+        }
         public void ResetGame()
         {
             gameObjects.Clear();

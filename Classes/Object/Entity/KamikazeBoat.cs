@@ -108,7 +108,23 @@ namespace HandsOnDeck.Classes.Object.Entity
 
         public override void onCollision(CollideableGameObject other)
         {
-            Debug.WriteLine("Kamikaze collided!");
+            switch (other.GetType().ToString())
+            {
+                case "HandsOnDeck.Classes.Object.Entity.CannonBall":
+                    {
+                        TakeDamage();
+                        break;
+                    }
+                case "HandsOnDeck.Classes.Object.Entity.ExplosiveBarrel":
+                    {
+                        TakeDamage();
+                        break;
+                    }
+            }
+        }
+        private void TakeDamage()
+        {
+            GameScreen.GetInstance.RemoveGameObject(this);
         }
     }
 }
