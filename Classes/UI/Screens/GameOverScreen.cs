@@ -13,7 +13,7 @@ public class GameOverScreen : UIScreen
     private string winText = " YOU WON!!!";
     private Button quitButton;
     private Button exitButton;
-    private bool hasWon = true;
+    private bool hasWon = false;
 
     private static GameOverScreen instance;
 
