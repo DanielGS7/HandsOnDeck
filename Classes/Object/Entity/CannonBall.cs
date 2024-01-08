@@ -32,7 +32,7 @@ namespace HandsOnDeck.Classes.Object.Entity
         {
             position += velocity;
             cannonBall.Update(gameTime);
-            Hitbox.bounds = new Rectangle(position.ToPoint(), size.ToPoint());
+            Hitbox.bounds = new Rectangle(position.ToPoint()/new Point(10,10), size.ToPoint() / new Point(10, 10));
         }
 
         public override void Draw(GameTime gameTime)

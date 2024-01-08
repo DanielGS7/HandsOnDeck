@@ -23,7 +23,7 @@ namespace HandsOnDeck.Classes.Object.Static
 
         public Island(Vector2 position, int islandIndex, int rotation)
         {
-            this.size = new Vector2(480, 480);
+            this.size = new Vector2(400, 400);
             this.position = position;
             this.rotation = rotation;
             islandSprite = new Animation("islands", size, islandIndex, 4, 16, 0, false);

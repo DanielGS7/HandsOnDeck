@@ -31,12 +31,18 @@ namespace HandsOnDeck.Classes.Object.Entity
         private Animation moving;
         private Animation stationary;
 
+        private float targetRotation;
+        private float rotationSpeed = MathHelper.PiOver4;
+        private bool isAvoiding = false;
+        private float rotationTimer = 0.0f;
+        private float rotationDuration = 2.5f;
+
         private Player()
         {
             size = new Vector2(672, 243);
             position = new Vector2(Game1.ProgramWidth/2,Game1.ProgramHeight/2);
             _gameObjectTextureName = "movingBoat";
-            Hitbox = new Hitbox(new Rectangle(position.ToPoint(), size.ToPoint()/new Point(5,5)), HitboxType.Physical);
+            Hitbox = new Hitbox(new Rectangle(position.ToPoint(), size.ToPoint()/new Point(5,5)), HitboxType.Trigger);
             moving = new Animation(_gameObjectTextureName,size, 0, 6, 5, 1, true);
             stationary = new Animation(_gameObjectTextureName, size, 5, 6, 6, 0, false);
             rotation = 0.0f;
@@ -113,6 +119,22 @@ namespace HandsOnDeck.Classes.Object.Entity
 
         private void UpdateMovement(GameTime gameTime)
         {
+            if (isAvoiding)
+            {
+                if (isAvoiding)
+                {
+                    float rotationAmount = rotationSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    rotation += rotationAmount;
+
+                    rotationTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                    if (rotationTimer >= rotationDuration)
+                    {
+                        isAvoiding = false; 
+                        sailsUp = false;    
+                    }
+                }
+            }
             float targetSpeed = sailsUp ? maxSpeed : 0.0f;
             if (speed < targetSpeed)
             {
@@ -185,7 +207,12 @@ namespace HandsOnDeck.Classes.Object.Entity
 
         public override void onCollision(CollideableGameObject other)
         {
-            Debug.WriteLine(other.GetType().ToString());
+            if (other.Hitbox.type == HitboxType.Physical)
+            {
+                AvoidIsland(other);
+            }
+
+
             switch (other.GetType().ToString())
             {
                 case "HandsOnDeck.Classes.Object.Entity.CannonBall":
@@ -206,8 +233,26 @@ namespace HandsOnDeck.Classes.Object.Entity
                         break;
                     }
             }
-            
+        }
 
+
+        public void AvoidIsland(GameObject other)
+        {
+            if (!isAvoiding)
+            {
+                Vector2 directionToOther = other.position - position;
+
+                float angleToOther = (float)Math.Atan2(directionToOther.Y, directionToOther.X);
+
+                targetRotation = angleToOther - MathHelper.PiOver2;
+
+                if (targetRotation < 0)
+                    targetRotation += MathHelper.TwoPi;
+
+                isAvoiding = true;
+
+                rotationTimer = 0.0f;
+            }
         }
 
         public void TakeDamage()
@@ -216,7 +261,6 @@ namespace HandsOnDeck.Classes.Object.Entity
             {
                 lifePoints--;
             }
-            Debug.WriteLine(lifePoints);
         }
 
         public void ResetLives()

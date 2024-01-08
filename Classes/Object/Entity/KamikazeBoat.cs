@@ -26,7 +26,7 @@ namespace HandsOnDeck.Classes.Object.Entity
             position = startPosition;
             size = new Vector2(672, 242);
             _gameObjectTextureName = "image1";
-            Hitbox = new Hitbox(new Rectangle(position.ToPoint(), size.ToPoint()), HitboxType.Physical);
+            Hitbox = new Hitbox(new Rectangle(position.ToPoint(), size.ToPoint()), HitboxType.Trigger);
             boatSprite = new Animation(_gameObjectTextureName, size, 0, 1, 1, 0, false);
             rotation = 0.0f;
             speed = 0.0f;

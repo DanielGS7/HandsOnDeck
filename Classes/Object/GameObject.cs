@@ -10,6 +10,8 @@ namespace HandsOnDeck.Classes.Object
         public Vector2 position;
         public Vector2 size;
 
+        public int Position { get; internal set; }
+
         public abstract void LoadContent();
         public abstract void Update(GameTime gameTime);
         public abstract void Draw(GameTime gameTime);

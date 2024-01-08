@@ -29,7 +29,7 @@ namespace HandsOnDeck.Classes.Object.Entity
             position = startPosition;
             size = new Vector2(1195, 706);
             _gameObjectTextureName = "PirateShip";
-            Hitbox = new Hitbox(new Rectangle(position.ToPoint(), size.ToPoint()), HitboxType.Physical);
+            Hitbox = new Hitbox(new Rectangle(position.ToPoint(), size.ToPoint()), HitboxType.Trigger);
             boatSprite = new Animation(_gameObjectTextureName,size , 0, 1, 1, 0, false);
             rotation = 0.0f;
             speed = 0.0f;
