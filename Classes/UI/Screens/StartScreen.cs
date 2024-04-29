@@ -29,7 +29,7 @@ namespace HandsOnDeck.Classes.UI.Screens
             }
         }
 
-        public void Initialize()
+        public override void Initialize()
         {
             base.Initialize();
             startButton = new Button("Start", new Vector2(1000, 650), StartGame);
