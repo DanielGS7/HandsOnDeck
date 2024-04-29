@@ -54,8 +54,7 @@ public class Toggle : UIElement
     public override void Update(GameTime gameTime)
     {
         MouseState mouseState = Mouse.GetState();
-        Point mousePosition = new Point(mouseState.X, mouseState.Y);
-
+        Point mousePosition = Game1.transformedMousePosition;
         isHovered = bounds.Contains(mousePosition);
         if (isHovered && mouseState.LeftButton == ButtonState.Pressed)
         {
