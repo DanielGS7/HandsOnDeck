@@ -1,32 +1,46 @@
 ﻿using HandsOnDeck.Classes.UI.Screens;
 
-public class SettingsScreen : UIScreen
-{   //Not yet implemented but needed to verify if buttons do change states correctly ;)
-    private Toggle soundToggle;
-    private Toggle musicToggle;
-    private Button backButton;
+using HandsOnDeck.Classes.Managers;
+using HandsOnDeck.Enums;
+using Microsoft.Xna.Framework;
 
-    public void Initialize()
+namespace HandsOnDeck.Classes.UI.Screens
+{
+    public class SettingsScreen : UIScreen
     {
-        base.Initialize();
-    }
+        private Toggle soundToggle;
+        private Toggle musicToggle;
+        private Button backButton;
 
-    internal override void LoadContent()
-    {
+        public SettingsScreen()
+        {
+            soundToggle = new Toggle("Sound", new Vector2(Game1.ProgramWidth / 2 - 350, Game1.ProgramHeight / 2), true, ToggleSound);
+            musicToggle = new Toggle("Music", new Vector2(Game1.ProgramWidth / 2 + 150, Game1.ProgramHeight / 2), true, ToggleMusic);
+            backButton = new Button("Back", new Vector2(Game1.ProgramWidth / 2, Game1.ProgramHeight / 2 + 200), GoBack);
 
-    }
-    private void ToggleSound(bool state)
-    {
+            AddUIElement(soundToggle);
+            AddUIElement(musicToggle);
+            AddUIElement(backButton);
+        }
 
-    }
+        private void ToggleSound()
+        {
+            
+        }
 
-    private void ToggleMusic(bool state)
-    {
+        private void ToggleMusic()
+        {
+            
+        }
 
-    }
+        private void GoBack()
+        {
+            GameStateManager.GetInstance.ChangeState(GameState.Pause);
+        }
 
-    private void GoBack()
-    {
-
+        internal override void LoadContent()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
