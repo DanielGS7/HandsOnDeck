@@ -45,8 +45,6 @@ namespace HandsOnDeck.Classes.UI.Screens
             GameScreen.GetInstance.isPaused = false;
             GameStateManager.GetInstance.ChangeState(GameState.Start);
         }
-
-        public void Initialize() { base.Initialize(); } //no logic needed
     }
 
 }

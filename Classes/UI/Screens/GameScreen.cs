@@ -62,7 +62,7 @@ namespace HandsOnDeck.Classes.UI
 
         }
 
-        public void Initialize()
+        public override void Initialize()
         {
             base.Initialize();
             ViewportSize = new Vector2(2048, 1080);

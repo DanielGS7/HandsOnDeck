@@ -29,7 +29,7 @@ public class GameOverScreen : UIScreen
             return instance;
         }
     }
-    public void Initialize()
+    public override void Initialize()
     {
         base.Initialize();
         quitButton = new Button("Quit", new Vector2(1000, 850), QuitGame);
