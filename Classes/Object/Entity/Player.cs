@@ -261,6 +261,13 @@ namespace HandsOnDeck.Classes.Object.Entity
             {
                 lifePoints--;
             }
+            Debug.WriteLine(lifePoints);
+
+            if(lifePoints<=0)
+            {
+                
+                GameStateManager.GetInstance.ChangeState(GameState.GameOver);
+            }
         }
 
         public void ResetLives()
