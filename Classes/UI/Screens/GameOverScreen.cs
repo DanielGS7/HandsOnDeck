@@ -5,6 +5,7 @@ using HandsOnDeck.Enums;
 using HandsOnDeck.Classes.MonogameAccessibility;
 using HandsOnDeck;
 using Microsoft.Xna.Framework.Graphics;
+using HandsOnDeck.Classes.UI;
 
 public class GameOverScreen : UIScreen
 {
@@ -51,7 +52,7 @@ public class GameOverScreen : UIScreen
     }
     public override void Draw(GameTime gameTime)
     {
-        titleFont = Game1.DefaultFont;
+        titleFont = Renderer.DefaultFont;
         float scale = 5.0f;
         Vector2 textSize = titleFont.MeasureString(gameOverText) * scale;
         Vector2 textPosition = new Vector2(1000, 400) - textSize / 2;
@@ -76,6 +77,7 @@ public class GameOverScreen : UIScreen
 
     private void ExitToMainMenu()
     {
+        GameScreen.GetInstance.ResetGame();
         GameStateManager.GetInstance.ChangeState(GameState.Start);
     }
 }

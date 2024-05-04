@@ -57,9 +57,6 @@ namespace HandsOnDeck.Classes.UI
             gameObjects.Add(barrel);
             gameObjects.Add(player);
             uiElements.Add(hearts);
-
-
-
         }
 
         public override void Initialize()
@@ -187,14 +184,34 @@ namespace HandsOnDeck.Classes.UI
         {
             this.gameObjects.Remove(gameObject);
         }
-        public void ResetGame()
-        {
-            gameObjects.Clear();
-            player = Player.GetInstance;
-            player.Reset();
-            bg = Background.GetInstance;
-            gameObjects.Add(player);
-            gameObjects.Add(bg);
-        }
+public void ResetGame()
+{
+    // Clear all game objects and UI elements
+    gameObjects.Clear();
+    uiElements.Clear();
+
+    // Reinitialize game objects
+    player = Player.GetInstance;
+    bg = Background.GetInstance;
+    enemy1 = new EnemyBoat(new Vector2(1000,500));
+    enemy2 = new KamikazeBoat(new Vector2(1200,600));
+    barrel = new ExplosiveBarrel(new Vector2(700, 700));
+    hearts = new HeartContainer(new Vector2(150,250));
+
+    player.LoadContent();
+    bg.LoadContent();
+    enemy1.LoadContent();
+    enemy2.LoadContent();
+    barrel.LoadContent();
+
+    gameObjects.Add(enemy1);
+    gameObjects.Add(enemy2);
+    gameObjects.Add(barrel);
+    gameObjects.Add(player);
+
+    hearts.LoadContent();
+
+    uiElements.Add(hearts);
+}
     }
 }

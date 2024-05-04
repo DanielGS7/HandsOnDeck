@@ -5,6 +5,7 @@ using System;
 using HandsOnDeck.Classes.UI.UIElements;
 using HandsOnDeck;
 using HandsOnDeck.Classes.MonogameAccessibility;
+using HandsOnDeck.Classes.Managers;
 
 public class Button : UIElement
 {
@@ -24,7 +25,7 @@ public class Button : UIElement
     {
         this.text = text;
         this.action = action;
-        this.font = Game1.DefaultFont;
+        this.font = Renderer.DefaultFont;
 
         Vector2 size = (font.MeasureString(text) + new Vector2(Padding * 2, Padding * 2)) * ScaleFactor;
         this.bounds = new Rectangle(
@@ -48,26 +49,30 @@ public class Button : UIElement
         this.hoverTexture = ContentLoader.Load<Texture2D>("button/buttonH");
     }
 
-    public override void Update(GameTime gameTime)
+public override void Update(GameTime gameTime)
+{
+    MouseState mouseState = Mouse.GetState();
+    Point mousePosition = InputManager.GetInstance.GetTransformedMousePosition();
+
+    isHovered = bounds.Contains(mousePosition);
+
+    if (isHovered && mouseState.LeftButton == ButtonState.Pressed)
     {
-        MouseState mouseState = Mouse.GetState();
-        Point mousePosition = Game1.transformedMousePosition;
-        isHovered = bounds.Contains(mousePosition);
-        if (isHovered && mouseState.LeftButton == ButtonState.Pressed)
-        {
-            isClicked = true;
-        }
-        else if (isClicked && mouseState.LeftButton == ButtonState.Released)
-        {
-            isClicked = false;
-            action.Invoke();
-        }
+        isClicked = true;
     }
+    else if (isClicked && mouseState.LeftButton == ButtonState.Released)
+    {
+        isClicked = false;
+        action.Invoke();
+    }
+}
+
+
 
     public override void Draw(GameTime gameTime)
     {
         Color color = isHovered ? Color.LightSeaGreen : Color.White;
-        Texture2D buttonSprite = isHovered ? Game1.ButtonHoverSprite : Game1.ButtonSprite;
+        Texture2D buttonSprite = isHovered ? Renderer.ButtonHoverSprite : Renderer.ButtonSprite;
         Draw9Slice(buttonSprite, bounds, null, (int)(10 * ScaleFactor));
         Vector2 textPosition = new Vector2(bounds.X + bounds.Width / 2 - font.MeasureString(text).X / 2 * ScaleFactor,
                                            bounds.Y + bounds.Height / 2 - font.MeasureString(text).Y / 2 * ScaleFactor);

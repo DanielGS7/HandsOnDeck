@@ -195,7 +195,7 @@ namespace HandsOnDeck.Classes.Object.Entity
             
         }
 
-        public void Reset()
+        public override void Reset()
         {
             position = new Vector2(500, 500);
             rotation = 0.0f;

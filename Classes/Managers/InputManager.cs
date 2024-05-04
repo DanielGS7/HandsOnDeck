@@ -1,4 +1,7 @@
-﻿using HandsOnDeck.Enums;
+﻿using HandsOnDeck.Classes.MonogameAccessibility;
+using HandsOnDeck.Enums;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
@@ -12,6 +15,8 @@ namespace HandsOnDeck.Classes.Managers
 
         private Dictionary<GameAction, Keys> keyMappings;
         private KeyboardState currentKeyboardState;
+        private MouseState currentMouseState;
+        private GraphicsDevice graphicsDevice;
 
         public static InputManager GetInstance
         {
@@ -34,8 +39,9 @@ namespace HandsOnDeck.Classes.Managers
             keyMappings = new Dictionary<GameAction, Keys>();
         }
 
-        public void Initialize()
+        public void Initialize(GraphicsDevice graphicsDevice)
         {
+            this.graphicsDevice = graphicsDevice;
             AddMapping(GameAction.TOGGLESAILS, Keys.Z);
             AddMapping(GameAction.TURNLEFT, Keys.Q);
             AddMapping(GameAction.TURNRIGHT, Keys.D);
@@ -46,6 +52,11 @@ namespace HandsOnDeck.Classes.Managers
             AddMapping(GameAction.SHOOTRIGHT, Keys.Right);
             AddMapping(GameAction.RELOAD, Keys.A);
             AddMapping(GameAction.REPAIR, Keys.H);
+        }
+
+        public void Update(){
+            currentMouseState = Mouse.GetState();
+            currentKeyboardState = Keyboard.GetState();
         }
 
         public void AddMapping(GameAction action, Keys key)
@@ -60,7 +71,6 @@ namespace HandsOnDeck.Classes.Managers
             }
         }
 
-
         public void RemoveMapping(GameAction action)
         {
             if (keyMappings.ContainsKey(action))
@@ -69,13 +79,8 @@ namespace HandsOnDeck.Classes.Managers
             }
             else
             {
-                throw new ArgumentException($"Action '{action}' niet gevonden");
+                throw new ArgumentException($"Action '{action}' not found");
             }
-        }
-
-        public void SetCurrentKeyboardState(KeyboardState state)
-        {
-            currentKeyboardState = state;
         }
 
         public List<GameAction> GetPressedActions()
@@ -92,6 +97,23 @@ namespace HandsOnDeck.Classes.Managers
 
             return pressedActions;
         }
-    }
+        public Point GetTransformedMousePosition()
+        {
+            Rectangle dst = Renderer.GetInstance.CalculateDestinationRectangle(Renderer.Window.ClientBounds.Width / (float)Renderer.Window.ClientBounds.Height, 
+                                                                            Game1.ProgramWidth / (float)Game1.ProgramHeight);
 
+            float scaleX = dst.Width / (float)Game1.ProgramWidth;
+            float scaleY = dst.Height / (float)Game1.ProgramHeight;
+
+            int transformedX = (int)((currentMouseState.X - dst.X) / scaleX);
+            int transformedY = (int)((currentMouseState.Y - dst.Y) / scaleY);
+
+            return new Point(transformedX, transformedY);
+        }
+        public void Draw()
+        {
+            String pos = GetTransformedMousePosition().ToVector2().ToString()+" "+graphicsDevice.Viewport.ToString();
+            SpriteBatchManager.Instance.DrawString(Renderer.DefaultFont, pos , GetTransformedMousePosition().ToVector2(), Color.White,0,Vector2.Zero,3,SpriteEffects.None,0);
+        }
+    }
 }

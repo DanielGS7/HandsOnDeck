@@ -7,6 +7,7 @@ namespace HandsOnDeck.Classes.Object
     public abstract class GameObject : IGameObject
     {
         public string _gameObjectTextureName;
+        public Vector2 spawnPosition;
         public Vector2 position;
         public Vector2 size;
 
@@ -16,5 +17,9 @@ namespace HandsOnDeck.Classes.Object
         public abstract void Update(GameTime gameTime);
         public abstract void Draw(GameTime gameTime);
         public abstract void Draw(GameTime gameTime, Vector2 position);
+        public virtual void Reset()
+        {
+            position = spawnPosition;
+        }
     }
 }

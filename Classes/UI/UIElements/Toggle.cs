@@ -1,4 +1,5 @@
 ﻿using HandsOnDeck;
+using HandsOnDeck.Classes.Managers;
 using HandsOnDeck.Classes.MonogameAccessibility;
 using HandsOnDeck.Classes.UI.UIElements;
 using Microsoft.Xna.Framework;
@@ -25,7 +26,7 @@ public class Toggle : UIElement
     {
         this.text = text;
         this.action = action;
-        this.font = Game1.DefaultFont;
+        this.font = Renderer.DefaultFont;
         this.isToggled = initialState;
 
         Vector2 size = (font.MeasureString(text) + new Vector2(Padding * 2, Padding * 2)) * ScaleFactor;
@@ -40,7 +41,7 @@ public class Toggle : UIElement
 
     internal override void Initialize()
     {
-        this.font = Game1.DefaultFont ?? throw new InvalidOperationException("DefaultFont not loaded.");
+        this.font = Renderer.DefaultFont ?? throw new InvalidOperationException("DefaultFont not loaded.");
         Vector2 size = font.MeasureString(text);
         this.bounds = new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y);
     }
@@ -51,26 +52,27 @@ public class Toggle : UIElement
         this.hoverTexture = ContentLoader.Load<Texture2D>("button/buttonH");
     }
 
-    public override void Update(GameTime gameTime)
+public override void Update(GameTime gameTime)
+{
+    MouseState mouseState = Mouse.GetState();
+    Point mousePosition = InputManager.GetInstance.GetTransformedMousePosition();
+
+    isHovered = bounds.Contains(mousePosition);
+
+    if (isHovered && mouseState.LeftButton == ButtonState.Pressed)
     {
-        MouseState mouseState = Mouse.GetState();
-        Point mousePosition = Game1.transformedMousePosition;
-        isHovered = bounds.Contains(mousePosition);
-        if (isHovered && mouseState.LeftButton == ButtonState.Pressed)
-        {
-            isClicked = true;
-        }
-        else if (isClicked && mouseState.LeftButton == ButtonState.Released)
-        {
-            isClicked = false;
-            isToggled = !isToggled;
-            action.Invoke();
-        }
+        isClicked = true;
     }
+    else if (isClicked && mouseState.LeftButton == ButtonState.Released)
+    {
+        isClicked = false;
+        action.Invoke();
+    }
+}
 
     public override void Draw(GameTime gameTime)
     {
-        Texture2D buttonSprite = isHovered ? Game1.ButtonHoverSprite : Game1.ButtonSprite;
+        Texture2D buttonSprite = isHovered ? Renderer.ButtonHoverSprite : Renderer.ButtonSprite;
         Draw9Slice(buttonSprite, bounds, null, (int)(10 * ScaleFactor));
 
         Vector2 textPosition = new Vector2(
@@ -86,6 +88,6 @@ public class Toggle : UIElement
             (int)(bounds.Height - Padding * ScaleFactor)-50,
             (int)(bounds.Height - Padding * ScaleFactor)-50
         );
-        SpriteBatchManager.Instance.Draw(Game1.ButtonSprite, toggleIndicatorBounds, toggleColor);
+        SpriteBatchManager.Instance.Draw(Renderer.ButtonSprite, toggleIndicatorBounds, toggleColor);
     }
 }

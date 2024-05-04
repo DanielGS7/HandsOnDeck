@@ -51,7 +51,7 @@ namespace HandsOnDeck.Classes.UI.Screens
 
         public override void Draw(GameTime gameTime)
         {
-            titleFont = Game1.DefaultFont;
+            titleFont = Renderer.DefaultFont;
             float scale = 5.0f;
             Vector2 textSize = titleFont.MeasureString(titleText) * scale;
             Vector2 textPosition = new Vector2(1000, 400) - textSize / 2;

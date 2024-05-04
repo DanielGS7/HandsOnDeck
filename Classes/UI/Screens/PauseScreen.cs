@@ -37,6 +37,7 @@ namespace HandsOnDeck.Classes.UI.Screens
 
         private void ToggleSound()
         {
+            
         }
 
         private void ExitToMainMenu()

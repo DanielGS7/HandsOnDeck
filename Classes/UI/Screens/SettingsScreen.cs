@@ -35,7 +35,7 @@ namespace HandsOnDeck.Classes.UI.Screens
 
         private void GoBack()
         {
-            GameStateManager.GetInstance.ChangeState(GameState.Pause);
+            GameStateManager.GetInstance.ChangeState(GameState.Start);
         }
 
         internal override void LoadContent()

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using HandsOnDeck;
+using HandsOnDeck.Classes.Managers;
 
 public class MousePositionDisplay
 {
@@ -10,7 +11,7 @@ public class MousePositionDisplay
 
     public MousePositionDisplay()
     {
-        font = Game1.DefaultFont;
+        font = Renderer.DefaultFont;
     }
 
     public void Update(GameTime gameTime)
