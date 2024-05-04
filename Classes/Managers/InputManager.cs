@@ -110,10 +110,10 @@ namespace HandsOnDeck.Classes.Managers
 
             return new Point(transformedX, transformedY);
         }
-        public void Draw()
+        /*public void Draw()
         {
             String pos = GetTransformedMousePosition().ToVector2().ToString()+" "+graphicsDevice.Viewport.ToString();
             SpriteBatchManager.Instance.DrawString(Renderer.DefaultFont, pos , GetTransformedMousePosition().ToVector2(), Color.White,0,Vector2.Zero,3,SpriteEffects.None,0);
-        }
+        }*/
     }
 }

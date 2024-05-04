@@ -102,8 +102,8 @@ namespace HandsOnDeck.Classes.Managers
             Background.GetInstance.Draw(gameTime);
             GameStateManager.GetInstance.Draw(gameTime);
             MapOverlay.GetInstance.Draw(gameTime);
-            mousePositionDisplay.Draw(SpriteBatchManager.Instance);
-            InputManager.GetInstance.Draw();
+            //mousePositionDisplay.Draw(SpriteBatchManager.Instance);
+            //InputManager.GetInstance.Draw();
             //Alles dat getekend moet worden komt boven deze lijn
             
             GetInstance._spriteBatch.End();
