@@ -7,6 +7,7 @@ using System;
 using HandsOnDeck.Classes.Object.Static;
 using HandsOnDeck.Classes.Managers;
 using HandsOnDeck.Classes.UI.UIElements;
+using HandsOnDeck.Classes.MonogameAccessibility;
 
 namespace HandsOnDeck.Classes.UI
 {
@@ -64,6 +65,7 @@ namespace HandsOnDeck.Classes.UI
             base.Initialize();
             ViewportSize = new Vector2(2048, 1080);
             WorldSize = new Vector2(10240, 5400);
+            CollisionManager.GetInstance.Initialize(GraphicsDeviceSingleton.GetInstance);
             foreach (GameObject obj in gameObjects)
             {
                 if (obj is CollideableGameObject collidableObj)
@@ -121,6 +123,7 @@ namespace HandsOnDeck.Classes.UI
                     gameObject.Draw(gameTime, wrappedPosition);
                 }
             }
+            CollisionManager.GetInstance.DrawVisualizations(viewportPosition);
         }
 
         private void UpdateViewportPosition()

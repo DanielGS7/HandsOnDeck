@@ -1,6 +1,9 @@
 ﻿using HandsOnDeck.Classes.Object;
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Graphics;
+using HandsOnDeck.Classes.Collisions;
+using Microsoft.Xna.Framework;
 
 namespace HandsOnDeck.Classes.Managers
 {
@@ -10,7 +13,9 @@ namespace HandsOnDeck.Classes.Managers
         private static readonly object lockObject = new object();
 
         internal List<CollideableGameObject> gameObjects;
-        HashSet<Tuple<GameObject, GameObject>> recordedCollisions = new HashSet<Tuple<GameObject, GameObject>>();
+        readonly HashSet<Tuple<Hitbox, Hitbox>> recordedCollisions = new HashSet<Tuple<Hitbox, Hitbox>>();
+        private CollisionVisualizer visualizer;
+
         public static CollisionManager GetInstance
         {
             get
@@ -32,33 +37,45 @@ namespace HandsOnDeck.Classes.Managers
             gameObjects = new List<CollideableGameObject>();
         }
 
+        public void Initialize(GraphicsDevice graphicsDevice)
+        {
+            visualizer = new CollisionVisualizer(graphicsDevice);
+        }
+
         internal void AddCollideableObject(CollideableGameObject gameObject)
         {
             gameObjects.Add(gameObject);
+            visualizer.AddHitbox(gameObject.Hitbox);
         }
 
         internal void RemoveCollideableObject(CollideableGameObject gameObject)
         {
             gameObjects.Remove(gameObject);
+            visualizer.RemoveHitbox(gameObject.Hitbox);
         }
 
         internal void CheckForCollisions()
         {
+            var currentCollisions = new List<Tuple<Hitbox, Hitbox>>();
+
             for (int i = 0; i < gameObjects.Count; i++)
             {
                 for (int j = i + 1; j < gameObjects.Count; j++)
                 {
                     var gameObjectA = gameObjects[i];
                     var gameObjectB = gameObjects[j];
-                    var collisionPair = new Tuple<GameObject, GameObject>(gameObjectA, gameObjectB);
+                    var hitboxA = gameObjectA.Hitbox;
+                    var hitboxB = gameObjectB.Hitbox;
+                    var collisionPair = new Tuple<Hitbox, Hitbox>(hitboxA, hitboxB);
 
-                    if (gameObjectA.Hitbox.bounds.Intersects(gameObjectB.Hitbox.bounds))
+                    if (hitboxA.bounds.Intersects(hitboxB.bounds))
                     {
                         if (!recordedCollisions.Contains(collisionPair))
                         {
                             gameObjectA.onCollision(gameObjectB);
                             gameObjectB.onCollision(gameObjectA);
                             recordedCollisions.Add(collisionPair);
+                            currentCollisions.Add(collisionPair);
                         }
                     }
                     else
@@ -67,8 +84,11 @@ namespace HandsOnDeck.Classes.Managers
                     }
                 }
             }
+
         }
-
+        public void DrawVisualizations(Vector2 viewportPosition)
+        {
+            visualizer.Draw(viewportPosition);
+        }
     }
-
 }

@@ -7,10 +7,13 @@ namespace HandsOnDeck.Classes.Collisions
     {
         internal Rectangle bounds { get; set;}
         internal HitboxType type { get; set; }
+        public bool IsColliding { get; internal set; }
+
         public Hitbox(Rectangle SourceRectangle, HitboxType hitboxType)
         {
             bounds = SourceRectangle;
             type = hitboxType;
+            IsColliding = false;
         }
     }
 }
