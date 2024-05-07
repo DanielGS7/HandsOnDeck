@@ -7,7 +7,7 @@ public class WorldCoordinate
     public float Y { get; private set; }
     public float Width { get; private set; }
     public float Height { get; private set; }
-    private const int ChunkSize = 100;  // Define chunk size, adjust based on your game's scale
+    private const int ChunkSize = 100;
 
     public WorldCoordinate(float x, float y, float width, float height)
     {
@@ -34,16 +34,14 @@ public class WorldCoordinate
         List<Chunk> relevantChunks = new List<Chunk>();
         Point currentChunkId = GetChunkID();
 
-        // Include current chunk
         relevantChunks.Add(chunkMap[currentChunkId]);
 
-        // Determine neighboring chunks, considering wrapping
         List<Point> neighborChunkIds = new List<Point>
         {
-            new Point((currentChunkId.X - 1 + (int)(Width / ChunkSize)) % (int)(Width / ChunkSize), currentChunkId.Y), // Left
-            new Point((currentChunkId.X + 1) % (int)(Width / ChunkSize), currentChunkId.Y),                          // Right
-            new Point(currentChunkId.X, (currentChunkId.Y - 1 + (int)(Height / ChunkSize)) % (int)(Height / ChunkSize)), // Up
-            new Point(currentChunkId.X, (currentChunkId.Y + 1) % (int)(Height / ChunkSize))                           // Down
+            new Point((currentChunkId.X - 1 + (int)(Width / ChunkSize)) % (int)(Width / ChunkSize), currentChunkId.Y),
+            new Point((currentChunkId.X + 1) % (int)(Width / ChunkSize), currentChunkId.Y),                          
+            new Point(currentChunkId.X, (currentChunkId.Y - 1 + (int)(Height / ChunkSize)) % (int)(Height / ChunkSize)),
+            new Point(currentChunkId.X, (currentChunkId.Y + 1) % (int)(Height / ChunkSize))                           
         };
 
         foreach (var id in neighborChunkIds)

@@ -12,6 +12,4 @@ public class Chunk
         ChunkID = chunkID;
         GameObjects = new List<GameObject>();
     }
-
-    // Additional methods to manage game objects can be added here.
 }
