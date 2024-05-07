@@ -176,3 +176,6 @@
 /processorParam:TextureFormat=Color
 /build:Unstable_Barrel.webp
 
+#begin VertexShaderInput.fx
+/copy:VertexShaderInput.fx
+

@@ -18,6 +18,7 @@ namespace HandsOnDeck.Classes.Managers
         public static Texture2D ButtonHoverSprite { get; private set; }
         public static ContentManager Content {get; private set;}
         public static GameWindow Window {get; private set;}
+        //public static ShaderManager shaderManager;
         public static Vector2 CurrentScale
         {
             get
@@ -60,7 +61,6 @@ namespace HandsOnDeck.Classes.Managers
                 return renderer;
             }
         }
-
         internal void Initialize(GraphicsDeviceManager graphics, ContentManager content, GameWindow window)
         {
             _graphics = graphics;
@@ -69,10 +69,10 @@ namespace HandsOnDeck.Classes.Managers
             Content = content;
             ContentLoader.Initialize(Content);
             GraphicsDeviceSingleton.Initialize(_graphics.GraphicsDevice);
+            //shaderManager = ShaderManager.GetInstance;
             RenderTarget = new RenderTarget2D(_graphics.GraphicsDevice, Game1.ProgramWidth, Game1.ProgramHeight, false, SurfaceFormat.Color, DepthFormat.None, pp.MultiSampleCount, RenderTargetUsage.DiscardContents);
             MapOverlay.GetInstance.Initialize();
         }
-
         public void LoadContent(SpriteBatch spriteBatch)
         {
             _spriteBatch = spriteBatch;
@@ -83,33 +83,28 @@ namespace HandsOnDeck.Classes.Managers
             MapOverlay.GetInstance.LoadContent();
             Window.AllowUserResizing = true;
             mousePositionDisplay = new MousePositionDisplay();
+            //shaderManager.LoadContent(Content);
         }
-
         public void Update(GameTime gameTime)
-        {
+        { 
+            //shaderManager.UpdateSunPosition(gameTime);
             Background.GetInstance.Update(gameTime);
             MapOverlay.GetInstance.Update(gameTime);
             mousePositionDisplay.Update(gameTime);
         }
-
         public void Draw(GameTime gameTime)
         {
             _graphics.GraphicsDevice.SetRenderTarget(RenderTarget);
             GraphicsDeviceSingleton.GetInstance.Clear(new Color(98, 91, 88));
             GetInstance._spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
-            
-            //Alles dat getekend moet worden komt onder deze lijn
+
             Background.GetInstance.Draw(gameTime);
             GameStateManager.GetInstance.Draw(gameTime);
             MapOverlay.GetInstance.Draw(gameTime);
-            //mousePositionDisplay.Draw(SpriteBatchManager.Instance);
-            //InputManager.GetInstance.Draw();
-            //Alles dat getekend moet worden komt boven deze lijn
-            
+
             GetInstance._spriteBatch.End();
             float outputAspect = Window.ClientBounds.Width / (float)Window.ClientBounds.Height;
             float preferredAspect = Game1.ProgramWidth / (float)Game1.ProgramHeight;
-
             Rectangle dst;
 
             if (outputAspect <= preferredAspect)
@@ -134,7 +129,6 @@ namespace HandsOnDeck.Classes.Managers
             _spriteBatch.Draw(RenderTarget, dst, Color.White);
             _spriteBatch.End();
         }
-
         public Rectangle CalculateDestinationRectangle(float outputAspect, float preferredAspect)
         {
             if (outputAspect <= preferredAspect)
