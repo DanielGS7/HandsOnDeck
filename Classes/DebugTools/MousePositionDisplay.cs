@@ -6,7 +6,7 @@ using HandsOnDeck.Classes.Managers;
 
 public class MousePositionDisplay
 {
-    private Vector2 position;
+    private WorldCoordinate position;
     private SpriteFont font;
 
     public MousePositionDisplay()
@@ -17,7 +17,7 @@ public class MousePositionDisplay
     public void Update(GameTime gameTime)
     {
         MouseState mouseState = Mouse.GetState();
-        position = new Vector2(mouseState.X, mouseState.Y);
+        position = new WorldCoordinate(mouseState.X, mouseState.Y);
     }
 
     public void Draw(SpriteBatch spriteBatch)

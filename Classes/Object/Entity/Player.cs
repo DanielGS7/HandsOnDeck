@@ -40,7 +40,7 @@ namespace HandsOnDeck.Classes.Object.Entity
         private Player()
         {
             size = new Vector2(672, 243);
-            position = new Vector2(Game1.ProgramWidth/2,Game1.ProgramHeight/2);
+            position = new WorldCoordinate(Game1.ProgramWidth/2,Game1.ProgramHeight/2);
             _gameObjectTextureName = "movingBoat";
             Hitbox = new Hitbox(new Rectangle(position.ToPoint(), size.ToPoint()/new Point(5,5)), HitboxType.Trigger);
             moving = new Animation(_gameObjectTextureName,size, 0, 6, 5, 1, true);
@@ -104,7 +104,7 @@ namespace HandsOnDeck.Classes.Object.Entity
             Draw(gameTime, position);
         }
 
-        public override void Draw(GameTime gameTime, Vector2 position)
+        public override void Draw(GameTime gameTime, WorldCoordinate position)
         {
             if (speed > 0)
             {
@@ -197,7 +197,7 @@ namespace HandsOnDeck.Classes.Object.Entity
 
         public override void Reset()
         {
-            position = new Vector2(500, 500);
+            position = new WorldCoordinate(500, 500);
             rotation = 0.0f;
             speed = 0.0f;
             sailsUp = false;
@@ -240,7 +240,7 @@ namespace HandsOnDeck.Classes.Object.Entity
         {
             if (!isAvoiding)
             {
-                Vector2 directionToOther = other.position - position;
+                Vector2 directionToOther = other.position.ToVector2() - position.ToVector2();
 
                 float angleToOther = (float)Math.Atan2(directionToOther.Y, directionToOther.X);
 

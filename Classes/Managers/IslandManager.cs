@@ -39,11 +39,11 @@ namespace HandsOnDeck.Classes.Managers
             float minDistance = GameScreen.WorldSize.X / 6;
             for (int i = 0; i < islandCount; i++)
             {
-                Vector2 position;
+                WorldCoordinate position;
                 int rotation = random.Next(0, 360);
                 do
                 {
-                    position = new Vector2(
+                    position = new WorldCoordinate(
                         random.Next(0, (int)GameScreen.WorldSize.X),
                         random.Next(0, (int)GameScreen.WorldSize.Y)
                     );
@@ -68,8 +68,8 @@ namespace HandsOnDeck.Classes.Managers
             foreach (var island in islands)
             {
 
-                Vector2 drawPosition = island.position - GameScreen.GetInstance.viewportPosition;
-                Vector2 wrappedPosition = GameScreen.GetInstance.AdjustForWorldWrapping(drawPosition, island.position);
+                WorldCoordinate drawPosition = island.position - GameScreen.GetInstance.viewportPosition;
+                WorldCoordinate wrappedPosition = GameScreen.GetInstance.AdjustForWorldWrapping(drawPosition, island.position);
 
                 if (drawPosition == wrappedPosition)
                 {
@@ -90,11 +90,11 @@ namespace HandsOnDeck.Classes.Managers
             }
         }
 
-        private bool IsPositionSufficientlyFar(Vector2 position, int minDistance)
+        private bool IsPositionSufficientlyFar(WorldCoordinate position, int minDistance)
         {
             foreach (var island in islands)
             {
-                if (Vector2.Distance(position, island.position) < minDistance)
+                if (Vector2.Distance(position.ToVector2(), island.position.ToVector2()) < minDistance)
                     return false;
             }
             return true;

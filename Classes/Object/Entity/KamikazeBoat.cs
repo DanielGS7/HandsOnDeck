@@ -21,7 +21,7 @@ namespace HandsOnDeck.Classes.Object.Entity
         private const float EncircleDistanceMin = 100f;
         private const float EncircleDistanceMax = 200f; // TODO let the boat circle between 2 ranges
 
-        public KamikazeBoat(Vector2 startPosition)
+        public KamikazeBoat(WorldCoordinate startPosition)
         {
             position = startPosition;
             size = new Vector2(672, 242);
@@ -49,7 +49,7 @@ namespace HandsOnDeck.Classes.Object.Entity
         {
             Draw(gameTime, position);
         }
-        public override void Draw(GameTime gameTime, Vector2 position)
+        public override void Draw(GameTime gameTime, WorldCoordinate position)
         {
             boatSprite.Draw(position, 0.2f, rotation, new Vector2(336, 121));
         }
@@ -57,7 +57,7 @@ namespace HandsOnDeck.Classes.Object.Entity
         private void UpdateMovement(GameTime gameTime, Player player)
         {
 
-            Vector2 directDirectionToPlayer = player.position - position;
+            Vector2 directDirectionToPlayer = player.position.ToVector2() - position.ToVector2();
             Vector2 wrappedDirectionToPlayer = directDirectionToPlayer;
 
             if (Math.Abs(directDirectionToPlayer.X) > GameScreen.WorldSize.X / 2)

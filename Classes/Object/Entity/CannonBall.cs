@@ -13,7 +13,7 @@ namespace HandsOnDeck.Classes.Object.Entity
         public static float BaseSpeed = 5.0f;
         public float TimeTillRemoval = 3.0f;
         public float TimeExisting = 0.0f;
-        public CannonBall(Vector2 initialPosition, Vector2 initialVelocity)
+        public CannonBall(WorldCoordinate initialPosition, Vector2 initialVelocity)
         {
             position = initialPosition;
             size = new Vector2(600, 562);
@@ -30,7 +30,7 @@ namespace HandsOnDeck.Classes.Object.Entity
 
         public override void Update(GameTime gameTime)
         {
-            position += velocity;
+            position= position+ velocity;
             cannonBall.Update(gameTime);
             Hitbox.bounds = new Rectangle(position.ToPoint()/new Point(10,10), size.ToPoint() / new Point(10, 10));
         }
@@ -39,7 +39,7 @@ namespace HandsOnDeck.Classes.Object.Entity
         {
             Draw(gameTime, position);
         }
-        public override void Draw(GameTime gameTime, Vector2 position)
+        public override void Draw(GameTime gameTime, WorldCoordinate position)
         {
             cannonBall.Draw(position,0.04f,0,new Vector2(300,281));
         }

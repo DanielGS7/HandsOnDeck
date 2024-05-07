@@ -1,21 +1,37 @@
 using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 
 public class WorldCoordinate
 {
-    public float X { get; private set; }
-    public float Y { get; private set; }
+    public float X { get; set; }
+    public float Y { get; set; }
     public float Width { get; private set; }
     public float Height { get; private set; }
     private const int ChunkSize = 100;
 
-    public WorldCoordinate(float x, float y, float width, float height)
+    public WorldCoordinate(float x, float y)
     {
         X = x;
         Y = y;
-        Width = width;
-        Height = height;
+        Width = 20480;
+        Height = 10800;
         Normalize();
+    }
+
+        public WorldCoordinate(Vector2 position)
+    {
+        X = position.X;
+        Y = position.Y;
+        Width = 20480;
+        Height = 10800;
+        Normalize();
+    }
+
+    public WorldCoordinate()
+    {
+        X = 0;
+        Y = 0;
     }
 
     private void Normalize()
@@ -28,6 +44,12 @@ public class WorldCoordinate
     {
         return new Vector2(X, Y);
     }
+
+    public Point ToPoint()
+    {
+        return new Point((int)Math.Round(X), (int)Math.Round(Y));
+    }
+
 
     public List<Chunk> GetRelevantChunks(Dictionary<Point, Chunk> chunkMap)
     {
@@ -60,5 +82,25 @@ public class WorldCoordinate
         int chunkX = (int)(X / ChunkSize);
         int chunkY = (int)(Y / ChunkSize);
         return new Point(chunkX, chunkY);
+    }
+
+        public static WorldCoordinate operator +(WorldCoordinate a, WorldCoordinate b)
+    {
+        return new WorldCoordinate(a.X + b.X, a.Y + b.Y);
+    }
+
+    public static WorldCoordinate operator -(WorldCoordinate a, WorldCoordinate b)
+    {
+        return new WorldCoordinate(a.X - b.X, a.Y - b.Y);
+    }
+
+        public static WorldCoordinate operator +(WorldCoordinate wc, Vector2 v)
+    {
+        return new WorldCoordinate(wc.X + v.X, wc.Y + v.Y);
+    }
+
+    public static WorldCoordinate operator -(WorldCoordinate wc, Vector2 v)
+    {
+        return new WorldCoordinate(wc.X - v.X, wc.Y - v.Y);
     }
 }

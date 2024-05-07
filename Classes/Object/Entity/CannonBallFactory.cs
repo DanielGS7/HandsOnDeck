@@ -10,7 +10,7 @@ namespace HandsOnDeck.Classes.Object.Entity
 {
     internal class CannonBallFactory: List<CannonBall>
     {
-        public void AddCannonball(Vector2 initialPosition, Vector2 initialVelocity) 
+        public void AddCannonball(WorldCoordinate initialPosition, Vector2 initialVelocity) 
         {
             CannonBall cannonBall= new CannonBall(initialPosition, initialVelocity);
             cannonBall.LoadContent();
@@ -38,8 +38,8 @@ namespace HandsOnDeck.Classes.Object.Entity
         {
             foreach(CannonBall cb in this) 
             {
-                Vector2 drawPosition = cb.position - GameScreen.GetInstance.viewportPosition;
-                Vector2 wrappedPosition = GameScreen.GetInstance.AdjustForWorldWrapping(drawPosition, cb.position);
+                WorldCoordinate drawPosition = cb.position - GameScreen.GetInstance.viewportPosition;
+                WorldCoordinate wrappedPosition = GameScreen.GetInstance.AdjustForWorldWrapping(drawPosition, cb.position);
 
                 if (drawPosition == wrappedPosition)
                 {

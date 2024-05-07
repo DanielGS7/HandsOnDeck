@@ -12,7 +12,7 @@ namespace HandsOnDeck.Classes.Object.Entity
         private float activationRange = 300f;
         private bool detectedByPlayer = false;
 
-        public ExplosiveBarrel(Vector2 startPosition) 
+        public ExplosiveBarrel(WorldCoordinate startPosition) 
         {
             position = startPosition;
             size = new Vector2(360, 360);
@@ -32,9 +32,9 @@ namespace HandsOnDeck.Classes.Object.Entity
         }
         public override void Draw(GameTime gameTime) {} //Draw method unnecessary
 
-        public override void Draw(GameTime gameTime, Vector2 position)
+        public override void Draw(GameTime gameTime, WorldCoordinate position)
         {
-            float distanceToPlayer = Vector2.Distance(Player.GetInstance.position, position);
+            float distanceToPlayer = Vector2.Distance(Player.GetInstance.position.ToVector2(), position.ToVector2());
             if (distanceToPlayer < activationRange)
             {
                 detectedByPlayer |= true;

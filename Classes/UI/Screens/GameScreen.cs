@@ -14,7 +14,7 @@ namespace HandsOnDeck.Classes.UI
     public class GameScreen : UIScreen
     {
 
-        public Vector2 viewportPosition;
+        public WorldCoordinate viewportPosition;
         public static Vector2 ViewportSize;
         public static Vector2 WorldSize;
 
@@ -49,10 +49,10 @@ namespace HandsOnDeck.Classes.UI
             gameObjects = new List<GameObject>();
             player = Player.GetInstance;
             bg = Background.GetInstance;
-            enemy1 = new EnemyBoat(new Vector2(1000,500));
-            enemy2 = new KamikazeBoat(new Vector2(1200,600));
-            barrel = new ExplosiveBarrel(new Vector2(700, 700));
-            hearts = new HeartContainer(new Vector2(150,250));
+            enemy1 = new EnemyBoat(new WorldCoordinate(1000,500));
+            enemy2 = new KamikazeBoat(new WorldCoordinate(1200,600));
+            barrel = new ExplosiveBarrel(new WorldCoordinate(700, 700));
+            hearts = new HeartContainer(new WorldCoordinate(150,250));
             gameObjects.Add(enemy1);
             gameObjects.Add(enemy2);
             gameObjects.Add(barrel);
@@ -73,7 +73,8 @@ namespace HandsOnDeck.Classes.UI
                     CollisionManager.GetInstance.AddCollideableObject(collidableObj);
                 }
             }
-
+            viewportPosition = new WorldCoordinate();
+            UpdateViewportPosition();
         }
 
         internal override void LoadContent()
@@ -105,14 +106,14 @@ namespace HandsOnDeck.Classes.UI
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
-            bg.Draw(gameTime, new Vector2(viewportPosition.X % 128, viewportPosition.Y % 128));
+            bg.Draw(gameTime, new WorldCoordinate(viewportPosition.X % 128, viewportPosition.Y % 128));
             IslandManager.GetInstance.Draw(gameTime);
             hearts.Draw(gameTime);
 
             foreach (var gameObject in gameObjects)
             {
-                Vector2 drawPosition = gameObject.position - viewportPosition;
-                Vector2 wrappedPosition = AdjustForWorldWrapping(drawPosition, gameObject.position);
+                WorldCoordinate drawPosition = gameObject.position - viewportPosition;
+                WorldCoordinate wrappedPosition = AdjustForWorldWrapping(drawPosition, gameObject.position);
 
                 if (drawPosition == wrappedPosition)
                 {
@@ -128,9 +129,9 @@ namespace HandsOnDeck.Classes.UI
 
         private void UpdateViewportPosition()
         {
-            Vector2 playerPosition = Player.GetInstance.position;
+            WorldCoordinate playerPosition = Player.GetInstance.position;
             Vector2 threshold = new Vector2(500, 400);
-            Vector2 relativePlayerPosition = playerPosition - viewportPosition;
+            Vector2 relativePlayerPosition = playerPosition.ToVector2() - viewportPosition.ToVector2();
 
             if (relativePlayerPosition.X < threshold.X)
                 viewportPosition.X = AdjustViewportEdge(playerPosition.X - threshold.X, viewportPosition.X, WorldSize.X);
@@ -159,9 +160,9 @@ namespace HandsOnDeck.Classes.UI
                 return currentViewport + wrappedDistance * 0.05f;
         }
 
-        public Vector2 AdjustForWorldWrapping(Vector2 drawPosition, Vector2 originalPosition)
+        public WorldCoordinate AdjustForWorldWrapping(WorldCoordinate drawPosition, WorldCoordinate originalPosition)
         {
-            Vector2 adjustedPosition = drawPosition;
+            WorldCoordinate adjustedPosition = drawPosition;
 
             if (originalPosition.X < ViewportSize.X && viewportPosition.X > WorldSize.X - ViewportSize.X)
             {
@@ -196,10 +197,10 @@ public void ResetGame()
     // Reinitialize game objects
     player = Player.GetInstance;
     bg = Background.GetInstance;
-    enemy1 = new EnemyBoat(new Vector2(1000,500));
-    enemy2 = new KamikazeBoat(new Vector2(1200,600));
-    barrel = new ExplosiveBarrel(new Vector2(700, 700));
-    hearts = new HeartContainer(new Vector2(150,250));
+    enemy1 = new EnemyBoat(new WorldCoordinate(1000,500));
+    enemy2 = new KamikazeBoat(new WorldCoordinate(1200,600));
+    barrel = new ExplosiveBarrel(new WorldCoordinate(700, 700));
+    hearts = new HeartContainer(new WorldCoordinate(150,250));
 
     player.LoadContent();
     bg.LoadContent();

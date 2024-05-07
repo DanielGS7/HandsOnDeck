@@ -86,7 +86,7 @@ namespace HandsOnDeck.Classes.Managers
             }
 
         }
-        public void DrawVisualizations(Vector2 viewportPosition)
+        public void DrawVisualizations(WorldCoordinate viewportPosition)
         {
             visualizer.Draw(viewportPosition);
         }

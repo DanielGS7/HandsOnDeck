@@ -24,7 +24,7 @@ namespace HandsOnDeck.Classes.Object.Entity
         private float shotCooldown = 2.0f;
         private float currentCooldown = 0.0f;
         CannonBallFactory cannonBalls = new CannonBallFactory();
-        public EnemyBoat(Vector2 startPosition)
+        public EnemyBoat(WorldCoordinate startPosition)
         {
             position = startPosition;
             size = new Vector2(1195, 706);
@@ -64,7 +64,7 @@ namespace HandsOnDeck.Classes.Object.Entity
         {
             Draw(gameTime, position);
         }
-        public override void Draw(GameTime gameTime, Vector2 position)
+        public override void Draw(GameTime gameTime, WorldCoordinate position)
         {
             boatSprite.Draw(position, 0.2f, rotation, new Vector2(597, 353));
             cannonBalls.Draw(gameTime);
@@ -72,7 +72,7 @@ namespace HandsOnDeck.Classes.Object.Entity
 
         private void UpdateMovement(GameTime gameTime, Player player)
         {
-            Vector2 directDirectionToPlayer = player.position - position;
+            Vector2 directDirectionToPlayer = player.position.ToVector2() - position.ToVector2();
             Vector2 wrappedDirectionToPlayer = directDirectionToPlayer;
 
             if (Math.Abs(directDirectionToPlayer.X) > GameScreen.WorldSize.X / 2)

@@ -58,22 +58,22 @@ namespace HandsOnDeck.Classes.Animations
         }
 
 
-        public void Draw(Vector2 position)
+        public void Draw(WorldCoordinate position)
         {
             SpriteBatchManager.Instance.Draw(
                 spriteSheet,
-                position,
+                position.ToVector2(),
                 sourceRectangle,
                 Color.White
             );
         }
 
-        public void Draw(Vector2 position, float scale, float rotation, Vector2 origin)
+        public void Draw(WorldCoordinate position, float scale, float rotation, Vector2 origin)
         {
-            SpriteBatchManager.Instance.Draw(spriteSheet, position, sourceRectangle, Color.White, rotation, origin, scale, SpriteEffects.None, 1);
+            SpriteBatchManager.Instance.Draw(spriteSheet, position.ToVector2(), sourceRectangle, Color.White, rotation, origin, scale, SpriteEffects.None, 1);
         }
 
-        public void Draw(Vector2 position, Vector2 totalSurface)
+        public void Draw(WorldCoordinate position, Vector2 totalSurface)
         {
             Vector2 extendedSurface = new Vector2(totalSurface.X + sourceRectangle.Width*2, totalSurface.Y + sourceRectangle.Height*2);
 
@@ -81,7 +81,7 @@ namespace HandsOnDeck.Classes.Animations
             {
                 for (int j = 0; j <= extendedSurface.X; j += sourceRectangle.Width)
                 {
-                    Vector2 tilePosition = new Vector2(j, i) - position-new Vector2(128,128);
+                    WorldCoordinate tilePosition = new WorldCoordinate(j - position.X -128, i - position.Y -128);
                     Draw(tilePosition);
                 }
             }

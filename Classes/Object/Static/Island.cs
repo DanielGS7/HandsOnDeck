@@ -21,7 +21,7 @@ namespace HandsOnDeck.Classes.Object.Static
         bool playerNearby = false;
         int rotation;
 
-        public Island(Vector2 position, int islandIndex, int rotation)
+        public Island(WorldCoordinate position, int islandIndex, int rotation)
         {
             this.size = new Vector2(512, 512);
             this.position = position;
@@ -40,7 +40,7 @@ namespace HandsOnDeck.Classes.Object.Static
 
         public override void Draw(GameTime gameTime) { }
 
-        public override void Draw(GameTime gameTime, Vector2 position)
+        public override void Draw(GameTime gameTime, WorldCoordinate position)
         {
             islandSprite.Draw(position,1, rotation, size/new Vector2(2,2));
         }

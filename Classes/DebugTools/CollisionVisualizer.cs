@@ -31,7 +31,7 @@ namespace HandsOnDeck.Classes.Managers
             _hitboxes.Remove(hitbox);
         }
 
-        public void Draw(Vector2 viewportPosition)
+        public void Draw(WorldCoordinate viewportPosition)
         {
             foreach (var hitbox in _hitboxes)
             {

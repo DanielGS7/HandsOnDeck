@@ -36,7 +36,7 @@ namespace HandsOnDeck.Classes.Object.Static
         }
         public void Draw(GameTime gameTime)
         {
-            _overlay.Draw(Vector2.Zero, 2, 0, Vector2.Zero);
+            _overlay.Draw(new WorldCoordinate(Vector2.Zero), 2, 0, Vector2.Zero);
         }
 
         public void Update(GameTime gameTime){} //No update logic needed for this

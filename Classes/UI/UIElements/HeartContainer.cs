@@ -18,10 +18,10 @@ namespace HandsOnDeck.Classes.UI.UIElements
         private Animation oneHealth;
         private Animation twoHealth;
         private Animation threeHealth;
-        private Vector2 position;
+        private WorldCoordinate position;
         private int Xlives { get { return Player.GetInstance.lifePoints; } }
 
-        public HeartContainer(Vector2 givenPosition )
+        public HeartContainer(WorldCoordinate givenPosition )
         {
             position = givenPosition;
             fullHealth = new Animation("heartshealth", new Vector2(283, 43), 0, 1, 6, 0, false);

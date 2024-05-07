@@ -23,8 +23,8 @@ namespace HandsOnDeck.Classes.Managers
         {
             get
             {
-                float scaleX = RenderTarget.Width / 2048f;  // 2048 should be your design width
-                float scaleY = RenderTarget.Height / 1080f; // 1080 should be your design height
+                float scaleX = RenderTarget.Width / 2048f; 
+                float scaleY = RenderTarget.Height / 1080f;
                 return new Vector2(scaleX, scaleY);
             }
         }
