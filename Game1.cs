@@ -17,16 +17,6 @@ namespace HandsOnDeck
         public const int ProgramHeight = 1080;
 
         public const float ratio = ProgramWidth / ProgramHeight;
-        private static Game1 instance;
-        public static Game1 Instance
-        {
-            get
-            {
-                if (instance == null)
-                    throw new Exception("Game1 instance is not initialized.");
-                return instance;
-            }
-        }
 
         public Game1()
         {
