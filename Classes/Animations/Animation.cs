@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Numerics;
 
 namespace HandsOnDeck.Classes.Animations
 {
@@ -68,9 +69,13 @@ namespace HandsOnDeck.Classes.Animations
             );
         }
 
+        public void DrawStatic(Vector2 position, float scale, float rotation, Vector2 origin){
+            SpriteBatchManager.Instance.Draw(spriteSheet, position, sourceRectangle, Color.White, rotation, origin, scale, SpriteEffects.None, 0);
+        }
+
         public void Draw(WorldCoordinate position, float scale, float rotation, Vector2 origin)
         {
-            SpriteBatchManager.Instance.Draw(spriteSheet, position.ToVector2(), sourceRectangle, Color.White, rotation, origin, scale, SpriteEffects.None, 1);
+            SpriteBatchManager.Instance.Draw(spriteSheet, position.ToVector2(), sourceRectangle, Color.White, rotation, origin, scale, SpriteEffects.None, 0);
         }
 
         public void Draw(WorldCoordinate position, Vector2 totalSurface)
@@ -81,8 +86,11 @@ namespace HandsOnDeck.Classes.Animations
             {
                 for (int j = 0; j <= extendedSurface.X; j += sourceRectangle.Width)
                 {
-                    WorldCoordinate tilePosition = new WorldCoordinate(j - position.X -128, i - position.Y -128);
-                    Draw(tilePosition);
+                    // Adjust for potential negative values in position.X/Y by ensuring it wraps positively
+                    int posX = (int)((j - position.X) % 128 + 128) % 128;
+                    int posY = (int)((i - position.Y) % 128 + 128) % 128;
+                    WorldCoordinate tilePosition = new WorldCoordinate(posX, posY);
+                    Draw(tilePosition); // Assuming Draw(Vector2) draws the tile at the position
                 }
             }
         }

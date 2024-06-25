@@ -1,23 +1,22 @@
-﻿using HandsOnDeck.Classes.Animations;
-using HandsOnDeck.Classes.MonogameAccessibility;
+﻿using System;
+using HandsOnDeck.Classes.Animations;
 using HandsOnDeck.Classes.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
 
 namespace HandsOnDeck.Classes.Object.Static
 {
     internal class Background : GameObject
     {
         private static Background background;
-        private static object syncRoot = new object();
+        private static readonly object syncRoot = new object();
         private static Animation water = new Animation("Swater", new Vector2(128, 128), 1, 6, 39, 15f, true);
-
 
         public override void LoadContent()
         {
             water.LoadContent();
         }
+
         public static Background GetInstance
         {
             get
@@ -41,17 +40,32 @@ namespace HandsOnDeck.Classes.Object.Static
 
         public override void Draw(GameTime gameTime)
         {
-            WorldCoordinate viewportOffset = GameScreen.GetInstance.viewportPosition;
-            WorldCoordinate startPosition = new WorldCoordinate(-viewportOffset.X % 128, -viewportOffset.Y % 128);
-            Draw(gameTime, startPosition);
+            throw new NotImplementedException();
         }
 
         public override void Draw(GameTime gameTime, WorldCoordinate position)
         {
-            GraphicsDevice _graphics = GraphicsDeviceSingleton.GetInstance;
-            SpriteBatch _spriteBatch = SpriteBatchManager.Instance;
-            Vector2 screenSize = new Vector2(_graphics.Viewport.Width, _graphics.Viewport.Height);
-            water.Draw(position, screenSize);
+            Vector2 tileSize = new Vector2(128, 128);
+            int bufferTiles = 1;
+            Vector2 startPosition = new Vector2(
+                (position.X % tileSize.X) - tileSize.X * bufferTiles,
+                (position.Y % tileSize.Y) - tileSize.Y * bufferTiles
+            );
+
+            int verticalTiles = (int)Math.Ceiling(GameScreen.ViewportSize.Y / tileSize.Y) + 2 * bufferTiles;
+            int horizontalTiles = (int)Math.Ceiling(GameScreen.ViewportSize.X / tileSize.X) + 2 * bufferTiles;
+
+            for (int x = 0; x < horizontalTiles; x++)
+            {
+                for (int y = 0; y < verticalTiles; y++)
+                {
+                    Vector2 drawPosition = new Vector2(
+                        startPosition.X + x * tileSize.X,
+                        startPosition.Y + y * tileSize.Y
+                    );
+                    water.DrawStatic(drawPosition, 1.0f, 0.0f, Vector2.Zero);
+                }
+            }
         }
     }
 }

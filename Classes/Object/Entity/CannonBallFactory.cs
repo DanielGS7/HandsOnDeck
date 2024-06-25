@@ -36,19 +36,10 @@ namespace HandsOnDeck.Classes.Object.Entity
 
         public void Draw(GameTime gameTime) 
         {
-            foreach(CannonBall cb in this) 
+            foreach (CannonBall cb in this) 
             {
-                WorldCoordinate drawPosition = cb.position - GameScreen.GetInstance.viewportPosition;
-                WorldCoordinate wrappedPosition = GameScreen.GetInstance.AdjustForWorldWrapping(drawPosition, cb.position);
-
-                if (drawPosition == wrappedPosition)
-                {
-                    cb.Draw(gameTime, drawPosition);
-                }
-                else if (drawPosition != wrappedPosition)
-                {
-                    cb.Draw(gameTime, wrappedPosition);
-                }
+                WorldCoordinate drawPosition = GameScreen.GetInstance.viewportManager.GetDrawPosition(cb.position);
+                cb.Draw(gameTime, drawPosition);
             }
         }
         internal void Reset()

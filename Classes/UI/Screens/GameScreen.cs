@@ -13,22 +13,20 @@ namespace HandsOnDeck.Classes.UI
 {
     public class GameScreen : UIScreen
     {
-
         public WorldCoordinate viewportPosition;
         public static Vector2 ViewportSize;
         public static Vector2 WorldSize;
 
         private List<GameObject> gameObjects;
-
         private Background bg;
         private Player player;
         private EnemyBoat enemy1;
         private KamikazeBoat enemy2;
         private ExplosiveBarrel barrel;
         private HeartContainer hearts;
+        public ViewportManager viewportManager;
 
         public bool isPaused;
-
         private static GameScreen instance;
 
         public static GameScreen GetInstance
@@ -66,6 +64,7 @@ namespace HandsOnDeck.Classes.UI
             ViewportSize = new Vector2(2048, 1080);
             WorldSize = new Vector2(10240, 5400);
             CollisionManager.GetInstance.Initialize(GraphicsDeviceSingleton.GetInstance);
+            viewportManager = new ViewportManager(ViewportSize.X, ViewportSize.Y);
             foreach (GameObject obj in gameObjects)
             {
                 if (obj is CollideableGameObject collidableObj)
@@ -74,7 +73,6 @@ namespace HandsOnDeck.Classes.UI
                 }
             }
             viewportPosition = new WorldCoordinate();
-            UpdateViewportPosition();
         }
 
         internal override void LoadContent()
@@ -85,14 +83,15 @@ namespace HandsOnDeck.Classes.UI
                 gameObject.LoadContent();
             }
             hearts.LoadContent();
-
         }
 
         public override void Update(GameTime gameTime)
         {
             IslandManager.GetInstance.Update(gameTime);
             if (isPaused) return;
-            UpdateViewportPosition();
+
+            viewportManager.UpdateViewportPosition(Player.GetInstance.position.ToVector2(), new Vector2(500, 400));
+            
             base.Update(gameTime);
             foreach (var gameObject in gameObjects)
             {
@@ -106,116 +105,56 @@ namespace HandsOnDeck.Classes.UI
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
-            bg.Draw(gameTime, new WorldCoordinate(viewportPosition.X % 128, viewportPosition.Y % 128));
-            IslandManager.GetInstance.Draw(gameTime);
-            hearts.Draw(gameTime);
-
+            
+            // Draw the background with wrapping
+            bg.Draw(gameTime, viewportManager.GetDrawPosition(new WorldCoordinate(viewportPosition.X % 128, viewportPosition.Y % 128)));
+            
+            // Draw all game objects with wrapping
             foreach (var gameObject in gameObjects)
             {
-                WorldCoordinate drawPosition = gameObject.position - viewportPosition;
-                WorldCoordinate wrappedPosition = AdjustForWorldWrapping(drawPosition, gameObject.position);
-
-                if (drawPosition == wrappedPosition)
-                {
-                    gameObject.Draw(gameTime, drawPosition);
-                }
-                else if (drawPosition != wrappedPosition)
-                {
-                    gameObject.Draw(gameTime, wrappedPosition);
-                }
+                WorldCoordinate drawPosition = viewportManager.GetDrawPosition(gameObject.position);
+                gameObject.Draw(gameTime, drawPosition);
             }
+
+            // Draw UI elements
+            hearts.Draw(gameTime);
+            MapOverlay.GetInstance.Draw(gameTime);
             CollisionManager.GetInstance.DrawVisualizations(viewportPosition);
-        }
-
-        private void UpdateViewportPosition()
-        {
-            WorldCoordinate playerPosition = Player.GetInstance.position;
-            Vector2 threshold = new Vector2(500, 400);
-            Vector2 relativePlayerPosition = playerPosition.ToVector2() - viewportPosition.ToVector2();
-
-            if (relativePlayerPosition.X < threshold.X)
-                viewportPosition.X = AdjustViewportEdge(playerPosition.X - threshold.X, viewportPosition.X, WorldSize.X);
-            else if (relativePlayerPosition.X > ViewportSize.X - threshold.X)
-                viewportPosition.X = AdjustViewportEdge(playerPosition.X - (ViewportSize.X - threshold.X), viewportPosition.X, WorldSize.X);
-
-
-            if (relativePlayerPosition.Y < threshold.Y)
-                viewportPosition.Y = AdjustViewportEdge(playerPosition.Y - threshold.Y, viewportPosition.Y, WorldSize.Y);
-            else if (relativePlayerPosition.Y > ViewportSize.Y - threshold.Y)
-                viewportPosition.Y = AdjustViewportEdge(playerPosition.Y - (ViewportSize.Y - threshold.Y), viewportPosition.Y, WorldSize.Y);
-
-
-            viewportPosition.X = (viewportPosition.X + WorldSize.X) % WorldSize.X;
-            viewportPosition.Y = (viewportPosition.Y + WorldSize.Y) % WorldSize.Y;
-        }
-
-        private float AdjustViewportEdge(float targetPosition, float currentViewport, float worldSize)
-        {
-            float directDistance = targetPosition - currentViewport;
-            float wrappedDistance = (targetPosition + worldSize) - currentViewport;
-
-            if (Math.Abs(directDistance) < Math.Abs(wrappedDistance))
-                return currentViewport + directDistance * 0.1f;
-            else
-                return currentViewport + wrappedDistance * 0.05f;
-        }
-
-        public WorldCoordinate AdjustForWorldWrapping(WorldCoordinate drawPosition, WorldCoordinate originalPosition)
-        {
-            WorldCoordinate adjustedPosition = drawPosition;
-
-            if (originalPosition.X < ViewportSize.X && viewportPosition.X > WorldSize.X - ViewportSize.X)
-            {
-                adjustedPosition.X += WorldSize.X;
-            }
-            else if (originalPosition.X > WorldSize.X - ViewportSize.X && viewportPosition.X < ViewportSize.X)
-            {
-                adjustedPosition.X -= WorldSize.X; 
-            }
-
-            if (originalPosition.Y < ViewportSize.Y && viewportPosition.Y > WorldSize.Y - ViewportSize.Y)
-            {
-                adjustedPosition.Y += WorldSize.Y;
-            }
-            else if (originalPosition.Y > WorldSize.Y - ViewportSize.Y && viewportPosition.Y < ViewportSize.Y)
-            {
-                adjustedPosition.Y -= WorldSize.Y; 
-            }
-            return adjustedPosition;
         }
 
         public void RemoveGameObject(GameObject gameObject)
         {
             this.gameObjects.Remove(gameObject);
         }
-public void ResetGame()
-{
-    // Clear all game objects and UI elements
-    gameObjects.Clear();
-    uiElements.Clear();
 
-    // Reinitialize game objects
-    player = Player.GetInstance;
-    bg = Background.GetInstance;
-    enemy1 = new EnemyBoat(new WorldCoordinate(1000,500));
-    enemy2 = new KamikazeBoat(new WorldCoordinate(1200,600));
-    barrel = new ExplosiveBarrel(new WorldCoordinate(700, 700));
-    hearts = new HeartContainer(new WorldCoordinate(150,250));
+        public void ResetGame()
+        {
+            // Clear all game objects and UI elements
+            gameObjects.Clear();
+            uiElements.Clear();
 
-    player.LoadContent();
-    bg.LoadContent();
-    enemy1.LoadContent();
-    enemy2.LoadContent();
-    barrel.LoadContent();
+            // Reinitialize game objects
+            player = Player.GetInstance;
+            bg = Background.GetInstance;
+            enemy1 = new EnemyBoat(new WorldCoordinate(1000,500));
+            enemy2 = new KamikazeBoat(new WorldCoordinate(1200,600));
+            barrel = new ExplosiveBarrel(new WorldCoordinate(700, 700));
+            hearts = new HeartContainer(new WorldCoordinate(150,250));
 
-    gameObjects.Add(enemy1);
-    gameObjects.Add(enemy2);
-    gameObjects.Add(barrel);
-    gameObjects.Add(player);
+            player.LoadContent();
+            bg.LoadContent();
+            enemy1.LoadContent();
+            enemy2.LoadContent();
+            barrel.LoadContent();
 
-    hearts.LoadContent();
+            gameObjects.Add(enemy1);
+            gameObjects.Add(enemy2);
+            gameObjects.Add(barrel);
+            gameObjects.Add(player);
 
-    uiElements.Add(hearts);
-}
+            hearts.LoadContent();
+
+            uiElements.Add(hearts);
+        }
     }
 }

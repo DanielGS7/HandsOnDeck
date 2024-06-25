@@ -96,39 +96,22 @@ namespace HandsOnDeck.Classes.Managers
         {
             _graphics.GraphicsDevice.SetRenderTarget(RenderTarget);
             GraphicsDeviceSingleton.GetInstance.Clear(new Color(98, 91, 88));
-            GetInstance._spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
+            _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
 
-            Background.GetInstance.Draw(gameTime);
             GameStateManager.GetInstance.Draw(gameTime);
             MapOverlay.GetInstance.Draw(gameTime);
+            _spriteBatch.End();
 
-            GetInstance._spriteBatch.End();
             float outputAspect = Window.ClientBounds.Width / (float)Window.ClientBounds.Height;
             float preferredAspect = Game1.ProgramWidth / (float)Game1.ProgramHeight;
-            Rectangle dst;
-
-            if (outputAspect <= preferredAspect)
-            {
-                int presentHeight = (int)((Window.ClientBounds.Width / preferredAspect) + 0.5f);
-                int barHeight = (Window.ClientBounds.Height - presentHeight) / 2;
-                dst = new Rectangle(0, barHeight, Window.ClientBounds.Width, presentHeight);
-                currentPaddingSize.Y = barHeight;
-                currentPaddingSize.X = 0;
-            }
-            else
-            {
-                int presentWidth = (int)((Window.ClientBounds.Height * preferredAspect) + 0.5f);
-                int barWidth = (Window.ClientBounds.Width - presentWidth) / 2;
-                dst = new Rectangle(barWidth, 0, presentWidth, Window.ClientBounds.Height);
-                currentPaddingSize.Y = 0;
-                currentPaddingSize.X = barWidth;
-            }
+            Rectangle dst = CalculateDestinationRectangle(outputAspect, preferredAspect);
 
             _graphics.GraphicsDevice.SetRenderTarget(null);
             _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
             _spriteBatch.Draw(RenderTarget, dst, Color.White);
             _spriteBatch.End();
         }
+
         public Rectangle CalculateDestinationRectangle(float outputAspect, float preferredAspect)
         {
             if (outputAspect <= preferredAspect)

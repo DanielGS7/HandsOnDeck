@@ -259,7 +259,7 @@ namespace HandsOnDeck.Classes.Object.Entity
         {
             if (lifePoints > 0)
             {
-                lifePoints--;
+//                lifePoints--;
             }
             Debug.WriteLine(lifePoints);
 

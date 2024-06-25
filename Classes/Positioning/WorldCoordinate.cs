@@ -6,8 +6,8 @@ public class WorldCoordinate
 {
     public float X { get; set; }
     public float Y { get; set; }
-    public float Width { get; private set; }
-    public float Height { get; private set; }
+    public static float Width { get; private set; }
+    public static float Height { get; private set; }
     private const int ChunkSize = 100;
 
     public WorldCoordinate(float x, float y)
@@ -34,7 +34,7 @@ public class WorldCoordinate
         Y = 0;
     }
 
-    private void Normalize()
+    public void Normalize()
     {
         X = (X + Width) % Width;
         Y = (Y + Height) % Height;

@@ -67,18 +67,8 @@ namespace HandsOnDeck.Classes.Managers
         {
             foreach (var island in islands)
             {
-
-                WorldCoordinate drawPosition = island.position - GameScreen.GetInstance.viewportPosition;
-                WorldCoordinate wrappedPosition = GameScreen.GetInstance.AdjustForWorldWrapping(drawPosition, island.position);
-
-                if (drawPosition == wrappedPosition)
-                {
-                    island.Draw(gameTime, drawPosition);
-                }
-                else if (drawPosition != wrappedPosition)
-                {
-                    island.Draw(gameTime, wrappedPosition);
-                }
+                WorldCoordinate drawPosition = GameScreen.GetInstance.viewportManager.GetDrawPosition(island.position);
+                island.Draw(gameTime, drawPosition);
             }
         }
 
