@@ -41,11 +41,11 @@ namespace HandsOnDeck2.Classes
             var keyboardState = Keyboard.GetState();
 
             // Handle player input
-            if (keyboardState.IsKeyDown(Keys.W)) player.HandleInput(GameAction.SailsOpen);
+            if (keyboardState.IsKeyDown(Keys.Z)) player.HandleInput(GameAction.SailsOpen);
             if (keyboardState.IsKeyDown(Keys.S)) player.HandleInput(GameAction.SailsClosed);
-            if (keyboardState.IsKeyDown(Keys.A)) player.HandleInput(GameAction.SteerLeft);
+            if (keyboardState.IsKeyDown(Keys.Q)) player.HandleInput(GameAction.SteerLeft);
             if (keyboardState.IsKeyDown(Keys.D)) player.HandleInput(GameAction.SteerRight);
-            if (keyboardState.IsKeyDown(Keys.Q)) player.HandleInput(GameAction.ShootLeft);
+            if (keyboardState.IsKeyDown(Keys.A)) player.HandleInput(GameAction.ShootLeft);
             if (keyboardState.IsKeyDown(Keys.E)) player.HandleInput(GameAction.ShootRight);
             if (keyboardState.IsKeyDown(Keys.Space)) player.HandleInput(GameAction.ToggleAnchor);
 
