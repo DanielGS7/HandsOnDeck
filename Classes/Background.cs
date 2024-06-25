@@ -10,15 +10,15 @@ namespace HandsOnDeck2.Classes
         private VisualElement visualElement;
         private Animation animation;
         private float rotation = 0f;
-        private float scale = 0.2f;
+        private float scale = 0.5f;
         private int spriteWidth = 128;
         private int spriteHeight = 128;
         private int columns = 6;
         private int totalSprites = 39;
         private float speed = 5f;
         private bool isLooping = true;
-        private Vector2 direction = Vector2.Zero;
-        private float moveSpeed = 0f;
+        private Vector2 direction = new Vector2(1,-1);
+        private float moveSpeed = 30f;
         private Vector2 offset = Vector2.Zero;
 
         private Background() { }

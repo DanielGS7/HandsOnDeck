@@ -1,6 +1,7 @@
 ﻿using HandsOnDeck2.Enums;
 using HandsOnDeck2.Interfaces;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -17,29 +18,22 @@ namespace HandsOnDeck2.Classes
         private bool anchorDown;
         private bool sailsOpen;
 
-        public Boat(Texture2D texture, Vector2 startPosition)
+        public Boat(ContentManager content, Vector2 startPosition)
         {
+            var boatTexture = content.Load<Texture2D>("boat");
+            var boatAnimation = new Animation("movingBoat", new Vector2(670, 243), 5, 5, 4f, true);
+            boatAnimation.LoadContent(content);
+            
             this.Position = startPosition;
             this.rotation = 0f;
             this.Speed = 0f;
             this.anchorDown = false;
             this.sailsOpen = false;
-            this.Size = new Vector2(texture.Width, texture.Height);
+            this.Size = new Vector2(boatTexture.Width, boatTexture.Height);
 
-            VisualElement = new VisualElement(texture, Position, new Vector2(texture.Width / 2, texture.Height / 2), 0.2f, rotation, Color.White, SpriteEffects.None, 0f);
+            VisualElement = new VisualElement(boatAnimation, Position, new Vector2(boatAnimation.SpriteSize.X / 2, boatAnimation.SpriteSize.Y / 2), 0.2f, rotation, Color.White, SpriteEffects.None, 0f);
         }
 
-        public Boat(Animation animation, Vector2 startPosition)
-        {
-            this.Position = startPosition;
-            this.rotation = 0f;
-            this.Speed = 0f;
-            this.anchorDown = false;
-            this.sailsOpen = false;
-            this.Size = animation.SpriteSize;
-
-            VisualElement = new VisualElement(animation, Position, new Vector2(animation.SpriteSize.X / 2, animation.SpriteSize.Y / 2), 0.2f, rotation, Color.White, SpriteEffects.None, 0f);
-        }
 
         public void HandleInput(GameAction action)
         {
