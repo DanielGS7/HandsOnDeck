@@ -72,12 +72,12 @@ namespace HandsOnDeck2.Classes
 
         private void ShootCannonball(Vector2 direction)
         {
-            // Implement shooting cannonball logic here
+            //TODO maak cannonball entity en regel schietlogica
         }
 
         private void ToggleAnchor()
         {
-            // Implement anchor toggling logic here
+            // implementeer anker logica
         }
 
         public void Update(GameTime gameTime)
@@ -103,8 +103,6 @@ namespace HandsOnDeck2.Classes
         public void Draw(SpriteBatch spriteBatch)
         {
             VisualElement.Draw(spriteBatch);
-
-            // Draw debug rectangle using IEntity method
             DebugTools.DrawRectangle(spriteBatch, this, Color.Red);
         }
     }

@@ -44,11 +44,11 @@ namespace HandsOnDeck2
             var islandTexture = Content.Load<Texture2D>("island");
             _map = new Map(islandTexture, GraphicsDevice.Viewport.Width * 10, GraphicsDevice.Viewport.Height * 10);
             Background.Instance.Initialize(Content, GraphicsDevice);
-            Background.Instance.SetScale(1f); // Set initial scale
-            Background.Instance.SetRotation(90f); // Set initial rotation
-            Background.Instance.SetDirection(new Vector2(1, -1)); // Move Up and Right
-            Background.Instance.SetMoveSpeed(30f); // Set initial move speed
-            Background.Instance.SetAnimationSpeed(7f); // Set initial animation speed
+            Background.Instance.SetScale(1f);
+            Background.Instance.SetRotation(90f);
+            Background.Instance.SetDirection(new Vector2(1, -1));
+            Background.Instance.SetMoveSpeed(30f);
+            Background.Instance.SetAnimationSpeed(7f);
 
             DebugTools.Initialize(GraphicsDevice, Content);
         }
@@ -57,7 +57,7 @@ namespace HandsOnDeck2
         {
             var keyboardState = Keyboard.GetState();
 
-            // Toggle fullscreen mode when F is pressed
+
             if (keyboardState.IsKeyDown(Keys.F))
             {
                 _isFullscreen = !_isFullscreen;

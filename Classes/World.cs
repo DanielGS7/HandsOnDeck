@@ -16,29 +16,23 @@ namespace HandsOnDeck2.Classes
             this.graphicsDevice = graphicsDevice;
             this.camera = camera;
 
-            // Load the effect
             heightmapEffect = content.Load<Effect>("Shaders/Heightmap");
 
-            // Set up texture for heightmap
             heightmapTexture = new Texture2D(graphicsDevice, 800, 800);
 
-            // Initialize the heightmap
             GenerateHeightMap();
         }
 
         public void GenerateHeightMap()
         {
-            // Set effect parameters
             heightmapEffect.Parameters["mapPos"].SetValue(new Vector2(0, 0));
             heightmapEffect.Parameters["res"].SetValue(new Vector2(heightmapTexture.Width, heightmapTexture.Height));
             heightmapEffect.Parameters["WorldViewProjection"].SetValue(camera.Transform);
 
-            // Render the heightmap to the texture
             RenderTarget2D renderTarget = new RenderTarget2D(graphicsDevice, heightmapTexture.Width, heightmapTexture.Height);
             graphicsDevice.SetRenderTarget(renderTarget);
             graphicsDevice.Clear(Color.Transparent);
 
-            // Draw full-screen quad
             using (SpriteBatch spriteBatch = new SpriteBatch(graphicsDevice))
             {
                 spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, null, null, null, heightmapEffect);

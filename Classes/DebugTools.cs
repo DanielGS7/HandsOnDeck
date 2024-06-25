@@ -42,12 +42,10 @@ namespace HandsOnDeck2.Classes
 
             Vector2 origin = new Vector2(size.X / 2, size.Y / 2);
 
-            // Adjust position to account for origin
             var adjustedPosition = position;
 
             Rectangle rect = new Rectangle((int)adjustedPosition.X, (int)adjustedPosition.Y, (int)size.X, (int)size.Y);
 
-            // Draw the rectangle with the correct origin and rotation
             spriteBatch.Draw(whiteTexture, adjustedPosition, rect, color * 0.5f, rotation, origin, 1.0f, SpriteEffects.None, 0);
         }
     }
