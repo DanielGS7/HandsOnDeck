@@ -108,3 +108,10 @@ captures/
 project.lock.json
 project.fragment.lock.json
 artifacts/
+
+# MonoGame Content Builder output
+*.xnb
+mgcontent/
+Content/bin/
+Content/obj/
+
