@@ -1,22 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HandsOnDeck.Enums
+﻿namespace HandsOnDeck2.Enums
 {
     public enum GameAction
     {
-        TOGGLESAILS,
-        TURNLEFT,
-        TURNRIGHT,
-        TOGGLEANCHOR,
-        SELECT,
-        PAUSE,
-        RELOAD,
-        REPAIR,
-        SHOOTLEFT,
-        SHOOTRIGHT
+        SailsOpen,
+        SailsClosed,
+        SteerLeft,
+        SteerRight,
+        ShootRight,
+        ShootLeft,
+        ToggleAnchor
     }
 }

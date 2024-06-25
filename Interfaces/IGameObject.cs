@@ -1,17 +1,11 @@
-﻿using HandsOnDeck.Classes.Collisions;
-using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
-namespace HandsOnDeck.Interfaces
+namespace HandsOnDeck2.Interfaces
 {
-    internal interface IGameObject
+    public interface IGameObject
     {
-        void LoadContent();
         void Update(GameTime gameTime);
-        void Draw(GameTime gameTime);
+        void Draw(SpriteBatch spriteBatch);
     }
 }

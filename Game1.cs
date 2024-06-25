@@ -1,109 +1,103 @@
-﻿using Microsoft.Xna.Framework;
+﻿using HandsOnDeck2.Classes;
+using HandsOnDeck2.Enums;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
-using System.Diagnostics;
-using HandsOnDeck.Classes.Managers;
 
-namespace HandsOnDeck
+namespace HandsOnDeck2
 {
     public class Game1 : Game
     {
-        private readonly GraphicsDeviceManager _graphics;
+        private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        public static RenderTarget2D RenderTarget;
-        public static int TimeModifier = 1;
-        public static float ScaleModifier = 6;
-        public static float EntityStatesSpeed = 1;
-        public static SpriteFont DefaultFont { get; private set; }
-        public static Texture2D ButtonSprite { get; private set; }
-        public static Texture2D ButtonHoverSprite { get; private set; }
-        public static Point transformedMousePosition;
+        private Boat _boat;
+        private Map _map;
+        private Camera _camera;
+        private bool _isFullscreen = false;
 
-        public const int ProgramWidth = 2048;
-        public const int ProgramHeight = 1080;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
-            _graphics.IsFullScreen = false;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            TargetElapsedTime = TimeSpan.FromSeconds(1d / 60);
-            }
+            _graphics.PreferredBackBufferWidth = 800;
+            _graphics.PreferredBackBufferHeight = 600;
+            _graphics.IsFullScreen = false;
+            Window.AllowUserResizing = true;
+        }
+
         protected override void Initialize()
         {
-            Renderer.GetInstance.Initialize(_graphics);
-            IsFixedTimeStep = true;
-            ContentLoader.Initialize(Content);
-            GraphicsDeviceSingleton.Initialize(_graphics.GraphicsDevice);
+            _camera = new Camera();
             base.Initialize();
-            SpriteBatchManager.Initialize(_spriteBatch);
         }
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(_graphics.GraphicsDevice);
-            DefaultFont = Content.Load<SpriteFont>("default");
-            ButtonSprite = Content.Load<Texture2D>("button/button");
-            ButtonHoverSprite = Content.Load<Texture2D>("button/buttonH");
-            Renderer.GetInstance.LoadContent(Content, _spriteBatch);
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            var boatTexture = Content.Load<Texture2D>("boat");
+            var boatAnimation = new Animation("movingBoat", new Vector2(670, 243), 5, 5, 4f, true);
+            boatAnimation.LoadContent(Content);
+            _boat = new Boat(boatAnimation, new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2));
+
+            var islandTexture = Content.Load<Texture2D>("island");
+            _map = new Map(islandTexture, GraphicsDevice.Viewport.Width * 10, GraphicsDevice.Viewport.Height * 10);
+            Background.Instance.Initialize(Content, GraphicsDevice);
+            Background.Instance.SetScale(1f); // Set initial scale
+            Background.Instance.SetRotation(90f); // Set initial rotation
+            Background.Instance.SetDirection(new Vector2(1, -1)); // Move Up and Right
+            Background.Instance.SetMoveSpeed(30f); // Set initial move speed
+            Background.Instance.SetAnimationSpeed(7f); // Set initial animation speed
+
+            DebugTools.Initialize(GraphicsDevice, Content);
         }
 
         protected override void Update(GameTime gameTime)
         {
-            Renderer.GetInstance.Update(gameTime);
-            MouseState mouseState = Mouse.GetState();
-            transformedMousePosition = Game1.TransformMousePosition(
-                mouseState,
-                _graphics.GraphicsDevice.Viewport.Width,
-                _graphics.GraphicsDevice.Viewport.Height,
-                Game1.RenderTarget.Width,
-                Game1.RenderTarget.Height);
+            var keyboardState = Keyboard.GetState();
+
+            // Toggle fullscreen mode when F is pressed
+            if (keyboardState.IsKeyDown(Keys.F))
+            {
+                _isFullscreen = !_isFullscreen;
+                _graphics.IsFullScreen = _isFullscreen;
+                _graphics.ApplyChanges();
+            }
+
+            if (keyboardState.IsKeyDown(Keys.W)) _boat.HandleInput(GameAction.SailsOpen);
+            if (keyboardState.IsKeyDown(Keys.S)) _boat.HandleInput(GameAction.SailsClosed);
+            if (keyboardState.IsKeyDown(Keys.A)) _boat.HandleInput(GameAction.SteerLeft);
+            if (keyboardState.IsKeyDown(Keys.D)) _boat.HandleInput(GameAction.SteerRight);
+            if (keyboardState.IsKeyDown(Keys.Q)) _boat.HandleInput(GameAction.ShootLeft);
+            if (keyboardState.IsKeyDown(Keys.E)) _boat.HandleInput(GameAction.ShootRight);
+            if (keyboardState.IsKeyDown(Keys.Space)) _boat.HandleInput(GameAction.ToggleAnchor);
+
+            _boat.Update(gameTime);
+            _camera.Update(_boat.Position, GraphicsDevice.Viewport);
+
+            Background.Instance.Update(gameTime);
+
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            _graphics.GraphicsDevice.SetRenderTarget(RenderTarget);
-            GraphicsDevice.Clear(new Microsoft.Xna.Framework.Color(98, 91, 88));
-            Window.AllowUserResizing = true;
+            GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            Renderer.GetInstance.Draw(gameTime);
-
-            float outputAspect = Window.ClientBounds.Width / (float)Window.ClientBounds.Height;
-            float preferredAspect = ProgramWidth / (float)ProgramHeight;
-
-            Rectangle dst;
-
-            if (outputAspect <= preferredAspect)
-            {
-                int presentHeight = (int)((Window.ClientBounds.Width / preferredAspect) + 0.5f);
-                int barHeight = (Window.ClientBounds.Height - presentHeight) / 2;
-                dst = new Rectangle(0, barHeight, Window.ClientBounds.Width, presentHeight);
-            }
-            else
-            {
-                int presentWidth = (int)((Window.ClientBounds.Height * preferredAspect) + 0.5f);
-                int barWidth = (Window.ClientBounds.Width - presentWidth) / 2;
-                dst = new Rectangle(barWidth, 0, presentWidth, Window.ClientBounds.Height);
-            }
-
-            _graphics.GraphicsDevice.SetRenderTarget(null);
-            _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
-            _spriteBatch.Draw(RenderTarget, dst, Color.White);
+            _spriteBatch.Begin(transformMatrix: _camera.Transform);
+            Background.Instance.Draw(_spriteBatch, _camera, GraphicsDevice.Viewport);
+            _map.Draw(_spriteBatch);
+            _boat.Draw(_spriteBatch);
+            DebugTools.DrawRectangle(_spriteBatch, _boat, Color.Red);
             _spriteBatch.End();
+
+            // Draw debug info
+            _spriteBatch.Begin();
+            DebugTools.DrawObjectInfo(_spriteBatch, _boat.Position, "boatposition", Color.FloralWhite);
+            _spriteBatch.End();
+
             base.Draw(gameTime);
-        }
-
-        public static Point TransformMousePosition(MouseState mouseState, int windowWidth, int windowHeight, int renderTargetWidth, int renderTargetHeight)
-        {
-            float scaleX = renderTargetWidth / (float)windowWidth;
-            float scaleY = renderTargetHeight / (float)windowHeight;
-
-            return new Point(
-                (int)(mouseState.X * scaleX),
-                (int)(mouseState.Y * scaleY)
-            );
         }
     }
 }
