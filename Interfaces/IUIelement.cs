@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HandsOnDeck2.Interfaces
 {
-    internal interface IUIelement
+    public interface IUIElement
     {
         void Update(GameTime gameTime);
         void Draw(SpriteBatch spriteBatch);

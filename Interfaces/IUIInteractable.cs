@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HandsOnDeck2.Interfaces
 {
-    public interface IUIInteractable: IUIelement
+    public interface IUIInteractable: IUIElement
     {
         void HandleInput(MouseState mouseState);
     }
