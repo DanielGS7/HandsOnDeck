@@ -1,7 +1,7 @@
-﻿using HandsOnDeck2.Classes;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using HandsOnDeck2.Classes;
 
 namespace HandsOnDeck2
 {
@@ -24,8 +24,8 @@ namespace HandsOnDeck2
 
         protected override void Initialize()
         {
-            _map = new Map(Content, GraphicsDevice);
-            _map.Initialize();
+            _map = Map.Instance;
+            _map.Initialize(Content, GraphicsDevice);
             base.Initialize();
         }
 
