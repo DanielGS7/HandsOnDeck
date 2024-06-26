@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HandsOnDeck2.Enums
 {
-    public enum GameState
+    public enum GameStates
     {
         MainMenu,
         Gameplay,
