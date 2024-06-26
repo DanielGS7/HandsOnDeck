@@ -70,7 +70,7 @@ namespace HandsOnDeck2.Classes
 
         public void SetAnimationSpeed(float newSpeed)
         {
-            animation.Speed = newSpeed;
+            animation.SetSpeed(newSpeed);
         }
 
         public float GetScale()

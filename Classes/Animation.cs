@@ -9,8 +9,9 @@ namespace HandsOnDeck2.Classes
         private Texture2D spriteSheet;
         private string spriteSheetName;
         private int spriteIndex;
+        private int startSpriteIndex;
+        private int endSpriteIndex;
         private int rowCount;
-        private int totalSprites;
         private Vector2 spriteSize;
         private Rectangle sourceRectangle;
         private float speed;
@@ -20,16 +21,29 @@ namespace HandsOnDeck2.Classes
 
         public Vector2 SpriteSize => spriteSize;
 
-        public float Speed { get => speed; set => speed = value; }
-
         public Animation(string spriteSheetName, Vector2 spriteSize, int rowCount, int totalSprites, float speed, bool isLooping)
         {
             this.spriteSheetName = spriteSheetName;
             this.spriteSize = spriteSize;
             this.rowCount = rowCount;
-            this.totalSprites = totalSprites;
-            this.spriteIndex = 0;
-            this.Speed = speed;
+            this.startSpriteIndex = 0;
+            this.endSpriteIndex = totalSprites - 1;
+            this.spriteIndex = startSpriteIndex;
+            this.speed = speed;
+            this.isLooping = isLooping;
+
+            this.sourceRectangle = CalculateSourceRectangle(this.spriteIndex);
+        }
+
+        public Animation(string spriteSheetName, Vector2 spriteSize, int rowCount, int startSpriteIndex, int endSpriteIndex, float speed, bool isLooping)
+        {
+            this.spriteSheetName = spriteSheetName;
+            this.spriteSize = spriteSize;
+            this.rowCount = rowCount;
+            this.startSpriteIndex = startSpriteIndex;
+            this.endSpriteIndex = endSpriteIndex;
+            this.spriteIndex = startSpriteIndex;
+            this.speed = speed;
             this.isLooping = isLooping;
 
             this.sourceRectangle = CalculateSourceRectangle(this.spriteIndex);
@@ -43,21 +57,21 @@ namespace HandsOnDeck2.Classes
         public void Update(GameTime gameTime)
         {
             double elapsedMilliseconds = gameTime.ElapsedGameTime.TotalMilliseconds;
-            double frameTime = 1000.0 / Speed;
+            double frameTime = 1000.0 / speed;
             timeSinceLastFrame += elapsedMilliseconds;
             if (timeSinceLastFrame >= frameTime)
             {
                 spriteIndex++;
 
-                if (spriteIndex >= totalSprites)
+                if (spriteIndex > endSpriteIndex)
                 {
                     if (isLooping)
                     {
-                        spriteIndex = 0;
+                        spriteIndex = startSpriteIndex;
                     }
                     else
                     {
-                        spriteIndex = totalSprites - 1;
+                        spriteIndex = endSpriteIndex;
                     }
                 }
                 timeSinceLastFrame = 0;
@@ -68,6 +82,11 @@ namespace HandsOnDeck2.Classes
         public void Draw(SpriteBatch spriteBatch, Vector2 position, float scale, float rotation, Vector2 origin, Color color, SpriteEffects effects, float layerDepth)
         {
             spriteBatch.Draw(spriteSheet, position, sourceRectangle, color, rotation, origin, scale, effects, layerDepth);
+        }
+
+        public void SetSpeed(float newSpeed)
+        {
+            speed = newSpeed;
         }
 
         private Rectangle CalculateSourceRectangle(int spriteIndex)

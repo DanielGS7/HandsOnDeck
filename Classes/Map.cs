@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
 using System.Collections.Generic;
 
 namespace HandsOnDeck2.Classes
@@ -27,9 +26,8 @@ namespace HandsOnDeck2.Classes
         public void Initialize()
         {
             player = new Boat(content, new Vector2(graphicsDevice.Viewport.Width / 2, graphicsDevice.Viewport.Height / 2));
-            GenerateIslands();
+            islands = Island.GenerateIslands(content, graphicsDevice, 16);
         }
-
 
         public void LoadContent()
         {
@@ -41,15 +39,20 @@ namespace HandsOnDeck2.Classes
             var keyboardState = Keyboard.GetState();
 
             // Handle player input
-            if (keyboardState.IsKeyDown(Keys.Z)) player.HandleInput(GameAction.SailsOpen);
+            if (keyboardState.IsKeyDown(Keys.W)) player.HandleInput(GameAction.SailsOpen);
             if (keyboardState.IsKeyDown(Keys.S)) player.HandleInput(GameAction.SailsClosed);
-            if (keyboardState.IsKeyDown(Keys.Q)) player.HandleInput(GameAction.SteerLeft);
+            if (keyboardState.IsKeyDown(Keys.A)) player.HandleInput(GameAction.SteerLeft);
             if (keyboardState.IsKeyDown(Keys.D)) player.HandleInput(GameAction.SteerRight);
-            if (keyboardState.IsKeyDown(Keys.A)) player.HandleInput(GameAction.ShootLeft);
+            if (keyboardState.IsKeyDown(Keys.Q)) player.HandleInput(GameAction.ShootLeft);
             if (keyboardState.IsKeyDown(Keys.E)) player.HandleInput(GameAction.ShootRight);
             if (keyboardState.IsKeyDown(Keys.Space)) player.HandleInput(GameAction.ToggleAnchor);
 
+            // Example of changing scale and rotation
+            if (keyboardState.IsKeyDown(Keys.OemPlus)) Background.Instance.SetScale(Background.Instance.GetScale() + 0.01f); // Increase scale
+            if (keyboardState.IsKeyDown(Keys.OemMinus)) Background.Instance.SetScale(Background.Instance.GetScale() - 0.01f); // Decrease scale
+            if (keyboardState.IsKeyDown(Keys.R)) Background.Instance.SetRotation((Background.Instance.GetRotation() + 90f) % 360f); // Rotate 90 degrees
 
+            // Update game objects
             player.Update(gameTime);
             Background.Instance.Update(gameTime);
             foreach (var island in islands)
@@ -69,19 +72,6 @@ namespace HandsOnDeck2.Classes
             }
             player.Draw(spriteBatch);
             spriteBatch.End();
-
-        }
-
-        private void GenerateIslands()
-        {
-            var islandTexture = content.Load<Texture2D>("island");
-            Random random = new Random();
-            for (int i = 0; i < 20; i++)
-            {
-                float x = (float)random.NextDouble() * graphicsDevice.Viewport.Width * 10;
-                float y = (float)random.NextDouble() * graphicsDevice.Viewport.Height * 10;
-                islands.Add(new Island(islandTexture, new Vector2(x, y)));
-            }
         }
     }
 }

@@ -17,17 +17,17 @@ namespace HandsOnDeck2.Classes
         private Animation animation;
 
         public Vector2 Origin => origin;
-        public float Scale => scale;
         public float Rotation => rotation;
 
         public Vector2 Position { get => position; set => position = value; }
+        public float Scale { get => scale; set => scale = value; }
 
         public VisualElement(Texture2D texture, Vector2 position, Vector2 origin, float scale, float rotation, Color color, SpriteEffects spriteEffects, float layerDepth, Rectangle? sourceRectangle = null)
         {
             this.texture = texture;
             this.Position = position;
             this.origin = origin;
-            this.scale = scale;
+            this.Scale = scale;
             this.rotation = rotation;
             this.color = color;
             this.spriteEffects = spriteEffects;
@@ -40,7 +40,7 @@ namespace HandsOnDeck2.Classes
             this.animation = animation;
             this.Position = position;
             this.origin = origin;
-            this.scale = scale;
+            this.Scale = scale;
             this.rotation = rotation;
             this.color = color;
             this.spriteEffects = spriteEffects;
@@ -56,11 +56,11 @@ namespace HandsOnDeck2.Classes
         {
             if (animation != null)
             {
-                animation.Draw(spriteBatch, Position, scale, rotation, origin, color, spriteEffects, layerDepth);
+                animation.Draw(spriteBatch, Position, Scale, rotation, origin, color, spriteEffects, layerDepth);
             }
             else
             {
-                spriteBatch.Draw(texture, Position, sourceRectangle, color, rotation, origin, scale, spriteEffects, layerDepth);
+                spriteBatch.Draw(texture, Position, sourceRectangle, color, rotation, origin, Scale, spriteEffects, layerDepth);
             }
         }
 
@@ -76,7 +76,7 @@ namespace HandsOnDeck2.Classes
 
         public void SetScale(float newScale)
         {
-            scale = newScale;
+            Scale = newScale;
         }
 
         public void SetColor(Color newColor)
