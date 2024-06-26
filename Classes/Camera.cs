@@ -6,18 +6,15 @@ namespace HandsOnDeck2.Classes
     public class Camera
     {
         public Matrix Transform { get; private set; }
-        public Vector2 Position { get => position; set => position = value; }
+        public Vector2 Position { get; private set; }
 
-        private Vector2 position;
-        private float lerpFactor;
 
         public Camera()
         {
             Position = Vector2.Zero;
-            lerpFactor = 0.06f;
         }
 
-        public void Update(Vector2 targetPosition, Viewport viewport)
+        public void Update(Vector2 targetPosition, Viewport viewport, int mapWidth, int mapHeight)
         {
             float viewportWidth = viewport.Width;
             float viewportHeight = viewport.Height;
@@ -49,7 +46,25 @@ namespace HandsOnDeck2.Classes
                 targetCameraPosition.Y = targetPosition.Y - viewportHeight + bufferY;
             }
 
-            Position = Vector2.Lerp(Position, targetCameraPosition, lerpFactor);
+            if (targetCameraPosition.X < 0)
+            {
+                targetCameraPosition.X += mapWidth;
+            }
+            else if (targetCameraPosition.X >= mapWidth)
+            {
+                targetCameraPosition.X -= mapWidth;
+            }
+
+            if (targetCameraPosition.Y < 0)
+            {
+                targetCameraPosition.Y += mapHeight;
+            }
+            else if (targetCameraPosition.Y >= mapHeight)
+            {
+                targetCameraPosition.Y -= mapHeight;
+            }
+
+            Position = targetCameraPosition;
 
             Transform = Matrix.CreateTranslation(new Vector3(-Position, 0));
         }

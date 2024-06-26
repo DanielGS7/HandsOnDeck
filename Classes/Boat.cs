@@ -3,8 +3,10 @@ using HandsOnDeck2.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework;
+using HandsOnDeck2.Interfaces;
 using System;
+using HandsOnDeck2.Enums;
 
 namespace HandsOnDeck2.Classes
 {
@@ -23,7 +25,7 @@ namespace HandsOnDeck2.Classes
             var boatTexture = content.Load<Texture2D>("boat");
             var boatAnimation = new Animation("movingBoat", new Vector2(670, 243), 5, 5, 4f, true);
             boatAnimation.LoadContent(content);
-            
+
             this.Position = startPosition;
             this.rotation = 0f;
             this.Speed = 0f;
@@ -33,7 +35,6 @@ namespace HandsOnDeck2.Classes
 
             VisualElement = new VisualElement(boatAnimation, Position, new Vector2(boatAnimation.SpriteSize.X / 2, boatAnimation.SpriteSize.Y / 2), 0.2f, rotation, Color.White, SpriteEffects.None, 0f);
         }
-
 
         public void HandleInput(GameAction action)
         {
@@ -76,6 +77,10 @@ namespace HandsOnDeck2.Classes
 
         public void Update(GameTime gameTime)
         {
+            var map = Map.Instance;
+            int mapWidth = map.MapWidth;
+            int mapHeight = map.MapHeight;
+
             if (anchorDown)
             {
                 Speed = 0f;
@@ -90,6 +95,26 @@ namespace HandsOnDeck2.Classes
             }
 
             Position += new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation)) * Speed;
+
+            
+            if (Position.X < 0)
+            {
+                Position = new Vector2(Position.X + mapWidth, Position.Y);
+            }
+            else if (Position.X >= mapWidth)
+            {
+                Position = new Vector2(Position.X - mapWidth, Position.Y);
+            }
+
+            if (Position.Y < 0)
+            {
+                Position = new Vector2(Position.X, Position.Y + mapHeight);
+            }
+            else if (Position.Y >= mapHeight)
+            {
+                Position = new Vector2(Position.X, Position.Y - mapHeight);
+            }
+
             VisualElement.SetPosition(Position);
             VisualElement.Update(gameTime);
         }
@@ -97,7 +122,6 @@ namespace HandsOnDeck2.Classes
         public void Draw(SpriteBatch spriteBatch)
         {
             VisualElement.Draw(spriteBatch);
-            DebugTools.DrawRectangle(spriteBatch, this, Color.Red);
         }
     }
 }

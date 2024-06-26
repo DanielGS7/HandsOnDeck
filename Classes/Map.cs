@@ -1,4 +1,5 @@
 ﻿using HandsOnDeck2.Enums;
+using HandsOnDeck2.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -9,24 +10,42 @@ namespace HandsOnDeck2.Classes
 {
     public class Map
     {
+        private static Map instance;
+        public static Map Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new Map();
+                }
+                return instance;
+            }
+        }
+
         private List<Island> islands;
         private Boat player;
         private Camera camera;
         private ContentManager content;
         private GraphicsDevice graphicsDevice;
+        public int MapWidth { get; private set; }
+        public int MapHeight { get; private set; }
 
-        public Map(ContentManager content, GraphicsDevice graphicsDevice)
+        private Map() 
         {
-            this.content = content;
-            this.graphicsDevice = graphicsDevice;
             islands = new List<Island>();
             camera = new Camera();
         }
 
-        public void Initialize()
+        public void Initialize(ContentManager content, GraphicsDevice graphicsDevice)
         {
+            this.content = content;
+            this.graphicsDevice = graphicsDevice;
+            MapWidth = graphicsDevice.Viewport.Width * 10;
+            MapHeight = graphicsDevice.Viewport.Height * 10;
+
             player = new Boat(content, new Vector2(graphicsDevice.Viewport.Width / 2, graphicsDevice.Viewport.Height / 2));
-            islands = Island.GenerateIslands(content, graphicsDevice, 16);
+            islands = Island.GenerateIslands(content, graphicsDevice, Island.totalIslands);
         }
 
         public void LoadContent()
@@ -59,19 +78,84 @@ namespace HandsOnDeck2.Classes
             {
                 island.Update(gameTime);
             }
-            camera.Update(player.Position, graphicsDevice.Viewport);
+            camera.Update(player.Position, graphicsDevice.Viewport, MapWidth, MapHeight);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin(transformMatrix: camera.Transform);
             Background.Instance.Draw(spriteBatch, camera, graphicsDevice.Viewport);
+
             foreach (var island in islands)
             {
-                island.Draw(spriteBatch);
+                DrawObject(spriteBatch, island);
             }
-            player.Draw(spriteBatch);
+
+            DrawObject(spriteBatch, player);
+
             spriteBatch.End();
+        }
+
+        private void DrawObject(SpriteBatch spriteBatch, IGameObject gameObject)
+        {
+            Vector2 adjustedPosition = WrapPosition(gameObject.Position);
+            gameObject.VisualElement.SetPosition(adjustedPosition);
+            gameObject.Draw(spriteBatch);
+
+            // Draw on the opposite side if near the edge (using viewport size as buffer)
+            int viewportWidth = graphicsDevice.Viewport.Width;
+            int viewportHeight = graphicsDevice.Viewport.Height;
+
+            if (adjustedPosition.X < viewportWidth)
+            {
+                Vector2 oppositePosition = adjustedPosition + new Vector2(MapWidth, 0);
+                gameObject.VisualElement.SetPosition(oppositePosition);
+                gameObject.Draw(spriteBatch);
+            }
+            if (adjustedPosition.X > MapWidth - viewportWidth)
+            {
+                Vector2 oppositePosition = adjustedPosition - new Vector2(MapWidth, 0);
+                gameObject.VisualElement.SetPosition(oppositePosition);
+                gameObject.Draw(spriteBatch);
+            }
+            if (adjustedPosition.Y < viewportHeight)
+            {
+                Vector2 oppositePosition = adjustedPosition + new Vector2(0, MapHeight);
+                gameObject.VisualElement.SetPosition(oppositePosition);
+                gameObject.Draw(spriteBatch);
+            }
+            if (adjustedPosition.Y > MapHeight - viewportHeight)
+            {
+                Vector2 oppositePosition = adjustedPosition - new Vector2(0, MapHeight);
+                gameObject.VisualElement.SetPosition(oppositePosition);
+                gameObject.Draw(spriteBatch);
+            }
+        }
+
+        private Vector2 WrapPosition(Vector2 position)
+        {
+            float wrappedX = position.X;
+            float wrappedY = position.Y;
+
+            if (position.X < 0)
+            {
+                wrappedX = MapWidth + position.X;
+            }
+            else if (position.X >= MapWidth)
+            {
+                wrappedX = position.X - MapWidth;
+            }
+
+            if (position.Y < 0)
+            {
+                wrappedY = MapHeight + position.Y;
+            }
+            else if (position.Y >= MapHeight)
+            {
+                wrappedY = position.Y - MapHeight;
+            }
+
+            return new Vector2(wrappedX, wrappedY);
         }
     }
 }
