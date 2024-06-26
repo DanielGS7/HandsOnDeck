@@ -8,8 +8,6 @@
 *.userosscache
 *.sln.docstates
 
-## MonoGame specific ##
-Content/Content.mgcb
 
 ## User-specific files (MonoGame Pipeline) ##
 MonoGamePipeline.xml
