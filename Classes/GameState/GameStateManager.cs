@@ -1,63 +1,47 @@
-﻿using HandsOnDeck2.Interfaces;
+﻿using HandsOnDeck2.Enums;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using System;
 using System.Collections.Generic;
-using HandsOnDeck2.Enums;
+using HandsOnDeck2.Interfaces;
 
 namespace HandsOnDeck2.Classes
 {
     public class GameStateManager
     {
-        private Dictionary<GameState, List<IUIElement>> uiElements;
-        private GameState currentState;
+        private Dictionary<GameStates, IGameState> gameStates;
+        private GameStates currentState;
 
         public GameStateManager()
         {
-            uiElements = new Dictionary<GameState, List<IUIElement>>();
-            currentState = GameState.MainMenu; // Initial state
+            gameStates = new Dictionary<GameStates, IGameState>();
         }
 
-        public void Initialize(GameState initialState)
+        public void AddState(GameStates state, IGameState gameState)
         {
-            currentState = initialState;
+            gameStates[state] = gameState;
         }
 
-        public void AddUIElement(GameState state, IUIElement element)
+        public void ChangeState(GameStates newState)
         {
-            if (!uiElements.ContainsKey(state))
-            {
-                uiElements[state] = new List<IUIElement>();
-            }
-            uiElements[state].Add(element);
+            currentState = newState;
+            gameStates[currentState].Enter();
         }
 
         public void Update(GameTime gameTime)
         {
-            foreach (var element in uiElements[currentState])
+            if (gameStates.ContainsKey(currentState))
             {
-                element.Update(gameTime);
-                if (element is IUIInteractable interactableElement)
-                {
-                    // Handle mouse input for interactable UI elements
-                    MouseState mouseState = Mouse.GetState();
-                    interactableElement.HandleInput(mouseState);
-                }
+                gameStates[currentState].Update(gameTime);
             }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (var element in uiElements[currentState])
+            if (gameStates.ContainsKey(currentState))
             {
-                element.Draw(spriteBatch);
+                gameStates[currentState].Draw(spriteBatch);
             }
-        }
-
-        public void ChangeState(GameState newState)
-        {
-            currentState = newState;
         }
     }
 }
