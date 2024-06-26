@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using HandsOnDeck2.Classes;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace HandsOnDeck2.Interfaces
@@ -7,5 +8,8 @@ namespace HandsOnDeck2.Interfaces
     {
         void Update(GameTime gameTime);
         void Draw(SpriteBatch spriteBatch);
+        VisualElement VisualElement { get; set; }
+        Vector2 Position { get; set; }
+        Vector2 Size { get; set; }
     }
 }
