@@ -12,6 +12,5 @@ namespace HandsOnDeck2.Enums
         Gameplay,
         PauseMenu,
         GameOver
-        // Add more states as needed
     }
 }
