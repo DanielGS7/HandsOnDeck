@@ -13,9 +13,9 @@ namespace HandsOnDeck2.Classes
         private static readonly Random random = new Random();
         private static readonly float minScale = 0.2f;
         private static readonly float maxScale = 1.2f;
-        private static readonly int islandGridSize = 4;
+        public static readonly int islandGridSize = 4;
         private static readonly int islandSpriteSize = 512;
-        private static readonly int totalIslands = islandGridSize * islandGridSize;
+        public static readonly int totalIslands = islandGridSize * islandGridSize;
         private static readonly List<string> namePart1 = new List<string> { "Sunny", "Misty", "Rocky" };
         private static readonly List<string> namePart2 = new List<string> { "Isle", "Cove", "Bay" };
         private static readonly List<string> namePart3 = new List<string> { "Haven", "Retreat", "Sanctuary" };
