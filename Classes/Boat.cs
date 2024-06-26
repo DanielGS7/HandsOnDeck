@@ -1,5 +1,3 @@
-﻿using HandsOnDeck2.Enums;
-using HandsOnDeck2.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -19,6 +17,7 @@ namespace HandsOnDeck2.Classes
         private float rotation;
         private bool anchorDown;
         private bool sailsOpen;
+        private Vector2 velocity;
 
         public Boat(ContentManager content, Vector2 startPosition)
         {
@@ -80,6 +79,7 @@ namespace HandsOnDeck2.Classes
             var map = Map.Instance;
             int mapWidth = map.MapWidth;
             int mapHeight = map.MapHeight;
+            var previousPosition = Position;
 
             if (anchorDown)
             {
@@ -94,25 +94,36 @@ namespace HandsOnDeck2.Classes
                 Speed = MathHelper.Clamp(Speed - 0.01f, 0f, 5f);
             }
 
-            Position += new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation)) * Speed;
+            velocity = new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation)) * Speed;
+            Position += velocity;
 
-            
+
+            bool hasTeleported = false;
             if (Position.X < 0)
             {
                 Position = new Vector2(Position.X + mapWidth, Position.Y);
+                hasTeleported = true;
             }
             else if (Position.X >= mapWidth)
             {
                 Position = new Vector2(Position.X - mapWidth, Position.Y);
+                hasTeleported = true;
             }
 
             if (Position.Y < 0)
             {
                 Position = new Vector2(Position.X, Position.Y + mapHeight);
+                hasTeleported = true;
             }
             else if (Position.Y >= mapHeight)
             {
                 Position = new Vector2(Position.X, Position.Y - mapHeight);
+                hasTeleported = true;
+            }
+
+            if (hasTeleported)
+            {
+                map.Camera.AdjustPositionForTeleport(previousPosition, Position);
             }
 
             VisualElement.SetPosition(Position);

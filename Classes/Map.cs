@@ -1,4 +1,4 @@
-﻿using HandsOnDeck2.Enums;
+using HandsOnDeck2.Enums;
 using HandsOnDeck2.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -25,7 +25,7 @@ namespace HandsOnDeck2.Classes
 
         private List<Island> islands;
         private Boat player;
-        private Camera camera;
+        public Camera Camera { get; private set; }
         private ContentManager content;
         private GraphicsDevice graphicsDevice;
         public int MapWidth { get; private set; }
@@ -34,7 +34,7 @@ namespace HandsOnDeck2.Classes
         private Map() 
         {
             islands = new List<Island>();
-            camera = new Camera();
+            Camera = new Camera();
         }
 
         public void Initialize(ContentManager content, GraphicsDevice graphicsDevice)
@@ -78,22 +78,28 @@ namespace HandsOnDeck2.Classes
             {
                 island.Update(gameTime);
             }
-            camera.Update(player.Position, graphicsDevice.Viewport, MapWidth, MapHeight);
+            Camera.Update(player.Position, graphicsDevice.Viewport, MapWidth, MapHeight);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin(transformMatrix: camera.Transform);
-            Background.Instance.Draw(spriteBatch, camera, graphicsDevice.Viewport);
+            spriteBatch.Begin(transformMatrix: Camera.Transform);
+            Background.Instance.Draw(spriteBatch, Camera, graphicsDevice.Viewport);
 
             foreach (var island in islands)
             {
                 DrawObject(spriteBatch, island);
+                DebugTools.DrawRectangle(spriteBatch, island,Color.Green);
             }
 
             DrawObject(spriteBatch, player);
 
             spriteBatch.End();
+
+            spriteBatch.Begin();
+            DebugTools.DrawObjectInfo(spriteBatch, player.Position,"bootpos",Color.White);
+            spriteBatch.End();
+
         }
 
         private void DrawObject(SpriteBatch spriteBatch, IGameObject gameObject)
@@ -106,6 +112,7 @@ namespace HandsOnDeck2.Classes
             int viewportWidth = graphicsDevice.Viewport.Width;
             int viewportHeight = graphicsDevice.Viewport.Height;
 
+            // Draw on the opposite X side
             if (adjustedPosition.X < viewportWidth)
             {
                 Vector2 oppositePosition = adjustedPosition + new Vector2(MapWidth, 0);
@@ -118,6 +125,8 @@ namespace HandsOnDeck2.Classes
                 gameObject.VisualElement.SetPosition(oppositePosition);
                 gameObject.Draw(spriteBatch);
             }
+
+            // Draw on the opposite Y side
             if (adjustedPosition.Y < viewportHeight)
             {
                 Vector2 oppositePosition = adjustedPosition + new Vector2(0, MapHeight);
@@ -127,6 +136,32 @@ namespace HandsOnDeck2.Classes
             if (adjustedPosition.Y > MapHeight - viewportHeight)
             {
                 Vector2 oppositePosition = adjustedPosition - new Vector2(0, MapHeight);
+                gameObject.VisualElement.SetPosition(oppositePosition);
+                gameObject.Draw(spriteBatch);
+            }
+
+            // Draw in the opposite corners
+            if (adjustedPosition.X < viewportWidth && adjustedPosition.Y < viewportHeight)
+            {
+                Vector2 oppositePosition = adjustedPosition + new Vector2(MapWidth, MapHeight);
+                gameObject.VisualElement.SetPosition(oppositePosition);
+                gameObject.Draw(spriteBatch);
+            }
+            if (adjustedPosition.X > MapWidth - viewportWidth && adjustedPosition.Y < viewportHeight)
+            {
+                Vector2 oppositePosition = adjustedPosition + new Vector2(-MapWidth, MapHeight);
+                gameObject.VisualElement.SetPosition(oppositePosition);
+                gameObject.Draw(spriteBatch);
+            }
+            if (adjustedPosition.X < viewportWidth && adjustedPosition.Y > MapHeight - viewportHeight)
+            {
+                Vector2 oppositePosition = adjustedPosition + new Vector2(MapWidth, -MapHeight);
+                gameObject.VisualElement.SetPosition(oppositePosition);
+                gameObject.Draw(spriteBatch);
+            }
+            if (adjustedPosition.X > MapWidth - viewportWidth && adjustedPosition.Y > MapHeight - viewportHeight)
+            {
+                Vector2 oppositePosition = adjustedPosition + new Vector2(-MapWidth, -MapHeight);
                 gameObject.VisualElement.SetPosition(oppositePosition);
                 gameObject.Draw(spriteBatch);
             }

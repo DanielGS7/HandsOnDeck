@@ -34,11 +34,11 @@ namespace HandsOnDeck2.Classes
             spriteBatch.DrawString(debugFont, info, new Vector2(10, 30), color);
         }
 
-        public static void DrawRectangle(SpriteBatch spriteBatch, IEntity entity, Color color)
+        public static void DrawRectangle(SpriteBatch spriteBatch, IGameObject gameObject , Color color)
         {
-            var position = entity.Position;
-            var size = entity.Size * entity.VisualElement.Scale;
-            var rotation = entity.VisualElement.Rotation;
+            var position = gameObject.Position;
+            var size = gameObject.Size * gameObject.VisualElement.Scale;
+            var rotation = gameObject.VisualElement.Rotation;
 
             Vector2 origin = new Vector2(size.X / 2, size.Y / 2);
 

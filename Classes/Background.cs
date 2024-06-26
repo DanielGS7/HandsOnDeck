@@ -99,6 +99,12 @@ namespace HandsOnDeck2.Classes
             visualElement.Update(gameTime);
         }
 
+        public void AdjustPositionForTeleport(Vector2 previousCameraPosition, Vector2 newCameraPosition)
+        {
+            Vector2 relativeOffset = previousCameraPosition - offset;
+            offset = newCameraPosition - relativeOffset;
+        }
+
         public void Draw(SpriteBatch spriteBatch, Camera camera, Viewport viewport)
         {
             var viewportSize = new Vector2(viewport.Width, viewport.Height);

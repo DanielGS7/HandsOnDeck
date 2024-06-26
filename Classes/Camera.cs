@@ -1,5 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Diagnostics;
 
 namespace HandsOnDeck2.Classes
 {
@@ -16,17 +17,15 @@ namespace HandsOnDeck2.Classes
 
         public void Update(Vector2 targetPosition, Viewport viewport, int mapWidth, int mapHeight)
         {
-            float viewportWidth = viewport.Width;
-            float viewportHeight = viewport.Height;
-            float bufferX = viewportHeight * 0.28f;
-            float bufferY = viewportHeight * 0.28f;
+            Vector2 targetCameraPosition = Position;
+
+            float bufferX = viewport.Height * 0.28f;
+            float bufferY = viewport.Height * 0.28f;
 
             float leftBound = Position.X + bufferX;
-            float rightBound = Position.X + viewportWidth - bufferX;
+            float rightBound = Position.X + viewport.Width - bufferX;
             float topBound = Position.Y + bufferY;
-            float bottomBound = Position.Y + viewportHeight - bufferY;
-
-            Vector2 targetCameraPosition = Position;
+            float bottomBound = Position.Y + viewport.Height - bufferY;
 
             if (targetPosition.X < leftBound)
             {
@@ -34,7 +33,7 @@ namespace HandsOnDeck2.Classes
             }
             else if (targetPosition.X > rightBound)
             {
-                targetCameraPosition.X = targetPosition.X - viewportWidth + bufferX;
+                targetCameraPosition.X = targetPosition.X - viewport.Width + bufferX;
             }
 
             if (targetPosition.Y < topBound)
@@ -43,30 +42,22 @@ namespace HandsOnDeck2.Classes
             }
             else if (targetPosition.Y > bottomBound)
             {
-                targetCameraPosition.Y = targetPosition.Y - viewportHeight + bufferY;
-            }
-
-            if (targetCameraPosition.X < 0)
-            {
-                targetCameraPosition.X += mapWidth;
-            }
-            else if (targetCameraPosition.X >= mapWidth)
-            {
-                targetCameraPosition.X -= mapWidth;
-            }
-
-            if (targetCameraPosition.Y < 0)
-            {
-                targetCameraPosition.Y += mapHeight;
-            }
-            else if (targetCameraPosition.Y >= mapHeight)
-            {
-                targetCameraPosition.Y -= mapHeight;
+                targetCameraPosition.Y = targetPosition.Y - viewport.Height + bufferY;
             }
 
             Position = targetCameraPosition;
 
             Transform = Matrix.CreateTranslation(new Vector3(-Position, 0));
+        }
+
+        public void AdjustPositionForTeleport(Vector2 previousPosition, Vector2 newPosition)
+        {
+            Debug.WriteLine("Previous Position: " + previousPosition + " New Position: " + newPosition);
+            Vector2 relativeOffset = previousPosition - Position;
+            Debug.WriteLine("Old Relative Offset: " + relativeOffset);
+            Position = newPosition - relativeOffset;
+            Background.Instance.AdjustPositionForTeleport(previousPosition, newPosition);
+            Debug.WriteLine("New Camera Position: " + Position + " New Relative Offset: " + (newPosition - Position));
         }
     }
 }
