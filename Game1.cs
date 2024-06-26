@@ -26,6 +26,7 @@ namespace HandsOnDeck2
         {
             _map = Map.Instance;
             _map.Initialize(Content, GraphicsDevice);
+            GraphDev.Initialize(GraphicsDevice);
             base.Initialize();
         }
 
