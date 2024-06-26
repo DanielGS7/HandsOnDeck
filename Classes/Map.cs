@@ -25,11 +25,12 @@ namespace HandsOnDeck2.Classes
 
         private List<Island> islands;
         private Boat player;
-        public Camera Camera { get; private set; }
+        private Camera camera;
         private ContentManager content;
         private GraphicsDevice graphicsDevice;
         public int MapWidth { get; private set; }
         public int MapHeight { get; private set; }
+        public Camera Camera { get => camera; set => camera = value; }
 
         private Map() 
         {
@@ -90,6 +91,7 @@ namespace HandsOnDeck2.Classes
             {
                 DrawObject(spriteBatch, island);
                 DebugTools.DrawRectangle(spriteBatch, island,Color.Green);
+                island.Collider.Draw(spriteBatch,graphicsDevice,island.VisualElement.Rotation);
             }
 
             DrawObject(spriteBatch, player);
@@ -108,11 +110,10 @@ namespace HandsOnDeck2.Classes
             gameObject.VisualElement.SetPosition(adjustedPosition);
             gameObject.Draw(spriteBatch);
 
-            // Draw on the opposite side if near the edge (using viewport size as buffer)
+
             int viewportWidth = graphicsDevice.Viewport.Width;
             int viewportHeight = graphicsDevice.Viewport.Height;
 
-            // Draw on the opposite X side
             if (adjustedPosition.X < viewportWidth)
             {
                 Vector2 oppositePosition = adjustedPosition + new Vector2(MapWidth, 0);
@@ -125,8 +126,6 @@ namespace HandsOnDeck2.Classes
                 gameObject.VisualElement.SetPosition(oppositePosition);
                 gameObject.Draw(spriteBatch);
             }
-
-            // Draw on the opposite Y side
             if (adjustedPosition.Y < viewportHeight)
             {
                 Vector2 oppositePosition = adjustedPosition + new Vector2(0, MapHeight);
@@ -139,9 +138,7 @@ namespace HandsOnDeck2.Classes
                 gameObject.VisualElement.SetPosition(oppositePosition);
                 gameObject.Draw(spriteBatch);
             }
-
-            // Draw in the opposite corners
-            if (adjustedPosition.X < viewportWidth && adjustedPosition.Y < viewportHeight)
+                        if (adjustedPosition.X < viewportWidth && adjustedPosition.Y < viewportHeight)
             {
                 Vector2 oppositePosition = adjustedPosition + new Vector2(MapWidth, MapHeight);
                 gameObject.VisualElement.SetPosition(oppositePosition);

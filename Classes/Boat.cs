@@ -1,7 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
 using HandsOnDeck2.Interfaces;
 using System;
 using HandsOnDeck2.Enums;
@@ -17,6 +16,7 @@ namespace HandsOnDeck2.Classes
         private float rotation;
         private bool anchorDown;
         private bool sailsOpen;
+        private Collider collider;
         private Vector2 velocity;
 
         public Boat(ContentManager content, Vector2 startPosition)
@@ -33,6 +33,7 @@ namespace HandsOnDeck2.Classes
             this.Size = new Vector2(boatTexture.Width, boatTexture.Height);
 
             VisualElement = new VisualElement(boatAnimation, Position, new Vector2(boatAnimation.SpriteSize.X / 2, boatAnimation.SpriteSize.Y / 2), 0.2f, rotation, Color.White, SpriteEffects.None, 0f);
+            collider = new Collider(new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y), false);
         }
 
         public void HandleInput(GameAction action)
@@ -128,11 +129,13 @@ namespace HandsOnDeck2.Classes
 
             VisualElement.SetPosition(Position);
             VisualElement.Update(gameTime);
+            collider.UpdateBounds(new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y));
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             VisualElement.Draw(spriteBatch);
+            collider.Draw(spriteBatch, spriteBatch.GraphicsDevice, rotation);
         }
     }
 }

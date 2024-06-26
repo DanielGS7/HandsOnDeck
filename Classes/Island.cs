@@ -1,3 +1,4 @@
+using HandsOnDeck2.Classes.Collisions;
 using HandsOnDeck2.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -7,7 +8,7 @@ using System.Collections.Generic;
 
 namespace HandsOnDeck2.Classes
 {
-    public class Island : IGameObject
+    public class Island : IGameObject, ICollideable
     {
         private static Texture2D islandTexture;
         private static readonly Random random = new Random();
@@ -27,6 +28,8 @@ namespace HandsOnDeck2.Classes
         public string Name { get; set; }
         public int SpriteIndex { get; set; }
 
+        public Collider Collider { get; set; }
+
         public Island(ContentManager content, GraphicsDevice graphicsDevice, int spriteIndex, string name, Vector2 position, float scale, float rotation)
         {
             if (islandTexture == null)
@@ -45,6 +48,8 @@ namespace HandsOnDeck2.Classes
             animation.LoadContent(content);
 
             VisualElement = new VisualElement(animation, position, new Vector2(spriteSize.X / 2, spriteSize.Y / 2), scale, rotation, Color.White, SpriteEffects.None, 0f);
+            Collider = new Collider(new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y), false);
+
         }
 
         public Island(ContentManager content, GraphicsDevice graphicsDevice)
@@ -88,6 +93,7 @@ namespace HandsOnDeck2.Classes
         public void Draw(SpriteBatch spriteBatch)
         {
             VisualElement.Draw(spriteBatch);
+            Collider.Draw(spriteBatch,GraphDev.GetInstance,0);
         }
 
         public static List<Island> GenerateIslands(ContentManager content, GraphicsDevice graphicsDevice, int count)
@@ -121,6 +127,21 @@ namespace HandsOnDeck2.Classes
             }
 
             return islands;
+        }
+
+        public void OnCollision(ICollideable other)
+        {
+
+        }
+
+        public void OnTriggerEnter(ICollideable other)
+        {
+
+        }
+
+        public void OnTriggerExit(ICollideable other)
+        {
+
         }
     }
 }
