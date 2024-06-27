@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace HandsOnDeck2.Interfaces
 {
-    public interface IUIInteractable: IUIElement
+    public interface IUIInteractable: IGameObject
     {
         void HandleInput(MouseState mouseState);
+        bool IsHovered(MouseState mouseState);
     }
 }
