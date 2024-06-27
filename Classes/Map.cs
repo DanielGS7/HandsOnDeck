@@ -99,9 +99,15 @@ namespace HandsOnDeck2.Classes
             spriteBatch.End();
 
             spriteBatch.Begin();
-            DebugTools.DrawObjectInfo(spriteBatch, player.Position,"bootpos",Color.White);
-            spriteBatch.End();
+        DebugTools.DrawObjectInfo(spriteBatch, player.Position, "bootpos", Color.White);
 
+        Island nearestIsland = GetNearestIsland(player.Position);
+        if (nearestIsland != null)
+        {
+            DebugTools.DrawObjectInfo(spriteBatch, nearestIsland.Position, "nearest island pos", Color.White);
+        }
+
+        spriteBatch.End();
         }
 
         private void DrawObject(SpriteBatch spriteBatch, IGameObject gameObject)
@@ -188,6 +194,24 @@ namespace HandsOnDeck2.Classes
             }
 
             return new Vector2(wrappedX, wrappedY);
+        }
+
+        private Island GetNearestIsland(Vector2 playerPosition)
+        {
+            Island nearestIsland = null;
+            float nearestDistance = float.MaxValue;
+
+            foreach (var island in islands)
+            {
+                float distance = Vector2.Distance(playerPosition, island.Position);
+                if (distance < nearestDistance)
+                {
+                    nearestDistance = distance;
+                    nearestIsland = island;
+                }
+            }
+
+            return nearestIsland;
         }
     }
 }
