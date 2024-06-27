@@ -28,8 +28,8 @@ namespace HandsOnDeck2.Classes
         private Camera camera;
         private ContentManager content;
         private GraphicsDevice graphicsDevice;
-        public int MapWidth { get; private set; }
-        public int MapHeight { get; private set; }
+        public static int MapWidth { get; private set; }
+        public static int MapHeight { get; private set; }
         public Camera Camera { get => camera; set => camera = value; }
 
         private Map() 
@@ -80,6 +80,7 @@ namespace HandsOnDeck2.Classes
                 island.Update(gameTime);
             }
             Camera.Update(player.Position, graphicsDevice.Viewport, MapWidth, MapHeight);
+            DebugTools.ResetVerticalOffset();
         }
 
         public void Draw(SpriteBatch spriteBatch)

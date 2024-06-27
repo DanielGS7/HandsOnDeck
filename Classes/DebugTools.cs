@@ -9,12 +9,24 @@ namespace HandsOnDeck2.Classes
     {
         private static SpriteFont debugFont;
         private static Texture2D whiteTexture;
+        private static int verticalOffset;
 
         public static void Initialize(GraphicsDevice graphicsDevice, ContentManager content)
         {
             debugFont = content.Load<SpriteFont>("default");
             whiteTexture = new Texture2D(graphicsDevice, 1, 1);
             whiteTexture.SetData(new[] { Color.White });
+            verticalOffset = 0;
+        }
+
+        public static void ResetVerticalOffset()
+        {
+            verticalOffset = 0;
+        }
+
+        public static void IncrementVerticalOffset(int amount)
+        {
+            verticalOffset += amount;
         }
 
         public static void DrawRectangle(SpriteBatch spriteBatch, Rectangle rectangle, Color color)
@@ -29,9 +41,11 @@ namespace HandsOnDeck2.Classes
 
         public static void DrawObjectInfo(SpriteBatch spriteBatch, Vector2 position, string info, Color color)
         {
+            int lineHeight = 20;
             string positionText = $"Pos: {position.X:F2}, {position.Y:F2}";
-            spriteBatch.DrawString(debugFont, positionText, new Vector2(10, 10), color);
-            spriteBatch.DrawString(debugFont, info, new Vector2(10, 30), color);
+            spriteBatch.DrawString(debugFont, positionText, new Vector2(10, 10 + verticalOffset), color);
+            spriteBatch.DrawString(debugFont, info, new Vector2(10, 10 + verticalOffset + lineHeight), color);
+            IncrementVerticalOffset(lineHeight * 2);
         }
 
         public static void DrawRectangle(SpriteBatch spriteBatch, IGameObject gameObject , Color color)
