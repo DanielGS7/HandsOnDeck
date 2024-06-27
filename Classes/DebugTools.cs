@@ -51,8 +51,8 @@ namespace HandsOnDeck2.Classes
         public static void DrawRectangle(SpriteBatch spriteBatch, IGameObject gameObject , Color color)
         {
             var position = gameObject.Position;
-            var size = gameObject.Size * gameObject.VisualElement.Scale;
-            var rotation = gameObject.VisualElement.Rotation;
+            var size = gameObject.Size * gameObject.Scale;
+            var rotation = gameObject.Rotation;
 
             Vector2 origin = new Vector2(size.X / 2, size.Y / 2);
 

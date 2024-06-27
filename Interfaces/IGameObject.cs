@@ -8,8 +8,12 @@ namespace HandsOnDeck2.Interfaces
     {
         void Update(GameTime gameTime);
         void Draw(SpriteBatch spriteBatch);
+
         VisualElement VisualElement { get; set; }
         Vector2 Position { get; set; }
         Vector2 Size { get; set; }
+        Vector2 Origin { get; set; }
+        float Scale { get; set; }
+        float Rotation { get; set; }
     }
 }

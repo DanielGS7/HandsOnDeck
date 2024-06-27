@@ -1,3 +1,4 @@
+using HandsOnDeck2.Classes.Collisions;
 using HandsOnDeck2.Enums;
 using HandsOnDeck2.Interfaces;
 using Microsoft.Xna.Framework;
@@ -80,26 +81,25 @@ namespace HandsOnDeck2.Classes
                 island.Update(gameTime);
             }
             Camera.Update(player.Position, graphicsDevice.Viewport, MapWidth, MapHeight);
+            CollisionManager.Instance.Update(gameTime);
             DebugTools.ResetVerticalOffset();
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+    public void Draw(SpriteBatch spriteBatch)
+    {
+        spriteBatch.Begin(transformMatrix: Camera.Transform);
+        Background.Instance.Draw(spriteBatch, Camera, graphicsDevice.Viewport);
+
+        foreach (var island in islands)
         {
-            spriteBatch.Begin(transformMatrix: Camera.Transform);
-            Background.Instance.Draw(spriteBatch, Camera, graphicsDevice.Viewport);
+            DrawObject(spriteBatch, island);
+        }
+        CollisionManager.Instance.Draw(spriteBatch, graphicsDevice);
+        player.Draw(spriteBatch);
 
-            foreach (var island in islands)
-            {
-                DrawObject(spriteBatch, island);
-                DebugTools.DrawRectangle(spriteBatch, island,Color.Green);
-                island.Collider.Draw(spriteBatch,graphicsDevice,island.VisualElement.Rotation);
-            }
+        spriteBatch.End();
 
-            DrawObject(spriteBatch, player);
-
-            spriteBatch.End();
-
-            spriteBatch.Begin();
+        spriteBatch.Begin();
         DebugTools.DrawObjectInfo(spriteBatch, player.Position, "bootpos", Color.White);
 
         Island nearestIsland = GetNearestIsland(player.Position);
@@ -109,12 +109,12 @@ namespace HandsOnDeck2.Classes
         }
 
         spriteBatch.End();
-        }
+    }
 
         private void DrawObject(SpriteBatch spriteBatch, IGameObject gameObject)
         {
             Vector2 adjustedPosition = WrapPosition(gameObject.Position);
-            gameObject.VisualElement.SetPosition(adjustedPosition);
+            gameObject.Position = adjustedPosition;
             gameObject.Draw(spriteBatch);
 
 
@@ -124,49 +124,49 @@ namespace HandsOnDeck2.Classes
             if (adjustedPosition.X < viewportWidth)
             {
                 Vector2 oppositePosition = adjustedPosition + new Vector2(MapWidth, 0);
-                gameObject.VisualElement.SetPosition(oppositePosition);
+                gameObject.Position = oppositePosition;
                 gameObject.Draw(spriteBatch);
             }
             if (adjustedPosition.X > MapWidth - viewportWidth)
             {
                 Vector2 oppositePosition = adjustedPosition - new Vector2(MapWidth, 0);
-                gameObject.VisualElement.SetPosition(oppositePosition);
+                gameObject.Position = oppositePosition;
                 gameObject.Draw(spriteBatch);
             }
             if (adjustedPosition.Y < viewportHeight)
             {
                 Vector2 oppositePosition = adjustedPosition + new Vector2(0, MapHeight);
-                gameObject.VisualElement.SetPosition(oppositePosition);
+                gameObject.Position = oppositePosition;
                 gameObject.Draw(spriteBatch);
             }
             if (adjustedPosition.Y > MapHeight - viewportHeight)
             {
                 Vector2 oppositePosition = adjustedPosition - new Vector2(0, MapHeight);
-                gameObject.VisualElement.SetPosition(oppositePosition);
+                gameObject.Position= oppositePosition;
                 gameObject.Draw(spriteBatch);
             }
                         if (adjustedPosition.X < viewportWidth && adjustedPosition.Y < viewportHeight)
             {
                 Vector2 oppositePosition = adjustedPosition + new Vector2(MapWidth, MapHeight);
-                gameObject.VisualElement.SetPosition(oppositePosition);
+                gameObject.Position= oppositePosition;
                 gameObject.Draw(spriteBatch);
             }
             if (adjustedPosition.X > MapWidth - viewportWidth && adjustedPosition.Y < viewportHeight)
             {
                 Vector2 oppositePosition = adjustedPosition + new Vector2(-MapWidth, MapHeight);
-                gameObject.VisualElement.SetPosition(oppositePosition);
+                gameObject.Position = oppositePosition;
                 gameObject.Draw(spriteBatch);
             }
             if (adjustedPosition.X < viewportWidth && adjustedPosition.Y > MapHeight - viewportHeight)
             {
                 Vector2 oppositePosition = adjustedPosition + new Vector2(MapWidth, -MapHeight);
-                gameObject.VisualElement.SetPosition(oppositePosition);
+                gameObject.Position = oppositePosition;
                 gameObject.Draw(spriteBatch);
             }
             if (adjustedPosition.X > MapWidth - viewportWidth && adjustedPosition.Y > MapHeight - viewportHeight)
             {
                 Vector2 oppositePosition = adjustedPosition + new Vector2(-MapWidth, -MapHeight);
-                gameObject.VisualElement.SetPosition(oppositePosition);
+                gameObject.Position = oppositePosition;
                 gameObject.Draw(spriteBatch);
             }
         }

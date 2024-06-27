@@ -16,6 +16,7 @@ namespace HandsOnDeck2.Classes
         private int columns = 6;
         private int totalSprites = 39;
         private float speed = 5f;
+        private Vector2 position;
         private bool isLooping = true;
         private Vector2 direction = new Vector2(1,-1);
         private float moveSpeed = 30f;
@@ -43,19 +44,17 @@ namespace HandsOnDeck2.Classes
             animation = new Animation(spriteSheetName, spriteSize, columns, totalSprites, speed, isLooping);
             animation.LoadContent(content);
 
-            visualElement = new VisualElement(animation, Vector2.Zero, new Vector2(spriteWidth / 2, spriteHeight / 2), scale, rotation, Color.White, SpriteEffects.None, 0f);
+            visualElement = new VisualElement(animation, Color.White, SpriteEffects.None, 0f);
         }
 
         public void SetRotation(float rotationDegrees)
         {
             rotation = MathHelper.ToRadians(rotationDegrees);
-            visualElement.SetRotation(rotation);
         }
 
         public void SetScale(float newScale)
         {
             scale = newScale;
-            visualElement.SetScale(scale);
         }
 
         public void SetDirection(Vector2 newDirection)
@@ -121,8 +120,8 @@ namespace HandsOnDeck2.Classes
             {
                 for (var x = startX; x <= endX; x += (int)tileSize.X)
                 {
-                    visualElement.SetPosition(new Vector2(x, y) - offset);
-                    visualElement.Draw(spriteBatch);
+                    position = new Vector2(x, y) - offset;
+                    visualElement.Draw(spriteBatch, position, new Vector2(spriteWidth/2, spriteHeight/2), scale, rotation);
                 }
             }
         }
