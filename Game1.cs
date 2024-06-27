@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using HandsOnDeck2.Classes;
+using HandsOnDeck2.Classes.States;
+using HandsOnDeck2.Enums;
 
 namespace HandsOnDeck2
 {
@@ -10,6 +12,7 @@ namespace HandsOnDeck2
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private Map _map;
+
 
         public Game1()
         {
@@ -24,15 +27,17 @@ namespace HandsOnDeck2
 
         protected override void Initialize()
         {
-            _map = Map.Instance;
-            _map.Initialize(Content, GraphicsDevice);
+            GameStateManager.Instance.AddState(GameStates.MainMenu, new MainMenuState(Content, GraphicsDevice));
+            GameStateManager.Instance.ChangeState(GameStates.MainMenu);
+            //_map = Map.Instance;
+            //_map.Initialize(Content, GraphicsDevice);
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _map.LoadContent();
+            //_map.LoadContent();
             DebugTools.Initialize(GraphicsDevice, Content);
         }
 
@@ -41,7 +46,10 @@ namespace HandsOnDeck2
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            _map.Update(gameTime);
+            GameStateManager.Instance.Update(gameTime);
+
+
+           // _map.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -49,7 +57,8 @@ namespace HandsOnDeck2
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            _map.Draw(_spriteBatch);
+            GameStateManager.Instance.Draw(_spriteBatch);
+            //_map.Draw(_spriteBatch);
             base.Draw(gameTime);
         }
     }
