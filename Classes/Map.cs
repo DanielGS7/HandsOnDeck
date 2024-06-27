@@ -42,8 +42,8 @@ namespace HandsOnDeck2.Classes
         {
             this.content = content;
             this.graphicsDevice = graphicsDevice;
-            MapWidth = graphicsDevice.Viewport.Width * 10;
-            MapHeight = graphicsDevice.Viewport.Height * 10;
+            MapWidth = graphicsDevice.Viewport.Width * 5;
+            MapHeight = graphicsDevice.Viewport.Height * 5;
 
             player = new Boat(content, new Vector2(graphicsDevice.Viewport.Width / 2, graphicsDevice.Viewport.Height / 2));
             islands = Island.GenerateIslands(content, graphicsDevice, Island.totalIslands);
