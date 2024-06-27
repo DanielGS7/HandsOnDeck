@@ -9,8 +9,8 @@ namespace HandsOnDeck2.Enums
     public enum GameStates
     {
         MainMenu,
-        Gameplay,
+        SettingsMenu,
         PauseMenu,
-        GameOver
+        InGame
     }
 }
