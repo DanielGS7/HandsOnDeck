@@ -12,12 +12,14 @@ namespace HandsOnDeck2.Classes.UI
         private Rectangle bounds;
         private bool isHovered;
         private Color color;
+        private SpriteFont font;
+        private string text;
 
-        public VisualElement VisualElement { get  ; set  ; }
-        public Vector2 Position { get  ; set  ; }
-        public Vector2 Size { get  ; set  ; }
+        public VisualElement VisualElement { get; set; }
+        public Vector2 Position { get; set; }
+        public Vector2 Size { get; set; }
 
-        public Button(ContentManager content, Rectangle bounds, Vector2 position)
+        public Button(ContentManager content, Rectangle bounds, Vector2 position, string text, SpriteFont font)
         {
             this.texture = content.Load<Texture2D>("button_rectangle_depth_gloss");
             this.bounds = bounds;
@@ -25,8 +27,10 @@ namespace HandsOnDeck2.Classes.UI
             this.color = Color.White;
             this.Position = position;
             this.Size = new Vector2(texture.Width, texture.Height);
+            this.font = font;
+            this.text = text;
 
-            VisualElement = new VisualElement(texture, Position, new Vector2(bounds.X/2,bounds.Y/2), 1.0f, 0.0f, Color.White, SpriteEffects.None, 0.0f);
+            VisualElement = new VisualElement(texture, Position, Vector2.Zero, 1.0f, 0.0f, Color.White, SpriteEffects.None, 0.0f);
         }
 
         public void HandleInput(MouseState mouseState)
@@ -56,6 +60,15 @@ namespace HandsOnDeck2.Classes.UI
         public void Draw(SpriteBatch spriteBatch)
         {
             VisualElement.Draw(spriteBatch);
+
+            // Calculate text position (centered)
+            Vector2 textSize = font.MeasureString(text);
+            Vector2 textPosition = new Vector2(
+                Position.X + (Size.X - textSize.X) / 2,
+                Position.Y + (Size.Y - textSize.Y) / 2
+            );
+
+            spriteBatch.DrawString(font, text, textPosition, Color.Black);
         }
 
         public void Update(GameTime gameTime)
