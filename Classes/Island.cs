@@ -89,7 +89,6 @@ public static List<Island> GenerateIslands(ContentManager content, GraphicsDevic
                 while (overlaps);
 
                 islands.Add(newIsland);
-                CollisionManager.Instance.AddCollideable(newIsland);
             }
 
             return islands;
