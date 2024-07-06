@@ -84,8 +84,8 @@ namespace HandsOnDeck2.Classes
                 Speed = MathHelper.Clamp(Speed - 0.01f, 0f, 5f);
             }
 
-            velocity = new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation)) * Speed;
-            Position.Move(velocity.X, velocity.Y);
+            Vector2 movement = new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation)) * Speed;
+            Position = new SeaCoordinate(Position.X + movement.X, Position.Y + movement.Y);
 
             VisualElement.Update(gameTime);
         }

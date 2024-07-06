@@ -18,8 +18,6 @@ namespace HandsOnDeck2.Classes
         private float speed = 5f;
         private Vector2 position;
         private bool isLooping = true;
-        private Vector2 direction = new Vector2(1,-1);
-        private float moveSpeed = 30f;
         private Vector2 offset = Vector2.Zero;
 
         private Background() { }
@@ -57,16 +55,6 @@ namespace HandsOnDeck2.Classes
             scale = newScale;
         }
 
-        public void SetDirection(Vector2 newDirection)
-        {
-            direction = newDirection;
-        }
-
-        public void SetMoveSpeed(float newMoveSpeed)
-        {
-            moveSpeed = newMoveSpeed;
-        }
-
         public void SetAnimationSpeed(float newSpeed)
         {
             animation.SetSpeed(newSpeed);
@@ -82,26 +70,10 @@ namespace HandsOnDeck2.Classes
             return MathHelper.ToDegrees(rotation);
         }
 
-        public Vector2 GetDirection()
+        public void Update(GameTime gameTime, Vector2 cameraOffset)
         {
-            return direction;
-        }
-
-        public float GetMoveSpeed()
-        {
-            return moveSpeed;
-        }
-
-        public void Update(GameTime gameTime)
-        {
-            offset += direction * moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            offset = cameraOffset;
             visualElement.Update(gameTime);
-        }
-
-        public void AdjustPositionForTeleport(Vector2 previousCameraPosition, Vector2 newCameraPosition)
-        {
-            Vector2 relativeOffset = previousCameraPosition - offset;
-            offset = newCameraPosition - relativeOffset;
         }
 
         public void Draw(SpriteBatch spriteBatch, Camera camera, Viewport viewport)
@@ -110,7 +82,7 @@ namespace HandsOnDeck2.Classes
             var tileSize = new Vector2(spriteWidth, spriteHeight) * scale;
             var bufferSize = tileSize * 2;
 
-            SeaCoordinate cameraPosition = camera.Position + offset;
+            var cameraPosition = camera.Position;
             var startX = (int)((cameraPosition.X - bufferSize.X) / tileSize.X) * tileSize.X;
             var startY = (int)((cameraPosition.Y - bufferSize.Y) / tileSize.Y) * tileSize.Y;
             var endX = (int)((cameraPosition.X + viewportSize.X + bufferSize.X) / tileSize.X) * tileSize.X;
@@ -120,8 +92,9 @@ namespace HandsOnDeck2.Classes
             {
                 for (var x = startX; x <= endX; x += (int)tileSize.X)
                 {
-                    position = new Vector2(x, y) - offset;
-                    visualElement.Draw(spriteBatch, (SeaCoordinate)position, new Vector2(spriteWidth/2, spriteHeight/2), scale, rotation);
+                    position = new Vector2(x, y);
+                    Vector2 drawPosition = position - offset;
+                    visualElement.Draw(spriteBatch, drawPosition, new Vector2(spriteWidth/2, spriteHeight/2), scale, rotation);
                 }
             }
         }

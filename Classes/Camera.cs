@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Diagnostics;
+using HandsOnDeck2.Classes;
+using System;
 
 namespace HandsOnDeck2.Classes
 {
@@ -8,56 +9,47 @@ namespace HandsOnDeck2.Classes
     {
         public Matrix Transform { get; private set; }
         public Vector2 Position { get; private set; }
-
+        private Vector2 offset;
 
         public Camera()
         {
             Position = Vector2.Zero;
+            offset = Vector2.Zero;
         }
 
-        public void Update(Vector2 targetPosition, Viewport viewport, int mapWidth, int mapHeight)
+        public void Update(SeaCoordinate targetPosition, Viewport viewport, int mapWidth, int mapHeight)
         {
-            Vector2 targetCameraPosition = Position;
-
-            float bufferX = viewport.Height * 0.28f;
+            float bufferX = viewport.Width * 0.28f;
             float bufferY = viewport.Height * 0.28f;
 
-            float leftBound = Position.X + bufferX;
-            float rightBound = Position.X + viewport.Width - bufferX;
-            float topBound = Position.Y + bufferY;
-            float bottomBound = Position.Y + viewport.Height - bufferY;
+            Vector2 targetVector = targetPosition.ToVector2();
+            Vector2 newPosition = Position;
 
-            if (targetPosition.X < leftBound)
-            {
-                targetCameraPosition.X = targetPosition.X - bufferX;
-            }
-            else if (targetPosition.X > rightBound)
-            {
-                targetCameraPosition.X = targetPosition.X - viewport.Width + bufferX;
-            }
+            if (targetVector.X - Position.X < bufferX)
+                newPosition.X = targetVector.X - bufferX;
+            else if (targetVector.X - Position.X > viewport.Width - bufferX)
+                newPosition.X = targetVector.X - viewport.Width + bufferX;
 
-            if (targetPosition.Y < topBound)
-            {
-                targetCameraPosition.Y = targetPosition.Y - bufferY;
-            }
-            else if (targetPosition.Y > bottomBound)
-            {
-                targetCameraPosition.Y = targetPosition.Y - viewport.Height + bufferY;
-            }
+            if (targetVector.Y - Position.Y < bufferY)
+                newPosition.Y = targetVector.Y - bufferY;
+            else if (targetVector.Y - Position.Y > viewport.Height - bufferY)
+                newPosition.Y = targetVector.Y - viewport.Height + bufferY;
 
-            Position = targetCameraPosition;
+            offset = newPosition - Position;
+            Position = newPosition;
 
             Transform = Matrix.CreateTranslation(new Vector3(-Position, 0));
         }
 
-        public void AdjustPositionForTeleport(Vector2 previousPosition, Vector2 newPosition)
+        public void AdjustPositionForTeleport(SeaCoordinate previousBoatPosition, SeaCoordinate newBoatPosition)
         {
-            Debug.WriteLine("Previous Position: " + previousPosition + " New Position: " + newPosition);
-            Vector2 relativeOffset = previousPosition - Position;
-            Debug.WriteLine("Old Relative Offset: " + relativeOffset);
-            Position = newPosition - relativeOffset;
-            Background.Instance.AdjustPositionForTeleport(previousPosition, newPosition);
-            Debug.WriteLine("New Camera Position: " + Position + " New Relative Offset: " + (newPosition - Position));
+            Vector2 positionDifference = newBoatPosition.ToVector2() - previousBoatPosition.ToVector2();
+            Position += positionDifference;
+        }
+
+        public Vector2 GetOffset()
+        {
+            return offset;
         }
     }
 }

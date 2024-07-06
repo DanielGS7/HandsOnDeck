@@ -44,8 +44,8 @@ namespace HandsOnDeck2.Classes
         {
             this.content = content;
             this.graphicsDevice = graphicsDevice;
-            MapWidth = graphicsDevice.Viewport.Width * 5;
-            MapHeight = graphicsDevice.Viewport.Height * 5;
+            MapWidth = 5120;
+            MapHeight = 2880;
 
             SeaCoordinate.SetMapDimensions(MapWidth, MapHeight);
 
@@ -59,21 +59,29 @@ namespace HandsOnDeck2.Classes
         }
 
 
-        public void Update(GameTime gameTime)
+       public void Update(GameTime gameTime)
         {
             InputManager.Instance.Update();
             InputManager.Instance.HandleInput(player);
             
+            SeaCoordinate previousPosition = player.Position;
             player.Update(gameTime);
-            Background.Instance.Update(gameTime);
+
+            if (player.Position.X != previousPosition.X || player.Position.Y != previousPosition.Y)
+            {
+                Camera.AdjustPositionForTeleport(previousPosition, player.Position);
+            }
+
+            Camera.Update(player.Position, graphicsDevice.Viewport, MapWidth, MapHeight);
+
+            Background.Instance.Update(gameTime, Camera.GetOffset());
             foreach (var island in islands)
             {
                 island.Update(gameTime);
             }
-            Camera.Update(player.Position.ToVector2(), graphicsDevice.Viewport, MapWidth, MapHeight);
             CollisionManager.Instance.Update(gameTime);
-            DebugTools.ResetVerticalOffset();
 
+            // Handle additional input for background scaling and rotation
             if (InputManager.Instance.IsKeyHeld(Keys.OemPlus))
                 Background.Instance.SetScale(Background.Instance.GetScale() + 0.01f);
             if (InputManager.Instance.IsKeyHeld(Keys.OemMinus))
@@ -81,7 +89,6 @@ namespace HandsOnDeck2.Classes
             if (InputManager.Instance.IsKeyPressed(Keys.R))
                 Background.Instance.SetRotation((Background.Instance.GetRotation() + 90f) % 360f);
         }
-
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin(transformMatrix: Camera.Transform);

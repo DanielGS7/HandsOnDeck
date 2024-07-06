@@ -45,7 +45,6 @@ namespace HandsOnDeck2.Classes
             animation.LoadContent(content);
 
             VisualElement = new VisualElement(animation, Color.White, SpriteEffects.None, 0f);
-            CollisionManager.Instance.AddCollideable(this);
         }
 
         public Island(ContentManager content, GraphicsDevice graphicsDevice)
@@ -90,7 +89,7 @@ public static List<Island> GenerateIslands(ContentManager content, GraphicsDevic
 
                 islands.Add(newIsland);
             }
-
+            foreach(ICollideable island in islands) CollisionManager.Instance.AddCollideable(island);
             return islands;
         }
 
