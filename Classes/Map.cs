@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using System;
 
 namespace HandsOnDeck2.Classes
 {
@@ -46,7 +47,9 @@ namespace HandsOnDeck2.Classes
             MapWidth = graphicsDevice.Viewport.Width * 5;
             MapHeight = graphicsDevice.Viewport.Height * 5;
 
-            player = new Boat(content, new Vector2(graphicsDevice.Viewport.Width / 2, graphicsDevice.Viewport.Height / 2));
+            SeaCoordinate.SetMapDimensions(MapWidth, MapHeight);
+
+            player = new Boat(content, new SeaCoordinate(MapWidth / 2, MapHeight / 2));
             islands = Island.GenerateIslands(content, graphicsDevice, Island.totalIslands);
         }
 
@@ -54,6 +57,7 @@ namespace HandsOnDeck2.Classes
         {
             Background.Instance.Initialize(content, graphicsDevice);
         }
+
 
         public void Update(GameTime gameTime)
         {
@@ -78,134 +82,62 @@ namespace HandsOnDeck2.Classes
                 Background.Instance.SetRotation((Background.Instance.GetRotation() + 90f) % 360f);
         }
 
-    public void Draw(SpriteBatch spriteBatch)
-    {
-        spriteBatch.Begin(transformMatrix: Camera.Transform);
-        Background.Instance.Draw(spriteBatch, Camera, graphicsDevice.Viewport);
-
-        foreach (var island in islands)
+        public void Draw(SpriteBatch spriteBatch)
         {
-            DrawObject(spriteBatch, island);
-        }
-        CollisionManager.Instance.Draw(spriteBatch, graphicsDevice);
-        player.Draw(spriteBatch);
+            spriteBatch.Begin(transformMatrix: Camera.Transform);
+            Background.Instance.Draw(spriteBatch, Camera, graphicsDevice.Viewport);
 
-        spriteBatch.End();
+            DrawVisibleObjects(spriteBatch);
+            CollisionManager.Instance.Draw(spriteBatch);
 
-        spriteBatch.Begin();
-        DebugTools.DrawObjectInfo(spriteBatch, player.Position, "bootpos", Color.White);
-
-        Island nearestIsland = GetNearestIsland(player.Position);
-        if (nearestIsland != null)
-        {
-            DebugTools.DrawObjectInfo(spriteBatch, nearestIsland.Position, "nearest island pos", Color.White);
+            spriteBatch.End();
         }
 
-        spriteBatch.End();
-    }
-
-        private void DrawObject(SpriteBatch spriteBatch, IGameObject gameObject)
+        private void DrawVisibleObjects(SpriteBatch spriteBatch)
         {
-            Vector2 adjustedPosition = WrapPosition(gameObject.Position);
-            gameObject.Position = adjustedPosition;
-            gameObject.Draw(spriteBatch);
-
-
-            int viewportWidth = graphicsDevice.Viewport.Width;
-            int viewportHeight = graphicsDevice.Viewport.Height;
-
-            if (adjustedPosition.X < viewportWidth)
-            {
-                Vector2 oppositePosition = adjustedPosition + new Vector2(MapWidth, 0);
-                gameObject.Position = oppositePosition;
-                gameObject.Draw(spriteBatch);
-            }
-            if (adjustedPosition.X > MapWidth - viewportWidth)
-            {
-                Vector2 oppositePosition = adjustedPosition - new Vector2(MapWidth, 0);
-                gameObject.Position = oppositePosition;
-                gameObject.Draw(spriteBatch);
-            }
-            if (adjustedPosition.Y < viewportHeight)
-            {
-                Vector2 oppositePosition = adjustedPosition + new Vector2(0, MapHeight);
-                gameObject.Position = oppositePosition;
-                gameObject.Draw(spriteBatch);
-            }
-            if (adjustedPosition.Y > MapHeight - viewportHeight)
-            {
-                Vector2 oppositePosition = adjustedPosition - new Vector2(0, MapHeight);
-                gameObject.Position= oppositePosition;
-                gameObject.Draw(spriteBatch);
-            }
-                        if (adjustedPosition.X < viewportWidth && adjustedPosition.Y < viewportHeight)
-            {
-                Vector2 oppositePosition = adjustedPosition + new Vector2(MapWidth, MapHeight);
-                gameObject.Position= oppositePosition;
-                gameObject.Draw(spriteBatch);
-            }
-            if (adjustedPosition.X > MapWidth - viewportWidth && adjustedPosition.Y < viewportHeight)
-            {
-                Vector2 oppositePosition = adjustedPosition + new Vector2(-MapWidth, MapHeight);
-                gameObject.Position = oppositePosition;
-                gameObject.Draw(spriteBatch);
-            }
-            if (adjustedPosition.X < viewportWidth && adjustedPosition.Y > MapHeight - viewportHeight)
-            {
-                Vector2 oppositePosition = adjustedPosition + new Vector2(MapWidth, -MapHeight);
-                gameObject.Position = oppositePosition;
-                gameObject.Draw(spriteBatch);
-            }
-            if (adjustedPosition.X > MapWidth - viewportWidth && adjustedPosition.Y > MapHeight - viewportHeight)
-            {
-                Vector2 oppositePosition = adjustedPosition + new Vector2(-MapWidth, -MapHeight);
-                gameObject.Position = oppositePosition;
-                gameObject.Draw(spriteBatch);
-            }
-        }
-
-        private Vector2 WrapPosition(Vector2 position)
-        {
-            float wrappedX = position.X;
-            float wrappedY = position.Y;
-
-            if (position.X < 0)
-            {
-                wrappedX = MapWidth + position.X;
-            }
-            else if (position.X >= MapWidth)
-            {
-                wrappedX = position.X - MapWidth;
-            }
-
-            if (position.Y < 0)
-            {
-                wrappedY = MapHeight + position.Y;
-            }
-            else if (position.Y >= MapHeight)
-            {
-                wrappedY = position.Y - MapHeight;
-            }
-
-            return new Vector2(wrappedX, wrappedY);
-        }
-
-        private Island GetNearestIsland(Vector2 playerPosition)
-        {
-            Island nearestIsland = null;
-            float nearestDistance = float.MaxValue;
+            Rectangle viewport = new Rectangle(
+                (int)Camera.Position.X,
+                (int)Camera.Position.Y,
+                graphicsDevice.Viewport.Width,
+                graphicsDevice.Viewport.Height
+            );
 
             foreach (var island in islands)
             {
-                float distance = Vector2.Distance(playerPosition, island.Position);
-                if (distance < nearestDistance)
+                if (IsObjectVisible(island, viewport))
                 {
-                    nearestDistance = distance;
-                    nearestIsland = island;
+                    island.Draw(spriteBatch);
                 }
             }
 
-            return nearestIsland;
+            player.Draw(spriteBatch);
+        }
+
+        private bool IsObjectVisible(IGameObject obj, Rectangle viewport)
+        {
+            float objectRadius = Math.Max(obj.Size.X, obj.Size.Y) * obj.Scale / 2;
+            Rectangle extendedViewport = new Rectangle(
+                viewport.X - (int)objectRadius,
+                viewport.Y - (int)objectRadius,
+                viewport.Width + (int)(objectRadius * 2),
+                viewport.Height + (int)(objectRadius * 2)
+            );
+
+            Vector2 objPos = obj.Position.ToVector2();
+            return IsPositionVisible(objPos, extendedViewport) ||
+                   IsPositionVisible(new Vector2(objPos.X - MapWidth, objPos.Y), extendedViewport) ||
+                   IsPositionVisible(new Vector2(objPos.X + MapWidth, objPos.Y), extendedViewport) ||
+                   IsPositionVisible(new Vector2(objPos.X, objPos.Y - MapHeight), extendedViewport) ||
+                   IsPositionVisible(new Vector2(objPos.X, objPos.Y + MapHeight), extendedViewport) ||
+                   IsPositionVisible(new Vector2(objPos.X - MapWidth, objPos.Y - MapHeight), extendedViewport) ||
+                   IsPositionVisible(new Vector2(objPos.X + MapWidth, objPos.Y - MapHeight), extendedViewport) ||
+                   IsPositionVisible(new Vector2(objPos.X - MapWidth, objPos.Y + MapHeight), extendedViewport) ||
+                   IsPositionVisible(new Vector2(objPos.X + MapWidth, objPos.Y + MapHeight), extendedViewport);
+        }
+
+        private bool IsPositionVisible(Vector2 position, Rectangle viewport)
+        {
+            return viewport.Contains(position);
         }
     }
 }

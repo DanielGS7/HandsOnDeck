@@ -39,36 +39,27 @@ namespace HandsOnDeck2.Classes.Collisions
 
         public void RemoveCollideable(ICollideable collideable)
         {
-            if (collideables.Contains(collideable))
-            {
-                collideables.Remove(collideable);
-            }
+            collideables.Remove(collideable);
         }
 
         public void Update(GameTime gameTime)
         {
+            // Reset all collision states
+            foreach (var collideable in collideables)
+            {
+                collideable.IsColliding = false;
+            }
+
             for (int i = 0; i < collideables.Count; i++)
             {
-                var collideableA = collideables[i];
-
                 for (int j = i + 1; j < collideables.Count; j++)
                 {
-                    var collideableB = collideables[j];
-
-                    if (CheckCollision(collideableA, collideableB))
+                    if (CheckCollision(collideables[i], collideables[j]))
                     {
-                        collideableA.Collider.Collides();
-                        collideableB.Collider.Collides();
-                        if (collideableA.Collider.IsTrigger || collideableB.Collider.IsTrigger)
-                        {
-                            collideableA.OnTriggerEnter(collideableB);
-                            collideableB.OnTriggerEnter(collideableA);
-                        }
-                        else
-                        {
-                            collideableA.OnCollision(collideableB);
-                            collideableB.OnCollision(collideableA);
-                        }
+                        collideables[i].IsColliding = true;
+                        collideables[j].IsColliding = true;
+                        collideables[i].OnCollision(collideables[j]);
+                        collideables[j].OnCollision(collideables[i]);
                     }
                 }
             }
@@ -76,85 +67,91 @@ namespace HandsOnDeck2.Classes.Collisions
 
         private bool CheckCollision(ICollideable a, ICollideable b)
         {
-            return CheckRotatedRectanglesCollision(
-                a.Collider.Bounds, a.Rotation,
-                b.Collider.Bounds, b.Rotation
-            );
-        }
-
-        private bool CheckRotatedRectanglesCollision(Rectangle rectA, float rotationA, Rectangle rectB, float rotationB)
-        {
-            Vector2[] cornersA = GetRotatedRectangleCorners(rectA, rotationA);
-            Vector2[] cornersB = GetRotatedRectangleCorners(rectB, rotationB);
-
-            return CheckSeparatingAxisTheorem(cornersA, cornersB) && CheckSeparatingAxisTheorem(cornersB, cornersA);
-        }
-
-        private Vector2[] GetRotatedRectangleCorners(Rectangle rect, float rotation)
-        {
-            Vector2[] corners = new Vector2[4];
-            Vector2 center = new Vector2(rect.X + rect.Width / 2, rect.Y + rect.Height / 2);
-            Vector2[] originalCorners = {
-                new Vector2(rect.X, rect.Y),
-                new Vector2(rect.X + rect.Width, rect.Y),
-                new Vector2(rect.X + rect.Width, rect.Y + rect.Height),
-                new Vector2(rect.X, rect.Y + rect.Height)
-            };
+            Vector2[] cornersA = GetRotatedRectangleCorners(a);
+            Vector2[] cornersB = GetRotatedRectangleCorners(b);
 
             for (int i = 0; i < 4; i++)
             {
-                Vector2 corner = originalCorners[i] - center;
-                float cos = (float)Math.Cos(rotation);
-                float sin = (float)Math.Sin(rotation);
-                corners[i] = new Vector2(
-                    corner.X * cos - corner.Y * sin,
-                    corner.X * sin + corner.Y * cos
-                ) + center;
+                if (IsPointInPolygon(cornersA[i], cornersB) || IsPointInPolygon(cornersB[i], cornersA))
+                {
+                    return true;
+                }
             }
+
+            return false;
+        }
+
+        private Vector2[] GetRotatedRectangleCorners(ICollideable collideable)
+        {
+            Vector2 size = collideable.Size * collideable.Scale;
+            Vector2 origin = collideable.Origin * collideable.Scale;
+            float rotation = collideable.Rotation;
+
+            Vector2[] corners = new Vector2[4];
+            Vector2 topLeft = new Vector2(-origin.X, -origin.Y);
+            Vector2 topRight = new Vector2(size.X - origin.X, -origin.Y);
+            Vector2 bottomRight = new Vector2(size.X - origin.X, size.Y - origin.Y);
+            Vector2 bottomLeft = new Vector2(-origin.X, size.Y - origin.Y);
+
+            Vector2 position = collideable.Position.ToVector2();
+            corners[0] = Vector2.Transform(topLeft, Matrix.CreateRotationZ(rotation)) + position;
+            corners[1] = Vector2.Transform(topRight, Matrix.CreateRotationZ(rotation)) + position;
+            corners[2] = Vector2.Transform(bottomRight, Matrix.CreateRotationZ(rotation)) + position;
+            corners[3] = Vector2.Transform(bottomLeft, Matrix.CreateRotationZ(rotation)) + position;
 
             return corners;
         }
 
-        private bool CheckSeparatingAxisTheorem(Vector2[] cornersA, Vector2[] cornersB)
+        private bool IsPointInPolygon(Vector2 point, Vector2[] polygon)
         {
-            for (int i = 0; i < 4; i++)
+            bool inside = false;
+            for (int i = 0, j = polygon.Length - 1; i < polygon.Length; j = i++)
             {
-                Vector2 edge = cornersA[(i + 1) % 4] - cornersA[i];
-                Vector2 axis = new Vector2(-edge.Y, edge.X);
-                float minA = float.MaxValue, maxA = float.MinValue;
-                float minB = float.MaxValue, maxB = float.MinValue;
-
-                foreach (var corner in cornersA)
+                if (((polygon[i].Y > point.Y) != (polygon[j].Y > point.Y)) &&
+                    (point.X < (polygon[j].X - polygon[i].X) * (point.Y - polygon[i].Y) / (polygon[j].Y - polygon[i].Y) + polygon[i].X))
                 {
-                    float projection = Vector2.Dot(corner, axis);
-                    minA = Math.Min(minA, projection);
-                    maxA = Math.Max(maxA, projection);
-                }
-
-                foreach (var corner in cornersB)
-                {
-                    float projection = Vector2.Dot(corner, axis);
-                    minB = Math.Min(minB, projection);
-                    maxB = Math.Max(maxB, projection);
-                }
-
-                if (maxA < minB || maxB < minA)
-                {
-                    return false;
+                    inside = !inside;
                 }
             }
-
-            return true;
+            return inside;
         }
 
-        public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
+        public void Draw(SpriteBatch spriteBatch)
         {
             if (!DrawColliders) return;
 
             foreach (var collideable in collideables)
             {
-                collideable.Collider.Draw(spriteBatch, graphicsDevice, collideable.Rotation);
+                DrawCollider(spriteBatch, collideable);
             }
+        }
+
+        private void DrawCollider(SpriteBatch spriteBatch, ICollideable collideable)
+        {
+            Vector2[] corners = GetRotatedRectangleCorners(collideable);
+            Color color = collideable.IsColliding ? Color.Red : Color.Green;
+
+            for (int i = 0; i < 4; i++)
+            {
+                int nextIndex = (i + 1) % 4;
+                DrawLine(spriteBatch, corners[i], corners[nextIndex], color);
+            }
+        }
+
+        private void DrawLine(SpriteBatch spriteBatch, Vector2 start, Vector2 end, Color color)
+        {
+            Vector2 edge = end - start;
+            float angle = (float)Math.Atan2(edge.Y, edge.X);
+            spriteBatch.Draw(
+                Texture2DHelper.GetWhiteTexture(GraphDev.GetInstance),
+                new Rectangle((int)start.X, (int)start.Y, (int)edge.Length(), 1),
+                null,
+                color,
+                angle,
+                Vector2.Zero,
+                SpriteEffects.None,
+                0
+            );
         }
     }
 }
