@@ -110,7 +110,7 @@ namespace HandsOnDeck2.Classes
             var tileSize = new Vector2(spriteWidth, spriteHeight) * scale;
             var bufferSize = tileSize * 2;
 
-            var cameraPosition = camera.Position + offset;
+            SeaCoordinate cameraPosition = camera.Position + offset;
             var startX = (int)((cameraPosition.X - bufferSize.X) / tileSize.X) * tileSize.X;
             var startY = (int)((cameraPosition.Y - bufferSize.Y) / tileSize.Y) * tileSize.Y;
             var endX = (int)((cameraPosition.X + viewportSize.X + bufferSize.X) / tileSize.X) * tileSize.X;
@@ -121,7 +121,7 @@ namespace HandsOnDeck2.Classes
                 for (var x = startX; x <= endX; x += (int)tileSize.X)
                 {
                     position = new Vector2(x, y) - offset;
-                    visualElement.Draw(spriteBatch, position, new Vector2(spriteWidth/2, spriteHeight/2), scale, rotation);
+                    visualElement.Draw(spriteBatch, (SeaCoordinate)position, new Vector2(spriteWidth/2, spriteHeight/2), scale, rotation);
                 }
             }
         }

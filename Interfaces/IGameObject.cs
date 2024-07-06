@@ -10,7 +10,7 @@ namespace HandsOnDeck2.Interfaces
         void Draw(SpriteBatch spriteBatch);
 
         VisualElement VisualElement { get; set; }
-        Vector2 Position { get; set; }
+        SeaCoordinate Position { get; set; }
         Vector2 Size { get; set; }
         Vector2 Origin { get; set; }
         float Scale { get; set; }

@@ -57,32 +57,25 @@ namespace HandsOnDeck2.Classes
 
         public void Update(GameTime gameTime)
         {
-            var keyboardState = Keyboard.GetState();
-
-            // Handle player input
-            if (keyboardState.IsKeyDown(Keys.W)) player.HandleInput(GameAction.SailsOpen);
-            if (keyboardState.IsKeyDown(Keys.S)) player.HandleInput(GameAction.SailsClosed);
-            if (keyboardState.IsKeyDown(Keys.A)) player.HandleInput(GameAction.SteerLeft);
-            if (keyboardState.IsKeyDown(Keys.D)) player.HandleInput(GameAction.SteerRight);
-            if (keyboardState.IsKeyDown(Keys.Q)) player.HandleInput(GameAction.ShootLeft);
-            if (keyboardState.IsKeyDown(Keys.E)) player.HandleInput(GameAction.ShootRight);
-            if (keyboardState.IsKeyDown(Keys.Space)) player.HandleInput(GameAction.ToggleAnchor);
-
-            // Example of changing scale and rotation
-            if (keyboardState.IsKeyDown(Keys.OemPlus)) Background.Instance.SetScale(Background.Instance.GetScale() + 0.01f); // Increase scale
-            if (keyboardState.IsKeyDown(Keys.OemMinus)) Background.Instance.SetScale(Background.Instance.GetScale() - 0.01f); // Decrease scale
-            if (keyboardState.IsKeyDown(Keys.R)) Background.Instance.SetRotation((Background.Instance.GetRotation() + 90f) % 360f); // Rotate 90 degrees
-
-            // Update game objects
+            InputManager.Instance.Update();
+            InputManager.Instance.HandleInput(player);
+            
             player.Update(gameTime);
             Background.Instance.Update(gameTime);
             foreach (var island in islands)
             {
                 island.Update(gameTime);
             }
-            Camera.Update(player.Position, graphicsDevice.Viewport, MapWidth, MapHeight);
+            Camera.Update(player.Position.ToVector2(), graphicsDevice.Viewport, MapWidth, MapHeight);
             CollisionManager.Instance.Update(gameTime);
             DebugTools.ResetVerticalOffset();
+
+            if (InputManager.Instance.IsKeyHeld(Keys.OemPlus))
+                Background.Instance.SetScale(Background.Instance.GetScale() + 0.01f);
+            if (InputManager.Instance.IsKeyHeld(Keys.OemMinus))
+                Background.Instance.SetScale(Background.Instance.GetScale() - 0.01f);
+            if (InputManager.Instance.IsKeyPressed(Keys.R))
+                Background.Instance.SetRotation((Background.Instance.GetRotation() + 90f) % 360f);
         }
 
     public void Draw(SpriteBatch spriteBatch)

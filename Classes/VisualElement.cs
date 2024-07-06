@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using HandsOnDeck2.Classes;
+using System;
 
 namespace HandsOnDeck2.Classes
 {
@@ -34,16 +36,41 @@ namespace HandsOnDeck2.Classes
             animation?.Update(gameTime);
         }
 
-        public void Draw(SpriteBatch spriteBatch, Vector2 position, Vector2 origin, float scale, float rotation)
+        public void Draw(SpriteBatch spriteBatch, SeaCoordinate position, Vector2 origin, float scale, float rotation)
         {
-            if (animation != null)
+            Vector2[] drawPositions = GetDrawPositions(position);
+
+            foreach (Vector2 drawPosition in drawPositions)
             {
-                animation.Draw(spriteBatch, position, scale, rotation, origin, color, spriteEffects, layerDepth);
+                if (animation != null)
+                {
+                    animation.Draw(spriteBatch, drawPosition, scale, rotation, origin, color, spriteEffects, layerDepth);
+                }
+                else
+                {
+                    spriteBatch.Draw(texture, drawPosition, sourceRectangle, color, rotation, origin, scale, spriteEffects, layerDepth);
+                }
             }
-            else
+        }
+
+        private Vector2[] GetDrawPositions(SeaCoordinate position)
+        {
+            int mapWidth = Map.MapWidth;
+            int mapHeight = Map.MapHeight;
+            Vector2 pos = position.ToVector2();
+
+            return new Vector2[]
             {
-                spriteBatch.Draw(texture, position, sourceRectangle, color, rotation, origin, scale, spriteEffects, layerDepth);
-            }
+                pos,
+                new Vector2(pos.X - mapWidth, pos.Y),
+                new Vector2(pos.X + mapWidth, pos.Y),
+                new Vector2(pos.X, pos.Y - mapHeight),
+                new Vector2(pos.X, pos.Y + mapHeight),
+                new Vector2(pos.X - mapWidth, pos.Y - mapHeight),
+                new Vector2(pos.X + mapWidth, pos.Y - mapHeight),
+                new Vector2(pos.X - mapWidth, pos.Y + mapHeight),
+                new Vector2(pos.X + mapWidth, pos.Y + mapHeight)
+            };
         }
 
         public void SetColor(Color newColor)
