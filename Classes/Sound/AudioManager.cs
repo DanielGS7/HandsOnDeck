@@ -1,110 +1,221 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 using HandsOnDeck2.Enums;
 using HandsOnDeck2.Interfaces;
 
-namespace HandsOnDeck2.Classes
+namespace HandsOnDeck2.Classes.Sound
 {
     public class AudioManager
     {
         private static AudioManager instance;
         public static AudioManager Instance => instance ??= new AudioManager();
 
-        private Dictionary<string, Song> music;
-        private Dictionary<string, SoundEffect> soundEffects;
+        private Dictionary<GameState, List<Song>> stateMusicMap;
+        private Dictionary<string, List<SoundEffect>> soundEffects;
+        private Dictionary<string, SoundEffectInstance> loopingSounds;
+        private Dictionary<GameState, int> currentSongIndexPerState;
+        private Dictionary<GameState, TimeSpan> musicPositionPerState;
         private Song currentSong;
-        private Song nextSong;
+        private GameState currentGameState;
         private float musicTransitionTime;
-        private float currentMusicVolume;
-        private float nextMusicVolume;
+        private float initialTransitionTime;
+        private Random random;
 
-        public float MusicVolume { get; set; } = 1f;
-        public float SfxVolume { get; set; } = 1f;
-        public bool IsMusicEnabled { get; set; } = true;
-        public bool IsSfxEnabled { get; set; } = true;
+        public float MusicVolume { get { return GlobalInfo.MusicVolume; } set {GlobalInfo.MusicVolume = value; } }
+        public float SfxVolume { get { return GlobalInfo.SfxVolume; } set { GlobalInfo.SfxVolume = value; } }
+        public bool IsMusicEnabled { get { return GlobalInfo.IsMusicEnabled; } set { GlobalInfo.IsMusicEnabled = value; } }
+        public bool IsSfxEnabled { get { return GlobalInfo.IsSfxEnabled; } set { GlobalInfo.IsSfxEnabled = value; } }
 
         public AudioListener Listener { get; set; }
 
         private AudioManager()
         {
-            music = new Dictionary<string, Song>();
-            soundEffects = new Dictionary<string, SoundEffect>();
+            stateMusicMap = new Dictionary<GameState, List<Song>>();
+            soundEffects = new Dictionary<string, List<SoundEffect>>();
+            loopingSounds = new Dictionary<string, SoundEffectInstance>();
+            currentSongIndexPerState = new Dictionary<GameState, int>();
+            musicPositionPerState = new Dictionary<GameState, TimeSpan>();
             Listener = new AudioListener();
+            random = new Random();
         }
 
-        public void LoadContent(Microsoft.Xna.Framework.Content.ContentManager content)
+        public void LoadContent(ContentManager content)
         {
-            //WIP
+            LoadMusic(content);
+            LoadSoundEffects(content);
         }
 
-        public void PlayMusicForState(GameStates state)
+        private void LoadMusic(ContentManager content)
         {
-            string trackName = GetMusicForState(state);
-            PlayMusic(trackName);
-        }
-
-        private string GetMusicForState(GameStates state)
-        {
-            switch (state)
+            stateMusicMap[GameState.DefaultMenu] = new List<Song> { content.Load<Song>("Music/Menu01") };
+            stateMusicMap[GameState.PausedMenu] = new List<Song> { content.Load<Song>("Music/Menu01") };
+            stateMusicMap[GameState.GameOverMenu] = new List<Song> { content.Load<Song>("Music/GameOver01") };
+            stateMusicMap[GameState.Battle] = new List<Song> { content.Load<Song>("Music/Battle01") };
+            stateMusicMap[GameState.DefaultPlay] = new List<Song>
             {
-                case GameStates.DefaultMenu:
-                    return "?";
-                case GameStates.DefaultPlay:
-                    return "?";
-                default:
-                    return "?";
+                content.Load<Song>("Music/Play01"),
+                content.Load<Song>("Music/Play02"),
+                content.Load<Song>("Music/Play03")
+            };
+
+            foreach (var state in stateMusicMap.Keys)
+            {
+                currentSongIndexPerState[state] = -1;
+                musicPositionPerState[state] = TimeSpan.Zero;
+            }
+        }
+        private void LoadSoundEffects(ContentManager content)
+        {
+            string[] sfxCategories = { "notice", "reload", "gong_sink", "Creak", "damage", "explosion", "score", "reward", "cannonball_flyby", "cannon_fire" };
+            foreach (string category in sfxCategories)
+            {
+                soundEffects[category] = new List<SoundEffect>();
+                int index = 1;
+                while (true)
+                {
+                    try
+                    {
+                        string fileName = $"{category}{index:D2}";
+                        SoundEffect sfx = content.Load<SoundEffect>($"SFX/{fileName}");
+                        soundEffects[category].Add(sfx);
+                        index++;
+                    }
+                    catch (ContentLoadException)
+                    {
+                        break;
+                    }
+                }
             }
         }
 
-        public void PlayMusic(string trackName, float transitionTime = 1f)
+        public void PlayMusicForState(GameState state, float transitionTime = 1f)
         {
-            if (!IsMusicEnabled || !music.ContainsKey(trackName)) return;
+            if (!stateMusicMap.ContainsKey(state) || stateMusicMap[state].Count == 0) return;
 
-            if (currentSong == null)
+            if (state == currentGameState && MediaPlayer.State == MediaState.Playing)
             {
-                currentSong = music[trackName];
-                MediaPlayer.Play(currentSong);
-                MediaPlayer.IsRepeating = true;
-                MediaPlayer.Volume = MusicVolume;
+                return;
             }
-            else if (music[trackName] != currentSong)
+
+            if (currentGameState != GameState.DefaultMenu && MediaPlayer.State == MediaState.Playing)
             {
-                nextSong = music[trackName];
-                musicTransitionTime = transitionTime;
-                currentMusicVolume = MediaPlayer.Volume;
-                nextMusicVolume = 0f;
+                musicPositionPerState[currentGameState] = MediaPlayer.PlayPosition;
             }
+
+            currentGameState = state;
+
+            if (currentSongIndexPerState[state] == -1)
+            {
+                currentSongIndexPerState[state] = random.Next(stateMusicMap[state].Count);
+                musicPositionPerState[state] = TimeSpan.Zero;
+            }
+
+            Song selectedSong = stateMusicMap[state][currentSongIndexPerState[state]];
+            PlayMusic(selectedSong, musicPositionPerState[state], transitionTime);
         }
 
-        public void PlaySoundEffect(string sfxName, float volume = 1f, float pitch = 0f, float pan = 0f)
+        private void PlayMusic(Song song, TimeSpan startPosition, float transitionTime = 1f)
+        {
+            if (!IsMusicEnabled) return;
+
+            currentSong = song;
+            MediaPlayer.IsRepeating = true;
+            MediaPlayer.Volume = 0;
+
+            MediaPlayer.Play(currentSong, startPosition);
+
+            musicTransitionTime = transitionTime;
+        }
+        public void Play(string sfxName, int? specificIndex = null, float volume = 1f, float pitch = 0f, float pan = 0f)
         {
             if (!IsSfxEnabled || !soundEffects.ContainsKey(sfxName)) return;
 
-            soundEffects[sfxName].Play(volume * SfxVolume, pitch, pan);
+            List<SoundEffect> sfxList = soundEffects[sfxName];
+            if (sfxList.Count == 0) return;
+
+            SoundEffect sfx;
+            if (specificIndex.HasValue && specificIndex.Value >= 0 && specificIndex.Value < sfxList.Count)
+            {
+                sfx = sfxList[specificIndex.Value];
+            }
+            else
+            {
+                sfx = sfxList[random.Next(sfxList.Count)];
+            }
+
+            sfx.Play(volume * SfxVolume, pitch, pan);
+        }
+
+        public void PlayLooping(string sfxName, int? specificIndex = null, float volume = 1f, float pitch = 0f, float pan = 0f)
+        {
+            if (!IsSfxEnabled || !soundEffects.ContainsKey(sfxName)) return;
+
+            List<SoundEffect> sfxList = soundEffects[sfxName];
+            if (sfxList.Count == 0) return;
+
+            SoundEffect sfx;
+            if (specificIndex.HasValue && specificIndex.Value >= 0 && specificIndex.Value < sfxList.Count)
+            {
+                sfx = sfxList[specificIndex.Value];
+            }
+            else
+            {
+                sfx = sfxList[random.Next(sfxList.Count)];
+            }
+
+            if (loopingSounds.ContainsKey(sfxName))
+            {
+                loopingSounds[sfxName].Stop();
+                loopingSounds.Remove(sfxName);
+            }
+
+            SoundEffectInstance instance = sfx.CreateInstance();
+            instance.IsLooped = true;
+            instance.Volume = volume * SfxVolume;
+            instance.Pitch = pitch;
+            instance.Pan = pan;
+            instance.Play();
+
+            loopingSounds[sfxName] = instance;
+        }
+
+        public void StopLooping(string sfxName)
+        {
+            if (loopingSounds.ContainsKey(sfxName))
+            {
+                loopingSounds[sfxName].Stop();
+                loopingSounds.Remove(sfxName);
+            }
         }
 
         public void Update(GameTime gameTime)
         {
-            if (nextSong != null)
+            UpdateMusicTransition(gameTime);
+            if (MediaPlayer.State == MediaState.Stopped)
+            {
+                currentSongIndexPerState[currentGameState] = (currentSongIndexPerState[currentGameState] + 1) % stateMusicMap[currentGameState].Count;
+                musicPositionPerState[currentGameState] = TimeSpan.Zero;
+                PlayMusicForState(currentGameState);
+            }
+        }
+
+        private void UpdateMusicTransition(GameTime gameTime)
+        {
+            if (musicTransitionTime > 0)
             {
                 float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-                currentMusicVolume = MathHelper.Max(currentMusicVolume - deltaTime / musicTransitionTime, 0f);
-                nextMusicVolume = MathHelper.Min(nextMusicVolume + deltaTime / musicTransitionTime, MusicVolume);
 
-                MediaPlayer.Volume = currentMusicVolume;
+                float progress = 1 - (musicTransitionTime / initialTransitionTime);
+                    
+                MediaPlayer.Volume = MathHelper.Lerp(0, MusicVolume, progress);
 
-                if (currentMusicVolume == 0f)
-                {
-                    currentSong = nextSong;
-                    nextSong = null;
-                    MediaPlayer.Play(currentSong);
-                    MediaPlayer.Volume = nextMusicVolume;
-                }
+                musicTransitionTime = Math.Max(0, musicTransitionTime - deltaTime);
             }
-            else
+            else if (MediaPlayer.Volume < MusicVolume)
             {
                 MediaPlayer.Volume = MusicVolume;
             }
@@ -114,7 +225,6 @@ namespace HandsOnDeck2.Classes
         {
             MediaPlayer.Stop();
             currentSong = null;
-            nextSong = null;
         }
     }
 }

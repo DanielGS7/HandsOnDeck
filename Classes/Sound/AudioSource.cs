@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
+using HandsOnDeck2.Classes.Sound;
 
-namespace HandsOnDeck2.Classes
+namespace HandsOnDeck2.Classes.Sound
 {
     public class AudioSource
     {
@@ -28,7 +29,7 @@ namespace HandsOnDeck2.Classes
             float volume = Loudness * attenuation;
             float pan = MathHelper.Clamp(direction.X / (Radius * 0.5f), -1f, 1f);
 
-            AudioManager.Instance.PlaySoundEffect(SoundEffectName, volume, 0f, pan);
+            AudioManager.Instance.Play(SoundEffectName,0,volume, 0f, pan);
         }
     }
 }

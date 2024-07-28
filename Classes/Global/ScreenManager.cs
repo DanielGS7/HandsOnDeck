@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using HandsOnDeck2.Classes.Sound;
+using HandsOnDeck2.Interfaces;
 
 namespace HandsOnDeck2.Classes.UI.Screens
 {
@@ -46,7 +48,7 @@ namespace HandsOnDeck2.Classes.UI.Screens
                 screen.Initialize();
                 screen.LoadContent();
             }
-
+            AudioManager.Instance.LoadContent(content);
             ChangeScreen(ScreenType.MainMenu);
         }
 
@@ -56,13 +58,38 @@ namespace HandsOnDeck2.Classes.UI.Screens
             {
                 screens[currentScreenType].IsActive = false;
                 currentScreenType = screenType;
+
+                GameState newGameState = DetermineGameState(screenType);
+                AudioManager.Instance.PlayMusicForState(newGameState, 1f);
+
                 screens[currentScreenType].IsActive = true;
+            }
+        }
+
+        private GameState DetermineGameState(ScreenType screenType)
+        {
+            switch (screenType)
+            {
+                case ScreenType.MainMenu:
+                case ScreenType.Settings:
+                case ScreenType.Difficulty:
+                    return GameState.DefaultMenu;
+                case ScreenType.Gameplay:
+                    return GameState.DefaultPlay;
+                case ScreenType.Pause:
+                    return GameState.PausedMenu;
+                case ScreenType.GameOver:
+                    return GameState.GameOverMenu;
+                default:
+                    return GameState.DefaultMenu;
             }
         }
 
         public void Update(GameTime gameTime)
         {
+            AudioManager.Instance.Update(gameTime);
             screens[currentScreenType].Update(gameTime);
+
         }
 
         public void Draw(SpriteBatch spriteBatch)

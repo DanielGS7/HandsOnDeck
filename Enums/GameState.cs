@@ -1,11 +1,10 @@
 ﻿namespace HandsOnDeck2.Enums
 {
-    public enum GameStates
+    public enum GameState
     {
         DefaultMenu,
         PausedMenu,
         GameOverMenu,
-        StartingGame,
         Battle,
         DefaultPlay
     }

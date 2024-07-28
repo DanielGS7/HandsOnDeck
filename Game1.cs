@@ -5,6 +5,8 @@ using HandsOnDeck2.Classes;
 using HandsOnDeck2.Enums;
 using HandsOnDeck2.Classes.UI.Screens;
 using HandsOnDeck2.Classes.CodeAccess;
+using Microsoft.Xna.Framework.Media;
+using HandsOnDeck2.Classes.Sound;
 
 namespace HandsOnDeck2
 {
@@ -92,7 +94,10 @@ namespace HandsOnDeck2
 
         public void ApplySettings(float volume, bool fullscreen)
         {
-            _graphics.IsFullScreen = fullscreen;
+            GlobalInfo.MusicVolume = volume/2;
+            GlobalInfo.SfxVolume = volume;
+            MediaPlayer.Volume = volume;
+            if (_graphics.IsFullScreen != fullscreen) _graphics.IsFullScreen = fullscreen;
             _graphics.ApplyChanges();
         }
     }
