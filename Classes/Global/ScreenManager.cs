@@ -60,7 +60,7 @@ namespace HandsOnDeck2.Classes.UI.Screens
                 currentScreenType = screenType;
 
                 GameState newGameState = DetermineGameState(screenType);
-                AudioManager.Instance.PlayMusicForState(newGameState, 1f);
+                AudioManager.Instance.PlayMusicForState(newGameState, 3f);
 
                 screens[currentScreenType].IsActive = true;
             }

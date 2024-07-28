@@ -24,8 +24,10 @@ namespace HandsOnDeck2.Classes.Sound
         private float musicTransitionTime;
         private float initialTransitionTime;
         private Random random;
+        private bool isFadingOut = false;
+        private GameState pendingGameState;
 
-        public float MusicVolume { get { return GlobalInfo.MusicVolume; } set {GlobalInfo.MusicVolume = value; } }
+        public float MusicVolume { get { return GlobalInfo.MusicVolume; } set { GlobalInfo.MusicVolume = value; } }
         public float SfxVolume { get { return GlobalInfo.SfxVolume; } set { GlobalInfo.SfxVolume = value; } }
         public bool IsMusicEnabled { get { return GlobalInfo.IsMusicEnabled; } set { GlobalInfo.IsMusicEnabled = value; } }
         public bool IsSfxEnabled { get { return GlobalInfo.IsSfxEnabled; } set { GlobalInfo.IsSfxEnabled = value; } }
@@ -68,6 +70,7 @@ namespace HandsOnDeck2.Classes.Sound
                 musicPositionPerState[state] = TimeSpan.Zero;
             }
         }
+
         private void LoadSoundEffects(ContentManager content)
         {
             string[] sfxCategories = { "notice", "reload", "gong_sink", "Creak", "damage", "explosion", "score", "reward", "cannonball_flyby", "cannon_fire" };
@@ -101,17 +104,27 @@ namespace HandsOnDeck2.Classes.Sound
                 return;
             }
 
-            if (currentGameState != GameState.DefaultMenu && MediaPlayer.State == MediaState.Playing)
+            if (MediaPlayer.State == MediaState.Playing)
             {
                 musicPositionPerState[currentGameState] = MediaPlayer.PlayPosition;
+                isFadingOut = true;
+                pendingGameState = state;
+                musicTransitionTime = transitionTime;
+                initialTransitionTime = transitionTime;
             }
+            else
+            {
+                FadeOutAndPlayNew(state, transitionTime);
+            }
+        }
 
+        private void FadeOutAndPlayNew(GameState state, float transitionTime)
+        {
             currentGameState = state;
 
             if (currentSongIndexPerState[state] == -1)
             {
                 currentSongIndexPerState[state] = random.Next(stateMusicMap[state].Count);
-                musicPositionPerState[state] = TimeSpan.Zero;
             }
 
             Song selectedSong = stateMusicMap[state][currentSongIndexPerState[state]];
@@ -129,7 +142,9 @@ namespace HandsOnDeck2.Classes.Sound
             MediaPlayer.Play(currentSong, startPosition);
 
             musicTransitionTime = transitionTime;
+            initialTransitionTime = transitionTime;
         }
+
         public void Play(string sfxName, int? specificIndex = null, float volume = 1f, float pitch = 0f, float pan = 0f)
         {
             if (!IsSfxEnabled || !soundEffects.ContainsKey(sfxName)) return;
@@ -194,12 +209,36 @@ namespace HandsOnDeck2.Classes.Sound
 
         public void Update(GameTime gameTime)
         {
-            UpdateMusicTransition(gameTime);
-            if (MediaPlayer.State == MediaState.Stopped)
+            if (isFadingOut)
+            {
+                UpdateFadeOut(gameTime);
+            }
+            else
+            {
+                UpdateMusicTransition(gameTime);
+            }
+
+            if (MediaPlayer.State == MediaState.Stopped && !isFadingOut)
             {
                 currentSongIndexPerState[currentGameState] = (currentSongIndexPerState[currentGameState] + 1) % stateMusicMap[currentGameState].Count;
                 musicPositionPerState[currentGameState] = TimeSpan.Zero;
-                PlayMusicForState(currentGameState);
+                PlayMusicForState(currentGameState, 4f);
+            }
+        }
+
+        private void UpdateFadeOut(GameTime gameTime)
+        {
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            
+            float progress = 1 - (musicTransitionTime / initialTransitionTime);
+            MediaPlayer.Volume = MathHelper.Lerp(MusicVolume, 0, progress);
+
+            musicTransitionTime = Math.Max(0, musicTransitionTime - deltaTime);
+
+            if (musicTransitionTime <= 0)
+            {
+                isFadingOut = false;
+                FadeOutAndPlayNew(pendingGameState, initialTransitionTime);
             }
         }
 
