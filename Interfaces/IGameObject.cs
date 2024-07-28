@@ -1,4 +1,5 @@
-﻿using HandsOnDeck2.Classes;
+﻿using HandsOnDeck2.Classes.Global;
+using HandsOnDeck2.Classes.Rendering;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
