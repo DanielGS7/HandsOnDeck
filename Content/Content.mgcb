@@ -668,6 +668,42 @@
 /processorParam:TextureFormat=Color
 /build:movingBoat.png
 
+#begin Music/Battle01.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/Battle01.mp3
+
+#begin Music/GameOver01.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/GameOver01.mp3
+
+#begin Music/Menu01.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/Menu01.mp3
+
+#begin Music/Play01.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/Play01.mp3
+
+#begin Music/Play02.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/Play02.mp3
+
+#begin Music/Play03.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/Play03.mp3
+
 #begin ocean.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -679,6 +715,186 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:ocean.png
+
+#begin SFX/cannon_fire01.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/cannon_fire01.wav
+
+#begin SFX/cannon_fire02.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/cannon_fire02.wav
+
+#begin SFX/cannon_fire03.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/cannon_fire03.wav
+
+#begin SFX/cannon_fire04.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/cannon_fire04.wav
+
+#begin SFX/cannon_fire05.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/cannon_fire05.wav
+
+#begin SFX/cannon_fire06.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/cannon_fire06.wav
+
+#begin SFX/cannonball_blyby04.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/cannonball_blyby04.wav
+
+#begin SFX/cannonball_flyby01.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/cannonball_flyby01.wav
+
+#begin SFX/cannonball_flyby02.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/cannonball_flyby02.wav
+
+#begin SFX/cannonball_flyby03.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/cannonball_flyby03.wav
+
+#begin SFX/Creaks01.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/Creaks01.wav
+
+#begin SFX/Creaks02.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/Creaks02.wav
+
+#begin SFX/damage01.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/damage01.wav
+
+#begin SFX/damage02.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/damage02.wav
+
+#begin SFX/damage03.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/damage03.wav
+
+#begin SFX/damage04.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/damage04.wav
+
+#begin SFX/damage05.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/damage05.wav
+
+#begin SFX/damage06.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/damage06.wav
+
+#begin SFX/damage07.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/damage07.wav
+
+#begin SFX/exploasion02.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/exploasion02.wav
+
+#begin SFX/explosion01.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/explosion01.wav
+
+#begin SFX/explosion03.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/explosion03.wav
+
+#begin SFX/explosion04.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/explosion04.wav
+
+#begin SFX/explosion05.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/explosion05.wav
+
+#begin SFX/gong_sink01.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/gong_sink01.wav
+
+#begin SFX/gong_sink02.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/gong_sink02.wav
+
+#begin SFX/notice.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/notice.wav
+
+#begin SFX/reload01.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/reload01.wav
+
+#begin SFX/reward01.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/reward01.wav
+
+#begin SFX/score01.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/score01.wav
 
 #begin water.png
 /importer:TextureImporter
