@@ -96,6 +96,13 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
             VisualElement.Draw(spriteBatch, Position, Origin, Scale, Rotation);
         }
 
+        public void LoadFromSaveData(Boat saveData)
+        {
+            this.Position = saveData.Position;
+            this.Rotation = saveData.Rotation;
+            this.Scale = saveData.Scale;
+            this.Speed = saveData.Speed;
+        }
         public void OnCollision(ICollideable other)
         {
         }

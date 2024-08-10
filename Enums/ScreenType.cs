@@ -3,6 +3,8 @@
     public enum ScreenType
     {
         MainMenu,
+        LoadGame,
+        SaveGame,
         Gameplay,
         Pause,
         Settings,

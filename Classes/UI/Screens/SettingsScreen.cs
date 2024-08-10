@@ -12,10 +12,16 @@ namespace HandsOnDeck2.Classes.UI.Screens
         private VolumeSlider volumeSlider;
         private Checkbox fullscreenCheckbox;
         private VideoBackground videoBackground;
+        private ScreenType previousScreen;
 
         public SettingsScreen(GraphicsDevice graphicsDevice, ContentManager content) : base(graphicsDevice, content)
         {
             videoBackground = new VideoBackground(graphicsDevice, content, "background\\background_frame_", 29, 25);
+        }
+
+        public void SetPreviousScreen(ScreenType screen)
+        {
+            previousScreen = screen;
         }
 
         public override void Initialize()
@@ -56,7 +62,7 @@ namespace HandsOnDeck2.Classes.UI.Screens
 
         private void GoBack()
         {
-            ScreenManager.Instance.ChangeScreen(ScreenType.MainMenu);
+            ScreenManager.Instance.ChangeScreen(previousScreen);
         }
 
         public override void HandleInput()

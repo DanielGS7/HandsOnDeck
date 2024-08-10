@@ -8,7 +8,7 @@ namespace HandsOnDeck2.Classes.Rendering
     public class Camera
     {
         public Matrix Transform { get; private set; }
-        public Vector2 Position { get; private set; }
+        public Vector2 Position { get; set; }
         private Vector2 offset;
 
         public Camera()

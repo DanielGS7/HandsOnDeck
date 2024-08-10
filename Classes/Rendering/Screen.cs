@@ -61,5 +61,7 @@ namespace HandsOnDeck2.Classes.Rendering
                 element.Draw(spriteBatch);
             }
         }
+        
+        public virtual void OnActivate() { }
     }
 }

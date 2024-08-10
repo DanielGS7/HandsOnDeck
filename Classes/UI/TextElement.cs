@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Windows.Markup;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -10,6 +11,8 @@ namespace HandsOnDeck2.Classes
         private string text;
         private Color color;
         private float textScale;
+
+        public string Text {get { return text; } set { text = value; }}
 
         public TextElement(ContentManager content, string text, Vector2 positionPercentage, float rotation, Color color, float textScale = 1f)
             : base(positionPercentage, Vector2.Zero, rotation)

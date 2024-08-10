@@ -14,6 +14,7 @@ namespace HandsOnDeck2.Classes.UI.Screens
         private static ScreenManager instance;
         private Dictionary<ScreenType, Screen> screens;
         private ScreenType currentScreenType;
+        private ScreenType previousScreenType;
 
         public static ScreenManager Instance
         {
@@ -42,6 +43,8 @@ namespace HandsOnDeck2.Classes.UI.Screens
             screens[ScreenType.Settings] = new SettingsScreen(graphicsDevice, content);
             screens[ScreenType.GameOver] = new GameOverScreen(graphicsDevice, content);
             screens[ScreenType.Difficulty] = new DifficultyScreen(graphicsDevice, content);
+            screens[ScreenType.LoadGame] = new LoadGameScreen(graphicsDevice, content);
+            screens[ScreenType.SaveGame] = new SaveGameScreen(graphicsDevice, content);
 
             foreach (var screen in screens.Values)
             {
@@ -52,19 +55,21 @@ namespace HandsOnDeck2.Classes.UI.Screens
             ChangeScreen(ScreenType.MainMenu);
         }
 
-        public void ChangeScreen(ScreenType screenType)
+
+    public void ChangeScreen(ScreenType screenType)
+    {
+        if (screens.ContainsKey(screenType))
         {
-            if (screens.ContainsKey(screenType))
-            {
-                screens[currentScreenType].IsActive = false;
-                currentScreenType = screenType;
+            screens[currentScreenType].IsActive = false;
+            currentScreenType = screenType;
 
-                GameState newGameState = DetermineGameState(screenType);
-                AudioManager.Instance.PlayMusicForState(newGameState, 3f);
+            GameState newGameState = DetermineGameState(screenType);
+            AudioManager.Instance.PlayMusicForState(newGameState, 3f);
 
-                screens[currentScreenType].IsActive = true;
-            }
+            screens[currentScreenType].IsActive = true;
+            screens[currentScreenType].OnActivate();
         }
+    }
 
         private GameState DetermineGameState(ScreenType screenType)
         {
@@ -73,6 +78,8 @@ namespace HandsOnDeck2.Classes.UI.Screens
                 case ScreenType.MainMenu:
                 case ScreenType.Settings:
                 case ScreenType.Difficulty:
+                case ScreenType.LoadGame:
+                case ScreenType.SaveGame:
                     return GameState.DefaultMenu;
                 case ScreenType.Gameplay:
                     return GameState.DefaultPlay;
@@ -89,7 +96,6 @@ namespace HandsOnDeck2.Classes.UI.Screens
         {
             AudioManager.Instance.Update(gameTime);
             screens[currentScreenType].Update(gameTime);
-
         }
 
         public void Draw(SpriteBatch spriteBatch)

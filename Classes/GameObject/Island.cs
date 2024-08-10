@@ -102,6 +102,14 @@ namespace HandsOnDeck2.Classes.GameObject
                 (float)new Random().NextDouble() * Map.MapHeight
             );
         }
+        public void LoadFromSaveData(Island saveData)
+        {
+            this.Position = saveData.Position;
+            this.Rotation = saveData.Rotation;
+            this.Scale = saveData.Scale;
+            this.Name = saveData.Name;
+            this.SpriteIndex = saveData.SpriteIndex;
+        }
         public void OnCollision(ICollideable other)
         {
         }

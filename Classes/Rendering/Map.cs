@@ -154,6 +154,65 @@ namespace HandsOnDeck2.Classes.Rendering
             return viewport.Contains(position);
         }
 
+                public Boat GetPlayerBoat()
+        {
+            return player;
+        }
+
+        public void LoadGameSaveData(GameSaveData gameState)
+        {
+            if (gameState == null)
+            {
+                throw new ArgumentNullException(nameof(gameState), "Game state cannot be null.");
+            }
+
+            if (gameState.PlayerBoat == null)
+            {
+                throw new InvalidOperationException("PlayerBoat in the loaded game state is null.");
+            }
+
+            CollisionManager.Instance.Reset();
+            islands.Clear();
+
+            MapWidth = gameState.MapWidth;
+            MapHeight = gameState.MapHeight;
+            SeaCoordinate.SetMapDimensions(MapWidth, MapHeight);
+
+            player = new Boat(content, gameState.PlayerBoat.Position);
+            player.LoadFromSaveData(gameState.PlayerBoat);
+            CollisionManager.Instance.AddCollideable(player);
+
+            foreach (var islandData in gameState.Islands)
+            {
+                var island = new Island(content, graphicsDevice, islandData.SpriteIndex, islandData.Name, islandData.Position, islandData.Scale, islandData.Rotation);
+                islands.Add(island);
+                CollisionManager.Instance.AddCollideable(island);
+            }
+
+            Camera.Position = player.Position.ToVector2();
+            GlobalInfo.Score = gameState.Score;
+        }
+
+        public void SetPlayerBoat(Boat boat)
+        {
+            player = boat;
+            CollisionManager.Instance.AddCollideable(player);
+        }
+
+        public List<Island> GetIslands()
+        {
+            return islands;
+        }
+
+        public void SetIslands(List<Island> newIslands)
+        {
+            islands = newIslands;
+            foreach (var island in islands)
+            {
+                CollisionManager.Instance.AddCollideable(island);
+            }
+        }
+
         internal void ResetGame()
         {
             lock (_lock)
