@@ -2,8 +2,11 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using HandsOnDeck2.Classes;
-using HandsOnDeck2.Classes.States;
 using HandsOnDeck2.Enums;
+using HandsOnDeck2.Classes.UI.Screens;
+using HandsOnDeck2.Classes.CodeAccess;
+using Microsoft.Xna.Framework.Media;
+using HandsOnDeck2.Classes.Sound;
 
 namespace HandsOnDeck2
 {
@@ -11,11 +14,15 @@ namespace HandsOnDeck2
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private Map _map;
+        private KeyboardState _previousKeyboardState;
+        private Difficulty currentDifficulty;
 
+        private static Game1 instance;
+        public static Game1 Instance => instance;
 
         public Game1()
         {
+            instance = this;
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
@@ -27,39 +34,71 @@ namespace HandsOnDeck2
 
         protected override void Initialize()
         {
-            GameStateManager.Instance.AddState(GameStates.MainMenu, new MainMenuState(Content, GraphicsDevice));
-            GameStateManager.Instance.ChangeState(GameStates.MainMenu);
-            //_map = Map.Instance;
-            //_map.Initialize(Content, GraphicsDevice);
             base.Initialize();
+            GraphDev.Initialize(GraphicsDevice);
+            ScreenManager.Instance.Initialize(GraphicsDevice, Content);
+            ScreenManager.Instance.ChangeScreen(ScreenType.MainMenu);
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            //_map.LoadContent();
-            DebugTools.Initialize(GraphicsDevice, Content);
         }
 
         protected override void Update(GameTime gameTime)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            KeyboardState currentKeyboardState = Keyboard.GetState();
+            GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
 
-            GameStateManager.Instance.Update(gameTime);
+            if ((gamePadState.Buttons.Back == ButtonState.Pressed && _previousKeyboardState.IsKeyUp(Keys.Escape)) ||
+                (currentKeyboardState.IsKeyDown(Keys.Escape) && _previousKeyboardState.IsKeyUp(Keys.Escape)))
+            {
+                HandleEscapeInput();
+            }
 
+            ScreenManager.Instance.Update(gameTime);
 
-           // _map.Update(gameTime);
+            _previousKeyboardState = currentKeyboardState;
 
             base.Update(gameTime);
+        }
+
+        private void HandleEscapeInput()
+        {
+            switch (ScreenManager.Instance.CurrentScreenType)
+            {
+                case ScreenType.Gameplay:
+                    ScreenManager.Instance.ChangeScreen(ScreenType.Pause);
+                    break;
+                case ScreenType.Pause:
+                    ScreenManager.Instance.ChangeScreen(ScreenType.Gameplay);
+                    break;
+            }
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            GameStateManager.Instance.Draw(_spriteBatch);
-            //_map.Draw(_spriteBatch);
+
+            _spriteBatch.Begin();
+            ScreenManager.Instance.Draw(_spriteBatch);
+            _spriteBatch.End();
+
             base.Draw(gameTime);
+        }
+
+        public void SetDifficulty(Difficulty difficulty)
+        {
+            currentDifficulty = difficulty;
+        }
+
+        public void ApplySettings(float volume, bool fullscreen)
+        {
+            GlobalInfo.MusicVolume = volume/2;
+            GlobalInfo.SfxVolume = volume;
+            MediaPlayer.Volume = volume;
+            if (_graphics.IsFullScreen != fullscreen) _graphics.IsFullScreen = fullscreen;
+            _graphics.ApplyChanges();
         }
     }
 }

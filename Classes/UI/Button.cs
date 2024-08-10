@@ -1,79 +1,102 @@
-using HandsOnDeck2.Interfaces;
+﻿using HandsOnDeck2.Classes.Rendering;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
-namespace HandsOnDeck2.Classes.UI
+namespace HandsOnDeck2.Classes
 {
-    public class Button : IUIInteractable
+    public class Button : UIElement
     {
         private Texture2D texture;
-        private Rectangle bounds;
-        private bool isHovered;
-        private Color color;
         private SpriteFont font;
         private string text;
+        private const float TextScaleFactor = 0.5f;
+        private Action onClick;
+        private bool isHovered;
+        private bool isPressed;
+        private float clickTimer;
 
-        public VisualElement VisualElement { get; set; }
-        public Vector2 Position { get; set; }
-        public Vector2 Size { get; set; }
+        private const float BaseScale = 1.0f;
+        private const float HoverScale = 1.1f;
+        private const float ClickScale = 0.9f;
+        private const float TextPadding = 20f;
+        private const float ClickDelay = 0.15f;
 
-        public Button(ContentManager content, Rectangle bounds, Vector2 position, string text, SpriteFont font)
+        public Button(GraphicsDevice graphicsDevice, ContentManager content, string text, Vector2 positionPercentage, Vector2 sizePercentage, float rotation, string textureName, Action onClick)
+            : base(positionPercentage, sizePercentage, rotation)
         {
-            this.texture = content.Load<Texture2D>("button_rectangle_depth_gloss");
-            this.bounds = bounds;
-            this.isHovered = false;
-            this.color = Color.White;
-            this.Position = position;
-            this.Size = new Vector2(texture.Width, texture.Height);
-            this.font = font;
             this.text = text;
+            this.onClick = onClick;
 
-            VisualElement = new VisualElement(texture, Position, Vector2.Zero, 1.0f, 0.0f, Color.White, SpriteEffects.None, 0.0f);
+            texture = content.Load<Texture2D>(textureName);
+            font = content.Load<SpriteFont>("default");
+
+            VisualElement = new VisualElement(texture, Color.White, SpriteEffects.None, 0f);
         }
 
-        public void HandleInput(MouseState mouseState)
+        public override void Update(GameTime gameTime, Viewport viewport)
         {
-            if (IsHovered(mouseState))
-            {
-                color = Color.Gray; // Change color on hover
-                isHovered = true;
+            base.Update(gameTime, viewport);
 
+            MouseState mouseState = Mouse.GetState();
+            Point mousePosition = mouseState.Position;
+
+            isHovered = bounds.Contains(mousePosition);
+
+            if (clickTimer > 0)
+            {
+                clickTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (clickTimer <= 0)
+                {
+                    onClick?.Invoke();
+                }
+            }
+            else if (isHovered)
+            {
                 if (mouseState.LeftButton == ButtonState.Pressed)
                 {
-                    // Handle click event
+                    isPressed = true;
+                    scale = MathHelper.Lerp(scale, ClickScale, 0.25f);
+                }
+                else if (mouseState.LeftButton == ButtonState.Released && isPressed)
+                {
+                    isPressed = false;
+                    clickTimer = ClickDelay;
+                }
+                else
+                {
+                    scale = MathHelper.Lerp(scale, HoverScale, 0.25f);
                 }
             }
             else
             {
-                color = Color.White;
-                isHovered = false;
+                isPressed = false;
+                scale = MathHelper.Lerp(scale, BaseScale, 0.25f);
             }
         }
 
-        public bool IsHovered(MouseState mouseState)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            return bounds.Contains(mouseState.Position);
-        }
+            Vector2 origin = new Vector2(texture.Width / 2f, texture.Height / 2f);
+            float buttonScale = Math.Min(size.X / texture.Width, size.Y / texture.Height) * scale;
 
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            VisualElement.Draw(spriteBatch);
+            spriteBatch.Draw(texture, position, null, Color.White, rotation, origin, buttonScale, SpriteEffects.None, 0f);
 
-            // Calculate text position (centered)
             Vector2 textSize = font.MeasureString(text);
-            Vector2 textPosition = new Vector2(
-                Position.X + (Size.X - textSize.X) / 2,
-                Position.Y + (Size.Y - textSize.Y) / 2
-            );
+            float textScaleX = (size.X * TextScaleFactor) / textSize.X;
+            float textScaleY = (size.Y * TextScaleFactor) / textSize.Y;
+            float textScale = Math.Min(textScaleX, textScaleY);
+            
+            Vector2 textPosition = position;
+            Vector2 textOrigin = textSize / 2f;
+            spriteBatch.DrawString(font, text, textPosition, Color.Black, rotation, textOrigin, textScale, SpriteEffects.None, 0f);
 
-            spriteBatch.DrawString(font, text, textPosition, Color.Black);
-        }
-
-        public void Update(GameTime gameTime)
-        {
-            VisualElement.Update(gameTime);
+            if (isHovered)
+            {
+                spriteBatch.Draw(texture, position, null, Color.White * 0.3f, rotation, origin, buttonScale, SpriteEffects.None, 0f);
+            }
         }
     }
 }
