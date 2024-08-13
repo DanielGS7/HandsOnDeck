@@ -4,6 +4,9 @@ using HandsOnDeck2.Interfaces;
 using System.Collections.Generic;
 using System;
 using HandsOnDeck2.Classes.CodeAccess;
+using HandsOnDeck2.Classes.Rendering;
+using System.Linq;
+using HandsOnDeck2.Classes.GameObject;
 
 namespace HandsOnDeck2.Classes.Collision
 {
@@ -50,21 +53,37 @@ namespace HandsOnDeck2.Classes.Collision
 
         public void Update(GameTime gameTime)
         {
-            foreach (var collideable in collideables)
+            var projectiles = Map.Instance.GetProjectiles();
+            List<ICollideable> currentCollideables = collideables.ToList();
+            foreach (var collideable in currentCollideables)
             {
                 collideable.IsColliding = false;
             }
 
-            for (int i = 0; i < collideables.Count; i++)
+            for (int i = 0; i < currentCollideables.Count; i++)
             {
-                for (int j = i + 1; j < collideables.Count; j++)
+                for (int j = i + 1; j < currentCollideables.Count; j++)
                 {
-                    if (CheckCollision(collideables[i], collideables[j]))
+                    if (CheckCollision(currentCollideables[i], currentCollideables[j]))
                     {
-                        collideables[i].IsColliding = true;
-                        collideables[j].IsColliding = true;
-                        collideables[i].OnCollision(collideables[j]);
-                        collideables[j].OnCollision(collideables[i]);
+                        currentCollideables[i].IsColliding = true;
+                        currentCollideables[j].IsColliding = true;
+                        currentCollideables[i].OnCollision(currentCollideables[j]);
+                        currentCollideables[j].OnCollision(currentCollideables[i]);
+                    }
+                }
+            }
+            foreach (var projectile in projectiles)
+            {
+                if (projectile is ICollideable collideable)
+                {
+                    foreach (var other in currentCollideables)
+                    {
+                        if (other != collideable && CheckCollision(collideable, other))
+                        {
+                            collideable.OnCollision(other);
+                            other.OnCollision(collideable);
+                        }
                     }
                 }
             }
@@ -77,9 +96,24 @@ namespace HandsOnDeck2.Classes.Collision
 
             for (int i = 0; i < 4; i++)
             {
-                if (IsPointInPolygon(cornersA[i], cornersB) || IsPointInPolygon(cornersB[i], cornersA))
-                {
+                if (IsPointInPolygon(cornersA[i], cornersB))
                     return true;
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                if (IsPointInPolygon(cornersB[i], cornersA))
+                    return true;
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                int nextA = (i + 1) % 4;
+                for (int j = 0; j < 4; j++)
+                {
+                    int nextB = (j + 1) % 4;
+                    if (LineIntersects(cornersA[i], cornersA[nextA], cornersB[j], cornersB[nextB]))
+                        return true;
                 }
             }
 
@@ -88,25 +122,29 @@ namespace HandsOnDeck2.Classes.Collision
 
         private Vector2[] GetRotatedRectangleCorners(ICollideable collideable)
         {
-            Vector2 size = collideable.Size * collideable.Scale;
-            Vector2 origin = collideable.Origin * collideable.Scale;
+            Vector2 size;
+            Vector2 position = collideable.Position.ToVector2();
             float rotation = collideable.Rotation;
 
-            Vector2[] corners = new Vector2[4];
-            Vector2 topLeft = new Vector2(-origin.X, -origin.Y);
-            Vector2 topRight = new Vector2(size.X - origin.X, -origin.Y);
-            Vector2 bottomRight = new Vector2(size.X - origin.X, size.Y - origin.Y);
-            Vector2 bottomLeft = new Vector2(-origin.X, size.Y - origin.Y);
+            if (collideable is Island island)
+            {
+                size = island.ColliderSize;
+            }
+            else
+            {
+                size = collideable.Size * collideable.Scale;
+            }
 
-            Vector2 position = collideable.Position.ToVector2();
-            corners[0] = Vector2.Transform(topLeft, Matrix.CreateRotationZ(rotation)) + position;
-            corners[1] = Vector2.Transform(topRight, Matrix.CreateRotationZ(rotation)) + position;
-            corners[2] = Vector2.Transform(bottomRight, Matrix.CreateRotationZ(rotation)) + position;
-            corners[3] = Vector2.Transform(bottomLeft, Matrix.CreateRotationZ(rotation)) + position;
+            Vector2 halfSize = size / 2;
+
+            Vector2[] corners = new Vector2[4];
+            corners[0] = Vector2.Transform(new Vector2(-halfSize.X, -halfSize.Y), Matrix.CreateRotationZ(rotation)) + position;
+            corners[1] = Vector2.Transform(new Vector2(halfSize.X, -halfSize.Y), Matrix.CreateRotationZ(rotation)) + position;
+            corners[2] = Vector2.Transform(new Vector2(halfSize.X, halfSize.Y), Matrix.CreateRotationZ(rotation)) + position;
+            corners[3] = Vector2.Transform(new Vector2(-halfSize.X, halfSize.Y), Matrix.CreateRotationZ(rotation)) + position;
 
             return corners;
         }
-
         private bool IsPointInPolygon(Vector2 point, Vector2[] polygon)
         {
             bool inside = false;
@@ -120,7 +158,26 @@ namespace HandsOnDeck2.Classes.Collision
             }
             return inside;
         }
+        private bool LineIntersects(Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2)
+        {
+            Vector2 b = a2 - a1;
+            Vector2 d = b2 - b1;
+            float bDotDPerp = b.X * d.Y - b.Y * d.X;
 
+            if (bDotDPerp == 0)
+                return false;
+
+            Vector2 c = b1 - a1;
+            float t = (c.X * d.Y - c.Y * d.X) / bDotDPerp;
+            if (t < 0 || t > 1)
+                return false;
+
+            float u = (c.X * b.Y - c.Y * b.X) / bDotDPerp;
+            if (u < 0 || u > 1)
+                return false;
+
+            return true;
+        }
         public void Draw(SpriteBatch spriteBatch)
         {
             if (!DrawColliders) return;

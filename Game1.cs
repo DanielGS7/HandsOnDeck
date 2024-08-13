@@ -7,6 +7,8 @@ using HandsOnDeck2.Classes.UI.Screens;
 using HandsOnDeck2.Classes.CodeAccess;
 using Microsoft.Xna.Framework.Media;
 using HandsOnDeck2.Classes.Sound;
+using HandsOnDeck2.Classes.GameObject.Entity;
+using HandsOnDeck2.Classes.Rendering;
 
 namespace HandsOnDeck2
 {
@@ -16,7 +18,7 @@ namespace HandsOnDeck2
         private SpriteBatch _spriteBatch;
         private KeyboardState _previousKeyboardState;
         private Difficulty currentDifficulty;
-
+        public Boat PlayerBoat { get; private set; }
         private static Game1 instance;
         public static Game1 Instance => instance;
 
@@ -38,6 +40,7 @@ namespace HandsOnDeck2
             GraphDev.Initialize(GraphicsDevice);
             ScreenManager.Instance.Initialize(GraphicsDevice, Content);
             ScreenManager.Instance.ChangeScreen(ScreenType.MainMenu);
+            PlayerBoat = Map.Instance.player;
         }
 
         protected override void LoadContent()

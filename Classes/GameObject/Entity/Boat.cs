@@ -21,6 +21,10 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
         public SeaCoordinate Position { get; set; }
         public bool IsColliding { get; set; }
 
+        private Vector2 externalForce;
+        private float sirenEffect = 0f;
+        private const float SirenEffectDecay = 0.98f;
+
         private float rotation;
         private bool anchorDown;
         private bool sailsOpen;
@@ -72,6 +76,8 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
 
         public void Update(GameTime gameTime)
         {
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
             if (anchorDown)
             {
                 Speed = 0f;
@@ -85,6 +91,10 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
                 Speed = MathHelper.Clamp(Speed - 0.01f, 0f, 5f);
             }
 
+            rotation += sirenEffect * deltaTime;
+            rotation = MathHelper.WrapAngle(rotation);
+            sirenEffect *= (float)Math.Pow(SirenEffectDecay, deltaTime * 60);
+
             Vector2 movement = new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation)) * Speed;
             Position = new SeaCoordinate(Position.X + movement.X, Position.Y + movement.Y);
 
@@ -94,6 +104,20 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
         public void Draw(SpriteBatch spriteBatch)
         {
             VisualElement.Draw(spriteBatch, Position, Origin, Scale, Rotation);
+        }
+
+        public void ApplyExternalForce(Vector2 force)
+        {
+            externalForce += force;
+        }
+
+        public void ApplySirenEffect(float rotationInfluence)
+        {
+            sirenEffect -= rotationInfluence;
+        }
+
+        public void TakeDamage()
+        {
         }
 
         public void OnCollision(ICollideable other)
