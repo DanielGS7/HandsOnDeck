@@ -7,6 +7,7 @@ using HandsOnDeck2.Enums;
 using HandsOnDeck2.Classes.Collision;
 using HandsOnDeck2.Classes.Rendering;
 using HandsOnDeck2.Classes.Global;
+using HandsOnDeck2.Classes.Sound;
 
 namespace HandsOnDeck2.Classes.GameObject.Entity
 {
@@ -31,6 +32,13 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
         private bool anchorDown;
         private bool sailsOpen;
 
+        private bool leftCannonLoaded;
+        private bool rightCannonLoaded;
+        private float reloadTimer;
+        private const float ReloadTime = 2f;
+
+        private IProjectileFactory playerCannonballFactory;
+
         public Boat(ContentManager content, SeaCoordinate startPosition)
         {
             var boatTexture = content.Load<Texture2D>("boat");
@@ -46,6 +54,12 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
             Origin = new Vector2(Size.X / 2, Size.Y / 2);
             VisualElement = new VisualElement(boatAnimation, Color.White, SpriteEffects.None, 0f);
             CollisionManager.Instance.AddCollideable(this);
+
+            leftCannonLoaded = true;
+            rightCannonLoaded = true;
+            reloadTimer = 0f;
+
+            playerCannonballFactory = new PlayerCannonballFactory(content);
         }
 
         public void HandleInput(GameAction action)
@@ -59,19 +73,22 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
                     sailsOpen = false;
                     break;
                 case GameAction.SteerLeft:
-                    rotation -= rotationSpeed/100;
+                    rotation -= rotationSpeed / 100;
                     break;
                 case GameAction.SteerRight:
-                    rotation += rotationSpeed/100;
+                    rotation += rotationSpeed / 100;
                     break;
                 case GameAction.ShootLeft:
-                    // Implement shooting left
+                    ShootCannon(true);
                     break;
                 case GameAction.ShootRight:
-                    // Implement shooting right
+                    ShootCannon(false);
                     break;
                 case GameAction.ToggleAnchor:
                     anchorDown = !anchorDown;
+                    break;
+                case GameAction.Reload:
+                    StartReload();
                     break;
             }
         }
@@ -101,6 +118,16 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
             Position = new SeaCoordinate(Position.X + movement.X, Position.Y + movement.Y);
 
             VisualElement.Update(gameTime);
+
+            if (reloadTimer > 0)
+            {
+                reloadTimer -= deltaTime;
+                if (reloadTimer <= 0)
+                {
+                    leftCannonLoaded = true;
+                    rightCannonLoaded = true;
+                }
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -132,6 +159,39 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
             float angleAway = (float)Math.Atan2(directionAway.Y, directionAway.X);
 
             rotation = MathHelper.Lerp(rotation, angleAway, 0.01f);
+        }
+
+        private void ShootCannon(bool isLeft)
+        {
+            if ((isLeft && leftCannonLoaded) || (!isLeft && rightCannonLoaded))
+            {
+                Vector2 forwardDirection = new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation));
+                
+                Vector2 perpendicularDirection = new Vector2(-forwardDirection.Y, forwardDirection.X);
+                if (isLeft) perpendicularDirection = -perpendicularDirection;
+
+                Vector2 spawnOffset = perpendicularDirection * (Size.Y / 2) * Scale;
+                spawnOffset += forwardDirection * (Size.X / 4) * Scale;
+                SeaCoordinate spawnPosition = new SeaCoordinate(Position.X + spawnOffset.X, Position.Y + spawnOffset.Y);
+
+                IProjectile playerCannonball = playerCannonballFactory.CreateProjectile(spawnPosition, perpendicularDirection, this);
+                Map.Instance.AddProjectile(playerCannonball);
+
+                if (isLeft)
+                    leftCannonLoaded = false;
+                else
+                    rightCannonLoaded = false;
+                
+                AudioManager.Instance.Play("cannon_fire", null, 0.5f);
+            }
+        }
+
+        private void StartReload()
+        {
+            if (!leftCannonLoaded || !rightCannonLoaded)
+            {
+                reloadTimer = ReloadTime;
+            }
         }
     }
 }

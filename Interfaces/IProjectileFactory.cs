@@ -22,7 +22,20 @@ public class CannonballFactory : IProjectileFactory
         return new Cannonball(content, position, direction, parent);
     }
 }
+public class PlayerCannonballFactory : IProjectileFactory
+{
+    private ContentManager content;
 
+    public PlayerCannonballFactory(ContentManager content)
+    {
+        this.content = content;
+    }
+
+    public IProjectile CreateProjectile(SeaCoordinate position, Vector2 direction, IGameObject parent)
+    {
+        return new PlayerCannonball(content, position, direction, parent);
+    }
+}
 public class BombFactory : IProjectileFactory
 {
     private ContentManager content;

@@ -8,6 +8,7 @@
         SteerRight,
         ShootRight,
         ShootLeft,
-        ToggleAnchor
+        ToggleAnchor,
+        Reload
     }
 }

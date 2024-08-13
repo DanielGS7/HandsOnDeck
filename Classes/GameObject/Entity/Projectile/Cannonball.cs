@@ -18,7 +18,7 @@ public class Cannonball : IProjectile
     public Vector2 Origin { get; set; }
     public float Scale { get; set; }
     public bool IsColliding { get; set; }
-    public bool IsExpired { get; private set; }
+    public bool IsExpired { get; internal set; }
     public IGameObject Parent { get; }
 
     private Vector2 Direction { get; }
@@ -60,7 +60,7 @@ public class Cannonball : IProjectile
         VisualElement.Draw(spriteBatch, Position, Origin, Scale, Rotation);
     }
 
-    public void OnCollision(ICollideable other)
+    public virtual void OnCollision(ICollideable other)
     {
         if (other != Parent)
         {

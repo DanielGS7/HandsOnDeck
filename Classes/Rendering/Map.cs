@@ -108,8 +108,8 @@ namespace HandsOnDeck2.Classes.Rendering
                 Background.Instance.SetScale(Background.Instance.GetScale() + 0.01f);
             if (InputManager.Instance.IsKeyHeld(Keys.OemMinus))
                 Background.Instance.SetScale(Background.Instance.GetScale() - 0.01f);
-            if (InputManager.Instance.IsKeyPressed(Keys.R))
-                Background.Instance.SetRotation((Background.Instance.GetRotation() + 90f) % 360f);
+            /*if (InputManager.Instance.IsKeyPressed(Keys.R))
+                Background.Instance.SetRotation((Background.Instance.GetRotation() + 90f) % 360f);*/
 
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             timeSinceLastSpawn += deltaTime;
