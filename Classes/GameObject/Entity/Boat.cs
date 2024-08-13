@@ -12,6 +12,8 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
 {
     public class Boat : IEntity, ICollideable, IControllable
     {
+        internal const float maxSpeed = 3f;
+        internal const float rotationSpeed = 3f;
         public Vector2 Size { get; set; }
         public float Speed { get; set; }
         public VisualElement VisualElement { get; set; }
@@ -57,10 +59,10 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
                     sailsOpen = false;
                     break;
                 case GameAction.SteerLeft:
-                    rotation -= 0.1f;
+                    rotation -= rotationSpeed/100;
                     break;
                 case GameAction.SteerRight:
-                    rotation += 0.1f;
+                    rotation += rotationSpeed/100;
                     break;
                 case GameAction.ShootLeft:
                     // Implement shooting left
@@ -84,11 +86,11 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
             }
             else if (sailsOpen)
             {
-                Speed = MathHelper.Clamp(Speed + 0.01f, 0f, 5f);
+                Speed = MathHelper.Clamp(Speed + 0.01f, 0f, maxSpeed);
             }
             else
             {
-                Speed = MathHelper.Clamp(Speed - 0.01f, 0f, 5f);
+                Speed = MathHelper.Clamp(Speed - 0.01f, 0f, maxSpeed);
             }
 
             rotation += sirenEffect * deltaTime;
@@ -122,17 +124,13 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
 
         public void OnCollision(ICollideable other)
         {
-            // Slow down the boat
             Speed = MathHelper.Clamp(Speed - 0.05f, 1f, 5f);
 
-            // Calculate the direction away from the other object
             Vector2 directionAway = Position.ToVector2() - other.Position.ToVector2();
             directionAway.Normalize();
 
-            // Calculate the angle to rotate away from the other object
             float angleAway = (float)Math.Atan2(directionAway.Y, directionAway.X);
 
-            // Gradually rotate the boat away from the collider
             rotation = MathHelper.Lerp(rotation, angleAway, 0.01f);
         }
     }
