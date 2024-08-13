@@ -7,6 +7,7 @@ using HandsOnDeck2.Classes.CodeAccess;
 using HandsOnDeck2.Classes.Rendering;
 using System.Linq;
 using HandsOnDeck2.Classes.GameObject;
+using HandsOnDeck2.Classes.Global;
 
 namespace HandsOnDeck2.Classes.Collision
 {
@@ -33,6 +34,20 @@ namespace HandsOnDeck2.Classes.Collision
             }
         }
 
+        public bool CheckCollisionAtNextPosition(ICollideable a, ICollideable b, Vector2 nextPosition)
+        {
+            // Temporarily set the new position
+            SeaCoordinate originalPosition = a.Position;
+            a.Position = new SeaCoordinate(nextPosition.X, nextPosition.Y);
+
+            // Check for collision at the new position
+            bool collisionDetected = CheckCollision(a, b);
+
+            // Restore the original position
+            a.Position = originalPosition;
+
+            return collisionDetected;
+        }
         public void AddCollideable(ICollideable collideable)
         {
             if (!collideables.Contains(collideable))
