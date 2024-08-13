@@ -33,8 +33,8 @@ namespace HandsOnDeck2.Classes
 
             if (HasCrossedEdge(previousPlayerPosition, playerPosition, mapWidth, mapHeight))
             {
-                Vector2 positionDifference = playerPosition - previousPlayerPosition;
-                Position += positionDifference;
+                Vector2 offset = Position - previousPlayerPosition;
+                Position = playerPosition + offset;
             }
 
             else
@@ -56,12 +56,8 @@ namespace HandsOnDeck2.Classes
                 {
                     targetCameraPosition.Y = playerPosition.Y - viewport.Height + bufferY;
                 }
+                Position = targetCameraPosition;
             }
-
-            Position = new Vector2(
-                (targetCameraPosition.X + mapWidth) % mapWidth,
-                (targetCameraPosition.Y + mapHeight) % mapHeight
-            );
 
             Transform = Matrix.CreateTranslation(new Vector3(-Position, 0));
 
