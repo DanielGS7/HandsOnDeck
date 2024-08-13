@@ -98,6 +98,25 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
 
         public void OnCollision(ICollideable other)
         {
+            // Predict the next position
+            Vector2 movement = new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation)) * Speed;
+            Vector2 nextPosition = Position.ToVector2() + movement;
+
+            // Check if the boat will still collide in the next frame
+            bool willCollide = CollisionManager.Instance.CheckCollisionAtNextPosition(this, other, nextPosition);
+
+            // Move the boat back until it doesn't collide
+            while (willCollide)
+            {
+                // Move back by a small increment
+                Position = new SeaCoordinate(Position.X - movement.X * 0.1f, Position.Y - movement.Y * 0.1f);
+
+                // Recalculate the next predicted position
+                nextPosition = Position.ToVector2() + movement;
+
+                // Recheck for collision
+                willCollide = CollisionManager.Instance.CheckCollisionAtNextPosition(this, other, nextPosition);
+            }
         }
     }
 }
