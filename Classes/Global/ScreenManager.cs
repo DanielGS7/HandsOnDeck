@@ -12,8 +12,8 @@ namespace HandsOnDeck2.Classes.UI.Screens
     public class ScreenManager
     {
         private static ScreenManager instance;
-        private Dictionary<ScreenType, Screen> screens;
-        private ScreenType currentScreenType;
+        internal Dictionary<ScreenType, Screen> screens;
+        internal ScreenType currentScreenType;
 
         public static ScreenManager Instance
         {

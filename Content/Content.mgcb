@@ -680,6 +680,12 @@
 /processorParam:TextureFormat=Compressed
 /build:default.spritefont
 
+#begin Effects/blur_effect.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/blur_effect.fx
+
 #begin ghost_boat.png
 /importer:TextureImporter
 /processor:TextureProcessor
