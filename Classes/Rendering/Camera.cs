@@ -33,33 +33,8 @@ namespace HandsOnDeck2.Classes
 
             if (HasCrossedEdge(previousPlayerPosition, playerPosition, mapWidth, mapHeight))
             {
-                Vector2 offset = previousPlayerPosition - Position;
-
-                if (Math.Abs(playerPosition.X - previousPlayerPosition.X) > mapWidth / 2)
-                {
-                    if (playerPosition.X > previousPlayerPosition.X)
-                    {
-                        offset.X -= mapWidth;
-                    }
-                    else
-                    {
-                        offset.X += mapWidth;
-                    }
-                }
-
-                if (Math.Abs(playerPosition.Y - previousPlayerPosition.Y) > mapHeight / 2)
-                {
-                    if (playerPosition.Y > previousPlayerPosition.Y)
-                    {
-                        offset.Y -= mapHeight;
-                    }
-                    else
-                    {
-                        offset.Y += mapHeight;
-                    }
-                }
-
-                targetCameraPosition = playerPosition - offset;
+                Vector2 positionDifference = playerPosition - previousPlayerPosition;
+                Position += positionDifference;
             }
 
             else
