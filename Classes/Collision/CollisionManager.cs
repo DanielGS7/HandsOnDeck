@@ -36,18 +36,16 @@ namespace HandsOnDeck2.Classes.Collision
 
         public bool CheckCollisionAtNextPosition(ICollideable a, ICollideable b, Vector2 nextPosition)
         {
-            // Temporarily set the new position
             SeaCoordinate originalPosition = a.Position;
             a.Position = new SeaCoordinate(nextPosition.X, nextPosition.Y);
 
-            // Check for collision at the new position
             bool collisionDetected = CheckCollision(a, b);
 
-            // Restore the original position
             a.Position = originalPosition;
 
             return collisionDetected;
         }
+
         public void AddCollideable(ICollideable collideable)
         {
             if (!collideables.Contains(collideable))
@@ -160,6 +158,7 @@ namespace HandsOnDeck2.Classes.Collision
 
             return corners;
         }
+
         private bool IsPointInPolygon(Vector2 point, Vector2[] polygon)
         {
             bool inside = false;
@@ -173,6 +172,7 @@ namespace HandsOnDeck2.Classes.Collision
             }
             return inside;
         }
+
         private bool LineIntersects(Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2)
         {
             Vector2 b = a2 - a1;
@@ -193,6 +193,7 @@ namespace HandsOnDeck2.Classes.Collision
 
             return true;
         }
+
         public void Draw(SpriteBatch spriteBatch)
         {
             if (!DrawColliders) return;

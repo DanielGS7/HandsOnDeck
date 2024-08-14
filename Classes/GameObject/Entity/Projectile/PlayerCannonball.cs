@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 public class PlayerCannonball : Cannonball
 {
+    private bool hasDamaged = false;
     public PlayerCannonball(ContentManager content, SeaCoordinate position, Vector2 direction, IGameObject parent)
         : base(content, position, direction, parent)
     {
@@ -14,16 +15,18 @@ public class PlayerCannonball : Cannonball
 
     public override void OnCollision(ICollideable other)
     {
-        if (other != Parent)
+        if (!hasDamaged && other != Parent)
         {
             if (other is RivalBoat rivalBoat)
             {
                 rivalBoat.TakeDamage();
+                hasDamaged = true;
                 IsExpired = true;
             }
             else if (other is Bomber bomber)
             {
                 bomber.TakeDamage();
+                hasDamaged = true;
                 IsExpired = true;
             }
             else if (other is Bomb)

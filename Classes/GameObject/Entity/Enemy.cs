@@ -143,13 +143,14 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
                 Vector2 heartPosition = pos;
                 for (int i = 0; i < Lives; i++)
                 {
-                    spriteBatch.Draw(HeartTexture, heartPosition, null, Color.White, 0f,
+spriteBatch.Draw(HeartTexture, heartPosition, null, Color.White, 0f,
                         new Vector2(HeartTexture.Width / 2f, HeartTexture.Height / 2f), 1f,
                         SpriteEffects.None, 0f);
                     heartPosition.X += HeartTexture.Width + 5;
                 }
             }
         }
+
         private Vector2[] GetDrawPositions(SeaCoordinate position)
         {
             int mapWidth = Map.MapWidth;

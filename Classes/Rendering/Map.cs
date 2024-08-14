@@ -45,7 +45,9 @@ namespace HandsOnDeck2.Classes.Rendering
         private List<Enemy> enemies;
         private List<IProjectile> projectiles;
         private List<Siren> sirens;
+
         private float timeSinceLastSpawn = 0f;
+        private DifficultySettings difficultySettings;
         private const float SpawnInterval = 2f;
         private float enemySpeedMultiplier;
         private CannonballFactory cannonballFactory;
@@ -55,6 +57,7 @@ namespace HandsOnDeck2.Classes.Rendering
         {
             islands = new List<Island>();
             Camera = new Camera();
+            difficultySettings = DifficultySettings.Instance;
         }
 
         public void Initialize(ContentManager content, GraphicsDevice graphicsDevice)
@@ -114,7 +117,7 @@ namespace HandsOnDeck2.Classes.Rendering
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             timeSinceLastSpawn += deltaTime;
 
-            if (timeSinceLastSpawn >= SpawnInterval)
+            if (timeSinceLastSpawn >= difficultySettings.GetEnemySpawnInterval() && enemies.Count < difficultySettings.GetMaxEnemiesInGame())
             {
                 SpawnEnemy();
                 timeSinceLastSpawn = 0f;

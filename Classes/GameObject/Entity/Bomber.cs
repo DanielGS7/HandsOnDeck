@@ -8,12 +8,12 @@ using System;
 
 class Bomber : Enemy
 {
-    private const float DropCooldown = 3f;
     private float timeSinceLastDrop = 0f;
     private const float DesiredDistance = 150f;
     private IProjectileFactory projectileFactory;
     private const float BomberSpeed = 150f;
     private const float BomberRotationSpeed = 0.3f;
+    private bool canDrop = true;
 
     public Bomber(ContentManager content, SeaCoordinate position, IProjectileFactory projectileFactory)
         : base(content, position, new Vector2(150, 78), BomberSpeed, 2)
@@ -28,15 +28,25 @@ class Bomber : Enemy
         base.Update(gameTime);
 
         float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-        Vector2 directionToPlayer = GetShortestDirectionToPlayer();
-        float distanceToPlayer = directionToPlayer.Length();
 
-        timeSinceLastDrop += deltaTime;
-        if (timeSinceLastDrop >= DropCooldown && IsInFrontOfPlayer())
+        if (!canDrop)
         {
-            DropBomb();
-            timeSinceLastDrop = 0f;
+            timeSinceLastDrop += deltaTime;
+            if (timeSinceLastDrop >= DifficultySettings.Instance.GetEnemyShootInterval())
+            {
+                canDrop = true;
+                timeSinceLastDrop = 0f;
+            }
         }
+
+        if (canDrop && IsInFrontOfPlayer())
+        {
+            Shoot();
+            canDrop = false;
+        }
+
+        Vector2 avoidanceForce = CalculateAvoidanceForce();
+        UpdateTargetRotation(deltaTime, avoidanceForce);
     }
 
     protected override void UpdateTargetRotation(float deltaTime, Vector2 avoidanceForce)
@@ -63,7 +73,7 @@ class Bomber : Enemy
         Rotation = SeaCoordinate.LerpAngle(Rotation, targetRotation, BomberRotationSpeed * deltaTime);
     }
 
-    private void DropBomb()
+    protected void Shoot()
     {
         IProjectile bomb = projectileFactory.CreateProjectile(Position, Vector2.Zero, this);
         Map.Instance.AddProjectile(bomb);
@@ -78,7 +88,7 @@ class Bomber : Enemy
         float angleToPlayer = (float)Math.Atan2(directionToPlayer.Y, directionToPlayer.X);
         float playerAngle = (float)Math.Atan2(playerForward.Y, playerForward.X);
 
-        float angleDifference = Math.Abs(angleToPlayer - playerAngle);
+        float angleDifference = Math.Abs(MathHelper.WrapAngle(angleToPlayer - playerAngle));
         return angleDifference < MathHelper.PiOver4 || angleDifference > MathHelper.Pi - MathHelper.PiOver4;
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using HandsOnDeck2.Enums;
 using HandsOnDeck2.Classes.CodeAccess;
 using HandsOnDeck2.Classes.Rendering;
+using HandsOnDeck2.Classes.Global;
 
 namespace HandsOnDeck2.Classes.UI.Screens
 {
@@ -38,7 +39,7 @@ namespace HandsOnDeck2.Classes.UI.Screens
         private void StartGame(Difficulty difficulty)
         {
 
-            Game1.Instance.SetDifficulty(difficulty);
+            DifficultySettings.Instance.SetDifficulty(Difficulty.Normal);
             ScreenManager.Instance.ChangeScreen(ScreenType.Gameplay);
         }
 

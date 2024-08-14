@@ -16,7 +16,7 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
         public float Rotation { get; set; }
         public Vector2 Origin { get; set; }
         public float Scale { get; set; }
-
+        private DifficultySettings difficultySettings;
         private const float AttractionRadius = 1000f;
         private const float MaxAttractionStrength = 0.02f;
         private const float AttractionCurve = 2f;
@@ -30,6 +30,7 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
             Rotation = 0f;
 
             var texture = content.Load<Texture2D>("siren");
+            difficultySettings = DifficultySettings.Instance;
             VisualElement = new VisualElement(texture, Color.White, SpriteEffects.None, 0f);
         }
 
@@ -42,7 +43,7 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
             if (distanceToPlayer <= AttractionRadius)
             {
                 float attractionFactor = 1 - Math.Min(distanceToPlayer / AttractionRadius, 1);
-                float attractionStrength = MaxAttractionStrength * (float)Math.Pow(attractionFactor, AttractionCurve);
+                float attractionStrength = difficultySettings.GetSirenPullingPower() * attractionFactor;
 
                 float angleToSiren = (float)Math.Atan2(directionToSiren.Y, directionToSiren.X);
                 float rotationDifference = MathHelper.WrapAngle(angleToSiren - playerBoat.Rotation);
