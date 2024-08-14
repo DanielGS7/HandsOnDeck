@@ -40,7 +40,8 @@ namespace HandsOnDeck2.Classes.Global
                 { Keys.D, GameAction.SteerRight },
                 { Keys.A, GameAction.ShootLeft },
                 { Keys.E, GameAction.ShootRight },
-                { Keys.Space, GameAction.ToggleAnchor }
+                { Keys.Space, GameAction.ToggleAnchor },
+                { Keys.R, GameAction.Reload }
             };
         }
 

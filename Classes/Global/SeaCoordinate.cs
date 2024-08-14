@@ -53,6 +53,22 @@ namespace HandsOnDeck2.Classes.Global
             float dy = Math.Min(Math.Abs(Y - other.Y), mapHeight - Math.Abs(Y - other.Y));
             return (float)Math.Sqrt(dx * dx + dy * dy);
         }
+        public Vector2 GetShortestDirection(SeaCoordinate target)
+        {
+            float dx = target.X - X;
+            float dy = target.Y - Y;
+
+            if (Math.Abs(dx) > mapWidth / 2)
+            {
+                dx = dx > 0 ? dx - mapWidth : dx + mapWidth;
+            }
+            if (Math.Abs(dy) > mapHeight / 2)
+            {
+                dy = dy > 0 ? dy - mapHeight : dy + mapHeight;
+            }
+
+            return new Vector2(dx, dy);
+        }
 
         public static SeaCoordinate operator +(SeaCoordinate a, SeaCoordinate b)
         {
@@ -80,6 +96,27 @@ namespace HandsOnDeck2.Classes.Global
         public static implicit operator SeaCoordinate(Vector2 vector)
         {
             return new SeaCoordinate(vector.X, vector.Y);
+        }
+
+        internal static float LerpAngle(float startAngle, float endAngle, float amount)
+        {
+            float difference = endAngle - startAngle;
+            while (difference < -Math.PI) difference += 2 * (float)Math.PI;
+            while (difference > Math.PI) difference -= 2 * (float)Math.PI;
+            return startAngle + difference * amount;
+        }
+
+        public static Vector2 ClampMagnitude(SeaCoordinate vector, float maxLength)
+        {
+            float squaredMagnitude = vector.X * vector.X + vector.Y * vector.Y;
+            if (squaredMagnitude > maxLength * maxLength)
+            {
+                float magnitude = (float)Math.Sqrt(squaredMagnitude);
+                float normalizedX = vector.X / magnitude;
+                float normalizedY = vector.Y / magnitude;
+                return new SeaCoordinate(normalizedX * maxLength, normalizedY * maxLength);
+            }
+            return vector;
         }
     }
 }

@@ -7,6 +7,9 @@ using HandsOnDeck2.Classes.UI.Screens;
 using HandsOnDeck2.Classes.CodeAccess;
 using Microsoft.Xna.Framework.Media;
 using HandsOnDeck2.Classes.Sound;
+using HandsOnDeck2.Classes.GameObject.Entity;
+using System.Collections.Generic;
+using HandsOnDeck2.Classes.Rendering;
 
 namespace HandsOnDeck2
 {
@@ -16,9 +19,10 @@ namespace HandsOnDeck2
         private SpriteBatch _spriteBatch;
         private KeyboardState _previousKeyboardState;
         private Difficulty currentDifficulty;
-
+        public Boat PlayerBoat { get; private set; }
         private static Game1 instance;
         public static Game1 Instance => instance;
+        private PauseScreen pauseScreen;
 
         public Game1()
         {
@@ -30,6 +34,7 @@ namespace HandsOnDeck2
             _graphics.PreferredBackBufferHeight = 600;
             _graphics.IsFullScreen = false;
             Window.AllowUserResizing = true;
+            Window.ClientSizeChanged += Window_ClientSizeChanged;
         }
 
         protected override void Initialize()
@@ -38,6 +43,8 @@ namespace HandsOnDeck2
             GraphDev.Initialize(GraphicsDevice);
             ScreenManager.Instance.Initialize(GraphicsDevice, Content);
             ScreenManager.Instance.ChangeScreen(ScreenType.MainMenu);
+            PlayerBoat = Map.Instance.player;
+            pauseScreen = (PauseScreen) ScreenManager.Instance.screens[ScreenType.Pause];
         }
 
         protected override void LoadContent()
@@ -68,6 +75,7 @@ namespace HandsOnDeck2
             switch (ScreenManager.Instance.CurrentScreenType)
             {
                 case ScreenType.Gameplay:
+                    pauseScreen.CaptureGameScreen(_spriteBatch);
                     ScreenManager.Instance.ChangeScreen(ScreenType.Pause);
                     break;
                 case ScreenType.Pause:
@@ -80,13 +88,19 @@ namespace HandsOnDeck2
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            _spriteBatch.Begin();
-            ScreenManager.Instance.Draw(_spriteBatch);
-            _spriteBatch.End();
+            if (ScreenManager.Instance.CurrentScreenType == ScreenType.Pause)
+            {
+                pauseScreen.Draw(_spriteBatch);
+            }
+            else
+            {
+                _spriteBatch.Begin();
+                ScreenManager.Instance.Draw(_spriteBatch);
+                _spriteBatch.End();
+            }
 
             base.Draw(gameTime);
         }
-
         public void SetDifficulty(Difficulty difficulty)
         {
             currentDifficulty = difficulty;
@@ -99,6 +113,17 @@ namespace HandsOnDeck2
             MediaPlayer.Volume = volume;
             if (_graphics.IsFullScreen != fullscreen) _graphics.IsFullScreen = fullscreen;
             _graphics.ApplyChanges();
+        }
+        private void Window_ClientSizeChanged(object sender, System.EventArgs e)
+        {
+            if (pauseScreen != null)
+            {
+                pauseScreen.RecreateRenderTarget();
+            }
+            if (pauseScreen.blurEffect != null)
+            {
+                pauseScreen.blurEffect.RecreateRenderTarget(GraphicsDevice);
+            }
         }
     }
 }

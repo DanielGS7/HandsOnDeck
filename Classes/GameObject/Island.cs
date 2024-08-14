@@ -1,4 +1,5 @@
 using HandsOnDeck2.Classes.Collision;
+using HandsOnDeck2.Classes.GameObject.Entity;
 using HandsOnDeck2.Classes.Global;
 using HandsOnDeck2.Classes.Rendering;
 using HandsOnDeck2.Interfaces;
@@ -21,6 +22,8 @@ namespace HandsOnDeck2.Classes.GameObject
         public Vector2 Origin { get; set; }
         public float Scale { get; set; }
         public bool IsColliding { get; set; }
+        Siren Siren { get; set; }
+
         private static Texture2D islandTexture;
         private static readonly Random random = new Random();
         private static readonly float minScale = 0.3f;
@@ -28,6 +31,8 @@ namespace HandsOnDeck2.Classes.GameObject
         public static readonly int islandGridSize = 4;
         private static readonly int islandSpriteSize = 512;
         public static readonly int totalIslands = islandGridSize * islandGridSize;
+        private static readonly float colliderSizeMultiplier = 0.6f;
+        public Vector2 ColliderSize => Size * Scale * colliderSizeMultiplier;
 
         public Island(ContentManager content, GraphicsDevice graphicsDevice, int spriteIndex, string name, SeaCoordinate position, float scale, float rotation)
         {
@@ -62,6 +67,7 @@ namespace HandsOnDeck2.Classes.GameObject
         public void Draw(SpriteBatch spriteBatch)
         {
             VisualElement.Draw(spriteBatch, Position, Origin, Scale, Rotation);
+            Siren?.Draw(spriteBatch);
         }
 
         public static List<Island> GenerateIslands(ContentManager content, GraphicsDevice graphicsDevice, int count)
@@ -88,11 +94,22 @@ namespace HandsOnDeck2.Classes.GameObject
                     }
                 }
                 while (overlaps);
-
+                newIsland.SpawnSiren(content, GetSirenSpawnChance());
                 islands.Add(newIsland);
             }
             foreach (ICollideable island in islands) CollisionManager.Instance.AddCollideable(island);
             return islands;
+        }
+
+        private static float GetSirenSpawnChance()
+        {
+            switch (GlobalInfo.Instance.CurrentDifficulty)
+            {
+                case Difficulty.Easy: return 0.1f;
+                case Difficulty.Normal: return 0.3f;
+                case Difficulty.Hard: return 0.5f;
+                default: return 0.3f;
+            }
         }
 
         private static SeaCoordinate GenerateRandomPosition()
@@ -118,6 +135,15 @@ namespace HandsOnDeck2.Classes.GameObject
         private static float GenerateRandomScale()
         {
             return (float)random.NextDouble() * (maxScale - minScale) + minScale;
+        }
+
+        public void SpawnSiren(ContentManager content, float spawnChance)
+        {
+            if (new Random().NextDouble() < spawnChance)
+            {
+                Siren = new Siren(content, Position);
+                Map.Instance.AddSiren(Siren);
+            }
         }
     }
 }
