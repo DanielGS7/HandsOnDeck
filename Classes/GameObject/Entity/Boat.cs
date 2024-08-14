@@ -151,14 +151,19 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
 
         public void OnCollision(ICollideable other)
         {
-            Speed = MathHelper.Clamp(Speed - 0.05f, 1f, 5f);
+            if (other is Island)
+            {
 
-            Vector2 directionAway = Position.ToVector2() - other.Position.ToVector2();
-            directionAway.Normalize();
 
-            float angleAway = (float)Math.Atan2(directionAway.Y, directionAway.X);
+                Speed = MathHelper.Clamp(Speed - 0.05f, 1f, 5f);
 
-            rotation = MathHelper.Lerp(rotation, angleAway, 0.01f);
+                Vector2 directionAway = Position.ToVector2() - other.Position.ToVector2();
+                directionAway.Normalize();
+
+                float angleAway = (float)Math.Atan2(directionAway.Y, directionAway.X);
+
+                rotation = MathHelper.Lerp(rotation, angleAway, 0.01f);
+            }
         }
 
         private void ShootCannon(bool isLeft)
