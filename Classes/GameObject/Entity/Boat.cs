@@ -98,18 +98,19 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
 
         public void OnCollision(ICollideable other)
         {
-            // Slow down the boat
-            Speed = MathHelper.Clamp(Speed - 0.05f, 1f, 5f);
+            if (other is Island)
+            {
 
-            // Calculate the direction away from the other object
-            Vector2 directionAway = Position.ToVector2() - other.Position.ToVector2();
-            directionAway.Normalize();
 
-            // Calculate the angle to rotate away from the other object
-            float angleAway = (float)Math.Atan2(directionAway.Y, directionAway.X);
+                Speed = MathHelper.Clamp(Speed - 0.05f, 1f, 5f);
 
-            // Gradually rotate the boat away from the collider
-            rotation = MathHelper.Lerp(rotation, angleAway, 0.01f);
+                Vector2 directionAway = Position.ToVector2() - other.Position.ToVector2();
+                directionAway.Normalize();
+
+                float angleAway = (float)Math.Atan2(directionAway.Y, directionAway.X);
+
+                rotation = MathHelper.Lerp(rotation, angleAway, 0.01f);
+            }
         }
     }
 }
