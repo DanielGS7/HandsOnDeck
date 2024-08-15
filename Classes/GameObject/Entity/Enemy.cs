@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using System;
+using System.Diagnostics;
 
 namespace HandsOnDeck2.Classes.GameObject.Entity
 {
@@ -24,6 +25,7 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
         protected bool IsCollidingWithIsland { get; set; }
         protected Texture2D HeartTexture { get; set; }
         public Collider Collider { get; protected set; }
+        public Island lastCollidedIsland { get;  set; }
 
         protected float targetRotation;
         protected const float RotationSpeed = 0.8f;
@@ -73,7 +75,7 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
             Vector2 directionToPlayer = GetShortestDirectionToPlayer();
             float distanceToPlayer = directionToPlayer.Length();
 
-            if (distanceToPlayer > MinDistanceToPlayer)
+            if (!IsCollidingWithIsland && distanceToPlayer > MinDistanceToPlayer)
             {
                 targetRotation = (float)Math.Atan2(directionToPlayer.Y, directionToPlayer.X);
             }
@@ -86,19 +88,30 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
                 targetRotation = MathHelper.WrapAngle(targetRotation + angleDifference);
             }
 
-            Rotation = SeaCoordinate.LerpAngle(Rotation, targetRotation, RotationSpeed * deltaTime);
+            if (!IsCollidingWithIsland)
+            {
+                Rotation = SeaCoordinate.LerpAngle(Rotation, targetRotation, RotationSpeed * deltaTime);
+            }
         }
 
         protected virtual void Move(float deltaTime, Vector2 avoidanceForce)
         {
             Vector2 forwardDirection = new Vector2((float)Math.Cos(Rotation), (float)Math.Sin(Rotation));
             float avoidanceStrength = avoidanceForce.Length();
-            float speedMultiplier = MathHelper.Lerp(1f, 0.5f, avoidanceStrength / AvoidanceForce);
+
+            
+            float speedMultiplier = IsCollidingWithIsland ? 0.6f : MathHelper.Lerp(1f, 0.5f, avoidanceStrength / AvoidanceForce);
 
             currentSpeed = Speed * speedMultiplier;
             Vector2 movement = forwardDirection * currentSpeed * deltaTime;
 
             Position = new SeaCoordinate(Position.X + movement.X, Position.Y + movement.Y);
+
+            
+            if (IsCollidingWithIsland && avoidanceStrength == 0f)
+            {
+                IsCollidingWithIsland = false;
+            }
         }
 
         protected Vector2 CalculateAvoidanceForce()
@@ -185,13 +198,20 @@ spriteBatch.Draw(HeartTexture, heartPosition, null, Color.White, 0f,
 
         public virtual void OnCollision(ICollideable other)
         {
-            if (other is Island)
+
+            if (other is Island island)
             {
-                if (!IsCollidingWithIsland)
-                {
-                    TakeDamage();
-                    IsCollidingWithIsland = true;
-                }
+                Speed = MathHelper.Clamp(Speed - 0.5f, 70f, 100f);
+                Debug.WriteLine("Speed: " + Speed);
+
+                Vector2 directionAway = Position.ToVector2() - island.Position.ToVector2();
+                directionAway.Normalize();
+
+                float angleAway = (float)Math.Atan2(directionAway.Y, directionAway.X);
+
+                Rotation = MathHelper.Lerp(Rotation, angleAway, 0.05f);
+
+                IsCollidingWithIsland = true;
             }
             else
             {
