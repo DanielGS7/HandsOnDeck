@@ -1,4 +1,5 @@
 using HandsOnDeck2.Classes.Rendering;
+using HandsOnDeck2.Classes.Sound;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -42,6 +43,11 @@ namespace HandsOnDeck2.Classes.UI.Screens
             gameMap.Draw(spriteBatch);
         }
 
+        public void AddScore(int points)
+        {
+            GlobalInfo.Score += points;
+            AudioManager.Instance.Play("score");
+        }
         public override void HandleInput()
         {
         }

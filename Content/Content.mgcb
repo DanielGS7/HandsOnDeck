@@ -902,23 +902,17 @@
 /processorParam:Quality=Best
 /build:SFX/damage06.wav
 
-#begin SFX/damage07.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:SFX/damage07.wav
-
-#begin SFX/exploasion02.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:SFX/exploasion02.wav
-
 #begin SFX/explosion01.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:SFX/explosion01.wav
+
+#begin SFX/explosion02.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/explosion02.wav
 
 #begin SFX/explosion03.wav
 /importer:WavImporter

@@ -124,6 +124,7 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
                 reloadTimer -= deltaTime;
                 if (reloadTimer <= 0)
                 {
+                    reloadTimer = 0;
                     leftCannonLoaded = true;
                     rightCannonLoaded = true;
                 }
@@ -147,8 +148,8 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
 
         public void TakeDamage()
         {
+            AudioManager.Instance.Play("damage");
         }
-
         public void OnCollision(ICollideable other)
         {
             if (other is Island)
@@ -193,9 +194,10 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
 
         private void StartReload()
         {
-            if (!leftCannonLoaded || !rightCannonLoaded)
+            if ((!leftCannonLoaded || !rightCannonLoaded) && reloadTimer == 0f )
             {
                 reloadTimer = ReloadTime;
+                AudioManager.Instance.Play("reload");
             }
         }
     }

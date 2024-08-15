@@ -305,6 +305,10 @@ namespace HandsOnDeck2.Classes.Rendering
             enemies.Remove(enemy);
             CollisionManager.Instance.RemoveCollideable(enemy);
         }
+        public void RemoveProjectile(IProjectile projectile)
+        {
+            projectiles.Remove(projectile);
+        }
         internal IEnumerable<Island> GetIslands()
         {
             return islands;
