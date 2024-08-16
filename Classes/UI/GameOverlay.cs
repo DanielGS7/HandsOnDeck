@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using HandsOnDeck2.Classes.GameObject.Entity;
 using HandsOnDeck2.Classes.UI.Screens;
 using System;
+using HandsOnDeck2.Classes;
 
 public class GameOverlay
 {
@@ -19,7 +20,7 @@ public class GameOverlay
     private GameplayScreen gameplayScreen;
 
     private const float ReloadTime = 2f;
-    private const float RepairTime = 6f;
+    private const float RepairTime = 3f;
     private const float BucketTime = 4f;
 
     public GameOverlay(ContentManager content, Viewport viewport, PlayerBoat playerBoat, GameplayScreen gameplayScreen)
@@ -106,9 +107,9 @@ public class GameOverlay
         damageDisplay.UpdateHoles(gameplayScreen.GetHoleCount());
     }
 
-    public void UpdateScore(int score)
+    public void UpdateScore()
     {
-        scoreDisplay.SetScore(score);
+        scoreDisplay.SetScore(GlobalInfo.Score);
     }
 
     public void SetWaterLevel(float level)

@@ -14,8 +14,9 @@ public class DamageDisplay : UIElement
     private GameplayScreen gameplayScreen;
     private List<DamageHole> holes;
     private const int MaxHoles = 5;
-    private const float RepairTime = 6f;
-    private const float FadeOutTime = 1f;
+    private const float RepairTime = 4f;
+    private const float HoleSizeFactor = 0.7f;
+    private Random random = new Random();
 
     public DamageDisplay(ContentManager content, Vector2 positionPercentage, Vector2 sizePercentage, GameplayScreen gameplayScreen) 
         : base(positionPercentage, sizePercentage, 0f)
@@ -42,16 +43,6 @@ public class DamageDisplay : UIElement
                 hole.RepairProgress += deltaTime / RepairTime;
                 if (hole.RepairProgress >= 1f)
                 {
-                    hole.IsFadingOut = true;
-                    hole.IsRepairing = false;
-                    hole.FadeProgress = 0f;
-                }
-            }
-            if (hole.IsFadingOut)
-            {
-                hole.FadeProgress += deltaTime / FadeOutTime;
-                if (hole.FadeProgress >= 1f)
-                {
                     holes.RemoveAt(i);
                     gameplayScreen.RepairHole();
                 }
@@ -66,27 +57,29 @@ public class DamageDisplay : UIElement
 
         spriteBatch.Draw(hullBackgroundTexture, position, null, Color.White, rotation, origin, backgroundScale, SpriteEffects.None, 0f);
 
+        Vector2 topLeft = position - (origin * backgroundScale);
+
         foreach (var hole in holes)
         {
-            Vector2 holePos = position + (hole.Position - origin) * backgroundScale;
-            Color holeColor = Color.White * (1f - hole.FadeProgress);
-            spriteBatch.Draw(holeTexture, holePos, null, holeColor, rotation, new Vector2(holeTexture.Width / 2f, holeTexture.Height / 2f), backgroundScale, SpriteEffects.None, 0f);
+            Vector2 holePos = topLeft + (hole.Position * backgroundScale);
+            float holeScale = backgroundScale * HoleSizeFactor;
 
-            if (hole.IsRepairing || hole.IsFadingOut)
+            spriteBatch.Draw(holeTexture, holePos, null, Color.White, hole.Rotation, new Vector2(holeTexture.Width / 2f, holeTexture.Height / 2f), holeScale, SpriteEffects.None, 0f);
+
+            if (hole.IsRepairing)
             {
-                float plankAlpha = hole.IsRepairing ? hole.RepairProgress : (1f - hole.FadeProgress);
-                Color plankColor = Color.White * plankAlpha;
-                spriteBatch.Draw(plankTexture, holePos, null, plankColor, rotation, new Vector2(plankTexture.Width / 2f, plankTexture.Height / 2f), backgroundScale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(plankTexture, holePos, null, Color.White * hole.RepairProgress, hole.Rotation, new Vector2(plankTexture.Width / 2f, plankTexture.Height / 2f), holeScale, SpriteEffects.None, 0f);
             }
         }
     }
 
     public void StartRepair()
     {
-        var holeToRepair = holes.Find(h => !h.IsRepairing && !h.IsFadingOut);
+        var holeToRepair = holes.Find(h => !h.IsRepairing);
         if (holeToRepair != null)
         {
             holeToRepair.IsRepairing = true;
+            holeToRepair.RepairProgress = 0f;
         }
     }
 
@@ -104,27 +97,27 @@ public class DamageDisplay : UIElement
 
     private void AddHole()
     {
-        holes.Add(new DamageHole(new Vector2(
-            new Random().Next(0, hullBackgroundTexture.Width),
-            new Random().Next(0, hullBackgroundTexture.Height)
-        )));
+        float margin = HoleSizeFactor / 2f;
+        float x = (float)random.NextDouble() * (1f - 2 * margin) + margin;
+        float y = (float)random.NextDouble() * (1f - 2 * margin) + margin;
+        float rotation = (float)random.NextDouble() * MathHelper.TwoPi;
+
+        holes.Add(new DamageHole(new Vector2(x, y) * new Vector2(hullBackgroundTexture.Width, hullBackgroundTexture.Height), rotation));
     }
 
     private class DamageHole
     {
         public Vector2 Position { get; set; }
+        public float Rotation { get; set; }
         public bool IsRepairing { get; set; }
-        public bool IsFadingOut { get; set; }
         public float RepairProgress { get; set; }
-        public float FadeProgress { get; set; }
 
-        public DamageHole(Vector2 position)
+        public DamageHole(Vector2 position, float rotation)
         {
             Position = position;
+            Rotation = rotation;
             IsRepairing = false;
-            IsFadingOut = false;
             RepairProgress = 0f;
-            FadeProgress = 0f;
         }
     }
 }

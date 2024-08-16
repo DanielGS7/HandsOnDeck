@@ -29,10 +29,11 @@ public class WaterGauge : UIElement
 
         spriteBatch.Draw(gaugeTexture, position, null, Color.White, rotation, origin, scale, SpriteEffects.None, 0f);
 
+        float waterWidth = size.X * 0.1f;
         Rectangle waterRect = new Rectangle(
-            (int)(position.X - (size.X / 2)),
+            (int)(position.X - (waterWidth / 2)),
             (int)(position.Y + (size.Y / 2) - (size.Y * waterLevel)),
-            (int)size.X,
+            (int)waterWidth,
             (int)(size.Y * waterLevel)
         );
 

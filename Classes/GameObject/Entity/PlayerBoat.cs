@@ -26,6 +26,7 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
         public bool IsColliding { get; set; }
         public bool IsLeftCannonLoaded { get; private set; }
         public bool IsRightCannonLoaded { get; private set; }
+        public event Action OnDamageTaken;
 
         private Vector2 externalForce;
         private float sirenEffect = 0f;
@@ -34,7 +35,8 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
         private float rotation;
         private bool anchorDown;
         private bool sailsOpen;
-
+        private float invincibilityTimer = 0f;
+        private float invincibilityDuration;
         private bool leftCannonLoaded = true;
         private bool rightCannonLoaded = true;
         private float reloadTimer;
@@ -57,7 +59,7 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
             Origin = new Vector2(Size.X / 2, Size.Y / 2);
             VisualElement = new VisualElement(boatAnimation, Color.White, SpriteEffects.None, 0f);
             CollisionManager.Instance.AddCollideable(this);
-
+            invincibilityDuration = DifficultySettings.Instance.GetInvincibilityDuration();
             IsLeftCannonLoaded = true;
             IsRightCannonLoaded = true;
             reloadTimer = 0f;
@@ -134,6 +136,10 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
                     rightCannonLoaded = true;
                 }
             }
+            if (invincibilityTimer > 0)
+            {
+                invincibilityTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -151,10 +157,17 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
             sirenEffect -= rotationInfluence;
         }
 
-        public void TakeDamage()
+        public bool TakeDamage()
         {
-            AudioManager.Instance.Play("damage");
-        }
+            if (invincibilityTimer <= 0)
+            {
+                invincibilityTimer = invincibilityDuration;
+                OnDamageTaken?.Invoke();
+                AudioManager.Instance.Play("damage");
+                return true;
+            }
+            return false;
+        }       
         public void OnCollision(ICollideable other)
         {
             if (other is Island)
@@ -196,7 +209,6 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
                 AudioManager.Instance.Play("cannon_fire", null, 0.5f);
             }
         }
-
         private void StartReload()
         {
             if ((!leftCannonLoaded || !rightCannonLoaded) && reloadTimer == 0f )

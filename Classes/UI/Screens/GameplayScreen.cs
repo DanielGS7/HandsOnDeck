@@ -7,168 +7,176 @@ using HandsOnDeck2.Classes.GameObject.Entity;
 using HandsOnDeck2.Classes.Global;
 using HandsOnDeck2.Classes.Sound;
 using HandsOnDeck2.Enums;
+using HandsOnDeck2.Classes.CodeAccess;
 
 namespace HandsOnDeck2.Classes.UI.Screens
 {
-    public class GameplayScreen : Screen
+public class GameplayScreen : Screen
+{
+    private Map gameMap;
+    private GameOverlay gameOverlay;
+    private float waterLevel = 0f;
+    private float waterIncreaseRate;
+    private int holeCount = 0;
+    private const int MaxHoles = 5;
+    private const float MaxWaterLevel = 1f;
+    private bool isSinking = false;
+    private float sinkingTimer = 0f;
+    private const float SinkingDuration = 3f;
+    private Color sinkingOverlayColor = new Color(0, 0, 139, 0);
+    private Texture2D pixel;
+
+    public GameplayScreen(GraphicsDevice graphicsDevice, ContentManager content) : base(graphicsDevice, content)
     {
-        private Map gameMap;
-        private GameOverlay gameOverlay;
-        private float waterLevel = 0f;
-        private float waterIncreaseRate = 0.01f;
-        private int score = 0;
-        private int holeCount = 0;
-        private const int MaxHoles = 5;
-        private const float MaxWaterLevel = 1f;
-        private bool isBoatSinking = false;
-        private float sinkingTimer = 0f;
-        private const float SinkingDuration = 3f;
+    }
 
-        public GameplayScreen(GraphicsDevice graphicsDevice, ContentManager content) : base(graphicsDevice, content)
+    public override void Initialize()
+    {
+        if (gameMap == null)
         {
+            gameMap = Map.Instance;
+            gameMap.Initialize(content, graphicsDevice);
+            gameOverlay = new GameOverlay(content, graphicsDevice.Viewport, gameMap.player, this);
+            waterIncreaseRate = DifficultySettings.Instance.GetWaterIncreaseRate();
+            pixel = new Texture2D(graphicsDevice, 1, 1);
+            pixel.SetData(new[] { Color.White });
+            gameMap.player.OnDamageTaken += AddDamage;
+            base.Initialize();
         }
+    }
 
-        public override void Initialize()
-        {
-            if (gameMap == null)
-            {
-                gameMap = Map.Instance;
-                gameMap.Initialize(content, graphicsDevice);
-                gameOverlay = new GameOverlay(content, graphicsDevice.Viewport, gameMap.player, this);
-                base.Initialize();
-            }
-        }
-
-        public override void LoadContent()
-        {
-            gameMap.LoadContent();
-            base.LoadContent();
-        }
-
-
+    public override void LoadContent()
+    {
+        gameMap.LoadContent();
+        base.LoadContent();
+    }
     public override void Update(GameTime gameTime)
     {
         if (IsActive)
         {
-            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            if (!isBoatSinking)
+            if (!isSinking)
             {
                 HandleInput();
                 gameMap.Update(gameTime);
-                UpdateWaterLevel(deltaTime);
+                UpdateWaterLevel(gameTime);
                 gameOverlay.Update(gameTime);
 
-                if (gameOverlay.IsWaterGaugeFull())
+                if (waterLevel >= MaxWaterLevel)
                 {
-                    isBoatSinking = true;
-                    sinkingTimer = 0f;
+                    StartSinking();
                 }
             }
             else
             {
-                sinkingTimer += deltaTime;
-                if (sinkingTimer >= SinkingDuration)
-                {
-                    EndGame();
-                }
+                UpdateSinkingEffect(gameTime);
             }
         }
     }
 
-        public override void HandleInput()
+    public override void HandleInput()
+    {
+        if (InputManager.Instance.IsKeyPressed(Keys.R))
         {
-            if (InputManager.Instance.IsKeyPressed(Keys.F))
-            {
-                TriggerRepair();
-            }
-            if (InputManager.Instance.IsKeyPressed(Keys.B))
-            {
-                TriggerBucket();
-            }
-            if (InputManager.Instance.IsKeyPressed(Keys.R))
-            {
-                TriggerReload();
-            }
+            TriggerReload();
         }
-
-        private void UpdateWaterLevel(float deltaTime)
+        if (InputManager.Instance.IsKeyPressed(Keys.F))
         {
-            waterLevel += waterIncreaseRate * holeCount * deltaTime;
-            waterLevel = MathHelper.Clamp(waterLevel, 0f, 1f);
-            gameOverlay.SetWaterLevel(waterLevel);
+            TriggerRepair();
         }
-
-        public void TriggerRepair()
+        if (InputManager.Instance.IsKeyPressed(Keys.B))
         {
-            gameOverlay.TriggerRepair();
+            TriggerBucket();
         }
-
-        public void TriggerBucket()
-        {
-            if (gameOverlay.TriggerBucket())
-            {
-                DecreaseWaterLevel(0.1f);
-                AudioManager.Instance.Play("bucket");
-            }
-        }
-
-        public void TriggerReload()
-        {
-            gameOverlay.TriggerReload();
-        }
-
-        private void DecreaseWaterLevel(float amount)
-        {
-            waterLevel = MathHelper.Max(0, waterLevel - amount);
-            gameOverlay.SetWaterLevel(waterLevel);
-        }
-
-        public void AddDamage()
-        {
-            if (holeCount < MaxHoles)
-            {
-                holeCount++;
-                gameOverlay.UpdateDamageDisplay();
-                AudioManager.Instance.Play("damage");
-            }
-        }
-
-        public void RepairHole()
-        {
-            if (holeCount > 0)
-            {
-                holeCount--;
-                gameOverlay.UpdateDamageDisplay();
-            }
-        }
-
-        public void AddScore(int points)
-        {
-            score += points;
-            gameOverlay.UpdateScore(score);
-            AudioManager.Instance.Play("score");
-        }
-
-        private bool IsBoatSinking()
-        {
-            return waterLevel >= MaxWaterLevel;
-        }
-
-        private void EndGame()
-        {
-            ScreenManager.Instance.ChangeScreen(ScreenType.GameOver);
-            ((GameOverScreen)ScreenManager.Instance.screens[ScreenType.GameOver]).SetScore(score);
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            gameMap.Draw(spriteBatch);
-            gameOverlay.Draw(spriteBatch);
-        }
-
-        public int GetHoleCount() => holeCount;
-        public float GetWaterLevel() => waterLevel;
-        public int GetScore() => score;
     }
+
+    private void UpdateWaterLevel(GameTime gameTime)
+    {
+        float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+        waterLevel += waterIncreaseRate * holeCount * deltaTime;
+        waterLevel = MathHelper.Clamp(waterLevel, 0f, MaxWaterLevel);
+        gameOverlay.SetWaterLevel(waterLevel);
+    }
+
+    public void TriggerReload()
+    {
+        gameOverlay.TriggerReload();
+    }
+
+    public void TriggerRepair()
+    {
+        gameOverlay.TriggerRepair();
+    }
+
+    public void TriggerBucket()
+    {
+        if (gameOverlay.TriggerBucket())
+        {
+            DecreaseWaterLevel(0.1f);
+        }
+    }
+
+    public void AddDamage()
+    {
+        if (holeCount < MaxHoles)
+        {
+            holeCount++;
+            gameOverlay.UpdateDamageDisplay();
+        }
+    }
+
+    public void RepairHole()
+    {
+        if (holeCount > 0)
+        {
+            holeCount--;
+            gameOverlay.UpdateDamageDisplay();
+        }
+    }
+
+    public void DecreaseWaterLevel(float amount)
+    {
+        waterLevel = MathHelper.Max(0, waterLevel - amount);
+        gameOverlay.SetWaterLevel(waterLevel);
+    }
+
+    private void StartSinking()
+    {
+        isSinking = true;
+        sinkingTimer = 0f;
+    }
+
+    private void UpdateSinkingEffect(GameTime gameTime)
+    {
+        float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+        sinkingTimer += deltaTime;
+
+        float progress = sinkingTimer / SinkingDuration;
+        sinkingOverlayColor.A = (byte)(progress * 255 * 0.5f);
+
+        if (sinkingTimer >= SinkingDuration)
+        {
+            EndGame();
+        }
+    }
+
+    public override void Draw(SpriteBatch spriteBatch)
+    {
+        gameMap.Draw(spriteBatch);
+        gameOverlay.Draw(spriteBatch);
+
+        if (isSinking)
+        {
+            spriteBatch.Draw(pixel, GraphDev.GetInstance.Viewport.Bounds, sinkingOverlayColor);
+        }
+    }
+
+    private void EndGame()
+    {
+        ScreenManager.Instance.ChangeScreen(ScreenType.GameOver);
+        ((GameOverScreen)ScreenManager.Instance.screens[ScreenType.GameOver]).SetScore(GlobalInfo.Score);
+    }
+
+    public int GetHoleCount() => holeCount;
+    public float GetWaterLevel() => waterLevel;
+}
 }
