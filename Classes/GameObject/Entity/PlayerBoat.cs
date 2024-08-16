@@ -26,6 +26,7 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
         public bool IsColliding { get; set; }
         public bool IsLeftCannonLoaded { get; private set; }
         public bool IsRightCannonLoaded { get; private set; }
+        public bool IsInvincible => invincibilityTimer > 0;
         public event Action OnDamageTaken;
 
         private Vector2 externalForce;
@@ -159,7 +160,7 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
 
         public bool TakeDamage()
         {
-            if (invincibilityTimer <= 0)
+            if (!IsInvincible)
             {
                 invincibilityTimer = invincibilityDuration;
                 OnDamageTaken?.Invoke();
@@ -167,7 +168,7 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
                 return true;
             }
             return false;
-        }       
+        }     
         public void OnCollision(ICollideable other)
         {
             if (other is Island)

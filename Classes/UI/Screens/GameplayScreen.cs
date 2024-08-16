@@ -24,6 +24,9 @@ public class GameplayScreen : Screen
     private float sinkingTimer = 0f;
     private const float SinkingDuration = 3f;
     private Color sinkingOverlayColor = new Color(0, 0, 139, 0);
+    private float timeSurvived;
+    private int minutesSurvived;
+    private int cannonballsDodged;
     private Texture2D pixel;
 
     public GameplayScreen(GraphicsDevice graphicsDevice, ContentManager content) : base(graphicsDevice, content)
@@ -38,8 +41,6 @@ public class GameplayScreen : Screen
             gameMap.Initialize(content, graphicsDevice);
             gameOverlay = new GameOverlay(content, graphicsDevice.Viewport, gameMap.player, this);
             waterIncreaseRate = DifficultySettings.Instance.GetWaterIncreaseRate();
-            pixel = new Texture2D(graphicsDevice, 1, 1);
-            pixel.SetData(new[] { Color.White });
             gameMap.player.OnDamageTaken += AddDamage;
             base.Initialize();
         }
@@ -56,11 +57,12 @@ public class GameplayScreen : Screen
         {
             if (!isSinking)
             {
+                float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
                 HandleInput();
                 gameMap.Update(gameTime);
                 UpdateWaterLevel(gameTime);
                 gameOverlay.Update(gameTime);
-
+                UpdateScoring(deltaTime);
                 if (waterLevel >= MaxWaterLevel)
                 {
                     StartSinking();
@@ -97,6 +99,18 @@ public class GameplayScreen : Screen
         gameOverlay.SetWaterLevel(waterLevel);
     }
 
+    private void UpdateScoring(float deltaTime)
+    {
+        timeSurvived += deltaTime;
+        int newMinutesSurvived = (int)(timeSurvived / 60f);
+        if (newMinutesSurvived > minutesSurvived)
+        {
+            int pointsEarned = 2 + (2 * newMinutesSurvived);
+            AddScore(pointsEarned);
+            minutesSurvived = newMinutesSurvived;
+        }
+    }
+
     public void TriggerReload()
     {
         gameOverlay.TriggerReload();
@@ -124,6 +138,13 @@ public class GameplayScreen : Screen
         }
     }
 
+    public void AddScore(int points)
+    {
+        GlobalInfo.Score += points;
+        AudioManager.Instance.Play("score");
+        gameOverlay.UpdateScore();
+    }
+
     public void RepairHole()
     {
         if (holeCount > 0)
@@ -139,6 +160,19 @@ public class GameplayScreen : Screen
         gameOverlay.SetWaterLevel(waterLevel);
     }
 
+    internal void EnemyDestroyed(Enemy enemy)
+    {
+        AddScore(enemy.PointValue);
+    }
+
+    public void CannonballDodged()
+    {
+        if (!gameMap.player.IsInvincible)
+        {
+            cannonballsDodged++;
+            AddScore(1);
+        }
+    }
     private void StartSinking()
     {
         isSinking = true;
@@ -166,7 +200,7 @@ public class GameplayScreen : Screen
 
         if (isSinking)
         {
-            spriteBatch.Draw(pixel, GraphDev.GetInstance.Viewport.Bounds, sinkingOverlayColor);
+            spriteBatch.Draw(Texture2DHelper.GetWhiteTexture(graphicsDevice), GraphDev.GetInstance.Viewport.Bounds, sinkingOverlayColor);
         }
     }
 

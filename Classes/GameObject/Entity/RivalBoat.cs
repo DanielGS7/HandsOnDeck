@@ -19,7 +19,7 @@ class RivalBoat : Enemy
     private bool canShoot = true;
 
     public RivalBoat(ContentManager content, SeaCoordinate position, IProjectileFactory projectileFactory)
-        : base(content, position, new Vector2(200, 85), RivalBoatSpeed, 3)
+        : base(content, position, new Vector2(200, 85), RivalBoatSpeed, 3, 6)
     {
         this.cannonballFactory = projectileFactory;
         var texture = content.Load<Texture2D>("rival_boat");

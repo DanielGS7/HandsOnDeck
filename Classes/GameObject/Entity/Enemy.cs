@@ -34,8 +34,10 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
         protected const float AvoidanceForce = 300f;
         protected const float MaxAvoidanceAngle = MathHelper.PiOver4; // 45 graden
         protected float currentSpeed;
+        public int PointValue { get; protected set; }
 
-        protected Enemy(ContentManager content, SeaCoordinate position, Vector2 size, float speed, int lives)
+
+        protected Enemy(ContentManager content, SeaCoordinate position, Vector2 size, float speed, int lives, int pointValue)
         {
             this.content = content;
             Position = position;
@@ -46,6 +48,7 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
             Lives = lives;
             HeartTexture = content.Load<Texture2D>("heart");
             Collider = new Collider(new Rectangle(0, 0, (int)size.X, (int)size.Y), false);
+            PointValue = pointValue;
             CollisionManager.Instance.AddCollideable(this);
         }
 
