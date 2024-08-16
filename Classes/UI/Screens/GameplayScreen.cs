@@ -27,7 +27,6 @@ public class GameplayScreen : Screen
     private float timeSurvived;
     private int minutesSurvived;
     private int cannonballsDodged;
-    private Texture2D pixel;
 
     public GameplayScreen(GraphicsDevice graphicsDevice, ContentManager content) : base(graphicsDevice, content)
     {
