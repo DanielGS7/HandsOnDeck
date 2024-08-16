@@ -15,14 +15,14 @@ public class GameOverlay
     private DamageDisplay damageDisplay;
     private CannonStatus leftCannon;
     private CannonStatus rightCannon;
-    private Boat playerBoat;
+    private PlayerBoat playerBoat;
     private GameplayScreen gameplayScreen;
 
     private const float ReloadTime = 2f;
     private const float RepairTime = 6f;
     private const float BucketTime = 4f;
 
-    public GameOverlay(ContentManager content, Viewport viewport, Boat playerBoat, GameplayScreen gameplayScreen)
+    public GameOverlay(ContentManager content, Viewport viewport, PlayerBoat playerBoat, GameplayScreen gameplayScreen)
     {
         this.playerBoat = playerBoat;
         this.gameplayScreen = gameplayScreen;

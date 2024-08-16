@@ -34,7 +34,7 @@ namespace HandsOnDeck2.Classes.Rendering
         }
 
         private List<Island> islands;
-        public Boat player;
+        public PlayerBoat player;
         private Camera camera;
         private ContentManager content;
         private GraphicsDevice graphicsDevice;
@@ -69,7 +69,7 @@ namespace HandsOnDeck2.Classes.Rendering
 
             SeaCoordinate.SetMapDimensions(MapWidth, MapHeight);
             CollisionManager.Instance.Reset();
-            player = new Boat(content, new SeaCoordinate(MapWidth / 2, MapHeight / 2));
+            player = new PlayerBoat(content, new SeaCoordinate(MapWidth / 2, MapHeight / 2));
             enemies = new List<Enemy>();
             projectiles = new List<IProjectile>();
             sirens = new List<Siren>();

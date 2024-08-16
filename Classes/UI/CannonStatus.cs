@@ -10,10 +10,10 @@ public class CannonStatus : UIElement
 {
     private Texture2D loadedTexture;
     private Texture2D emptyTexture;
-    private Boat playerBoat;
+    private PlayerBoat playerBoat;
     private bool isLeftCannon;
 
-    public CannonStatus(ContentManager content, Vector2 positionPercentage, Vector2 sizePercentage, Boat playerBoat, bool isLeftCannon)
+    public CannonStatus(ContentManager content, Vector2 positionPercentage, Vector2 sizePercentage, PlayerBoat playerBoat, bool isLeftCannon)
         : base(positionPercentage, sizePercentage, 0f)
     {
         loadedTexture = content.Load<Texture2D>("cannon_loaded");

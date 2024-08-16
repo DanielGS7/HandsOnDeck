@@ -19,7 +19,7 @@ namespace HandsOnDeck2
         private SpriteBatch _spriteBatch;
         private KeyboardState _previousKeyboardState;
         private Difficulty currentDifficulty;
-        public Boat PlayerBoat { get; private set; }
+        public PlayerBoat PlayerBoat { get; private set; }
         private static Game1 instance;
         public static Game1 Instance => instance;
         private PauseScreen pauseScreen;

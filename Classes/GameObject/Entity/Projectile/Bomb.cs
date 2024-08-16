@@ -115,7 +115,7 @@ public class Bomb : IProjectile, ICollideable
                     {
                         enemy.TakeDamage();
                     }
-                    else if (collideable is Boat playerBoat)
+                    else if (collideable is PlayerBoat playerBoat)
                     {
                         playerBoat.TakeDamage();
                     }

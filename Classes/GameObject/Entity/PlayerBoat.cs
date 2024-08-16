@@ -12,7 +12,7 @@ using HandsOnDeck2.Classes.UI.Screens;
 
 namespace HandsOnDeck2.Classes.GameObject.Entity
 {
-    public class Boat : IEntity, ICollideable, IControllable
+    public class PlayerBoat : IEntity, ICollideable, IControllable
     {
         internal const float maxSpeed = 3f;
         internal const float rotationSpeed = 3f;
@@ -42,7 +42,7 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
 
         private IProjectileFactory playerCannonballFactory;
 
-        public Boat(ContentManager content, SeaCoordinate startPosition)
+        public PlayerBoat(ContentManager content, SeaCoordinate startPosition)
         {
             var boatTexture = content.Load<Texture2D>("boat");
             var boatAnimation = new Animation("movingBoat", new Vector2(670, 243), 5, 5, 4f, true);
