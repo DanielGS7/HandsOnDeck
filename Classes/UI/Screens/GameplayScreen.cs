@@ -152,7 +152,6 @@ public class GameplayScreen : Screen
         if (holeCount > 0)
         {
             holeCount--;
-            gameOverlay.UpdateDamageDisplay();
         }
     }
 

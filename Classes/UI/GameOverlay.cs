@@ -30,7 +30,7 @@ public class GameOverlay
 
         scoreDisplay = new ScoreDisplay(content, new Vector2(0.92f, 0.05f), new Vector2(0.12f, 0.12f));
         reloadTimer = new ActionTimer(content, new Vector2(0.05f, 0.05f), new Vector2(0.1f, 0.05f), "RELOAD", ReloadTime, OnReloadTimerFinished);
-        repairTimer = new ActionTimer(content, new Vector2(0.05f, 0.15f), new Vector2(0.1f, 0.05f), "FIX", RepairTime, OnRepairTimerFinished);
+        repairTimer = new ActionTimer(content, new Vector2(0.05f, 0.15f), new Vector2(0.1f, 0.05f), "FIX", RepairTime);
         bucketTimer = new ActionTimer(content, new Vector2(0.05f, 0.25f), new Vector2(0.1f, 0.05f), "BUCKET", BucketTime);
         waterGauge = new WaterGauge(content, new Vector2(0.05f, 0.85f), new Vector2(0.2f, 0.2f));
         damageDisplay = new DamageDisplay(content, new Vector2(0.15f, 0.85f), new Vector2(0.20f, 0.20f), gameplayScreen);
@@ -66,11 +66,6 @@ public class GameOverlay
     private void OnReloadTimerFinished()
     {
         playerBoat.FinishReload();
-    }
-
-    private void OnRepairTimerFinished()
-    {
-        gameplayScreen.RepairHole();
     }
     public void TriggerRepair()
     {
