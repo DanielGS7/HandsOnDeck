@@ -8,6 +8,7 @@ using HandsOnDeck2.Classes.Collision;
 using HandsOnDeck2.Classes.Rendering;
 using HandsOnDeck2.Classes.Global;
 using HandsOnDeck2.Classes.Sound;
+using HandsOnDeck2.Classes.UI.Screens;
 
 namespace HandsOnDeck2.Classes.GameObject.Entity
 {
@@ -23,6 +24,8 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
         public float Rotation { get => rotation; set => rotation = value; }
         public SeaCoordinate Position { get; set; }
         public bool IsColliding { get; set; }
+        public bool IsLeftCannonLoaded { get; private set; }
+        public bool IsRightCannonLoaded { get; private set; }
 
         private Vector2 externalForce;
         private float sirenEffect = 0f;
@@ -32,8 +35,8 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
         private bool anchorDown;
         private bool sailsOpen;
 
-        private bool leftCannonLoaded;
-        private bool rightCannonLoaded;
+        private bool leftCannonLoaded = true;
+        private bool rightCannonLoaded = true;
         private float reloadTimer;
         private const float ReloadTime = 2f;
 
@@ -55,8 +58,8 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
             VisualElement = new VisualElement(boatAnimation, Color.White, SpriteEffects.None, 0f);
             CollisionManager.Instance.AddCollideable(this);
 
-            leftCannonLoaded = true;
-            rightCannonLoaded = true;
+            IsLeftCannonLoaded = true;
+            IsRightCannonLoaded = true;
             reloadTimer = 0f;
 
             playerCannonballFactory = new PlayerCannonballFactory(content);
@@ -79,10 +82,12 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
                     rotation += rotationSpeed / 100;
                     break;
                 case GameAction.ShootLeft:
-                    ShootCannon(true);
+                        ShootCannon(true);
+                        IsLeftCannonLoaded = false;
                     break;
                 case GameAction.ShootRight:
-                    ShootCannon(false);
+                        ShootCannon(false);
+                        IsRightCannonLoaded = false;
                     break;
                 case GameAction.ToggleAnchor:
                     anchorDown = !anchorDown;
@@ -169,7 +174,7 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
 
         private void ShootCannon(bool isLeft)
         {
-            if ((isLeft && leftCannonLoaded) || (!isLeft && rightCannonLoaded))
+            if ((isLeft && IsLeftCannonLoaded) || (!isLeft && IsRightCannonLoaded))
             {
                 Vector2 forwardDirection = new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation));
                 
@@ -199,6 +204,12 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
                 reloadTimer = ReloadTime;
                 AudioManager.Instance.Play("reload");
             }
+        }
+        
+        public void FinishReload()
+        {
+            IsLeftCannonLoaded = true;
+            IsRightCannonLoaded = true;
         }
     }
 }
