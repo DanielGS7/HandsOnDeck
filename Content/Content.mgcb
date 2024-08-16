@@ -710,6 +710,30 @@
 /processorParam:TextureFormat=Color
 /build:heart.png
 
+#begin hole.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:hole.png
+
+#begin hull_background.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:hull_background.png
+
 #begin island.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -781,6 +805,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:ocean.png
+
+#begin plank.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:plank.png
 
 #begin rival_boat.png
 /importer:TextureImporter
@@ -902,23 +938,17 @@
 /processorParam:Quality=Best
 /build:SFX/damage06.wav
 
-#begin SFX/damage07.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:SFX/damage07.wav
-
-#begin SFX/exploasion02.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:SFX/exploasion02.wav
-
 #begin SFX/explosion01.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:SFX/explosion01.wav
+
+#begin SFX/explosion02.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/explosion02.wav
 
 #begin SFX/explosion03.wav
 /importer:WavImporter
@@ -985,6 +1015,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:siren.png
+
+#begin timer.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:timer.png
+
+#begin water_gauge.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:water_gauge.png
 
 #begin water.png
 /importer:TextureImporter

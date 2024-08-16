@@ -55,7 +55,7 @@ class RivalBoat : Enemy
 
     protected override void UpdateTargetRotation(float deltaTime, Vector2 avoidanceForce)
     {
-        Boat playerBoat = Map.Instance.player;
+        PlayerBoat playerBoat = Map.Instance.player;
         Vector2 playerDirection = new Vector2((float)Math.Cos(playerBoat.Rotation), (float)Math.Sin(playerBoat.Rotation));
         Vector2 perpendicularDirection = new Vector2(-playerDirection.Y, playerDirection.X);
 

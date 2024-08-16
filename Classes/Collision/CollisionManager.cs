@@ -8,6 +8,8 @@ using HandsOnDeck2.Classes.Rendering;
 using System.Linq;
 using HandsOnDeck2.Classes.GameObject;
 using HandsOnDeck2.Classes.Global;
+using HandsOnDeck2.Classes.GameObject.Entity;
+using HandsOnDeck2.Classes.Sound;
 
 namespace HandsOnDeck2.Classes.Collision
 {
@@ -66,8 +68,11 @@ namespace HandsOnDeck2.Classes.Collision
 
         public void Update(GameTime gameTime)
         {
+            var currentCollideables = collideables.ToList();
             var projectiles = Map.Instance.GetProjectiles();
-            List<ICollideable> currentCollideables = collideables.ToList();
+            var playerBoat = Map.Instance.player;
+            var expiredProjectiles = new List<IProjectile>();
+
             foreach (var collideable in currentCollideables)
             {
                 collideable.IsColliding = false;
@@ -75,30 +80,57 @@ namespace HandsOnDeck2.Classes.Collision
 
             for (int i = 0; i < currentCollideables.Count; i++)
             {
+                var a = currentCollideables[i];
                 for (int j = i + 1; j < currentCollideables.Count; j++)
                 {
-                    if (CheckCollision(currentCollideables[i], currentCollideables[j]))
+                    var b = currentCollideables[j];
+                    if (CheckCollision(a, b))
                     {
-                        currentCollideables[i].IsColliding = true;
-                        currentCollideables[j].IsColliding = true;
-                        currentCollideables[i].OnCollision(currentCollideables[j]);
-                        currentCollideables[j].OnCollision(currentCollideables[i]);
+                        a.IsColliding = true;
+                        b.IsColliding = true;
+                        a.OnCollision(b);
+                        b.OnCollision(a);
                     }
                 }
-            }
-            foreach (var projectile in projectiles)
-            {
-                if (projectile is ICollideable collideable)
+
+                foreach (var projectile in projectiles)
                 {
-                    foreach (var other in currentCollideables)
+                    if (projectile is ICollideable collideable && collideable != a && CheckCollision(a, collideable))
                     {
-                        if (other != collideable && CheckCollision(collideable, other))
+                        a.IsColliding = true;
+                        collideable.IsColliding = true;
+                        a.OnCollision(collideable);
+                        collideable.OnCollision(a);
+
+                        if (a == playerBoat && projectile.Parent != playerBoat)
                         {
-                            collideable.OnCollision(other);
-                            other.OnCollision(collideable);
+                            playerBoat.TakeDamage();
+                            expiredProjectiles.Add(projectile);
+                        }
+                        else if (a is Enemy enemy && projectile is PlayerCannonball)
+                        {
+                            expiredProjectiles.Add(projectile);
                         }
                     }
                 }
+            }
+
+            foreach (var projectile in projectiles)
+            {
+                if (projectile.Parent != playerBoat && !projectile.IsExpired)
+                {
+                    float distanceToPlayer = Vector2.Distance(projectile.Position.ToVector2(), playerBoat.Position.ToVector2());
+                    if (distanceToPlayer < 50 && distanceToPlayer > 20)
+                    {
+                        AudioManager.Instance.Play("cannonball_flyby");
+                        expiredProjectiles.Add(projectile);
+                    }
+                }
+            }
+
+            foreach (var expiredProjectile in expiredProjectiles)
+            {
+                Map.Instance.RemoveProjectile(expiredProjectile);
             }
         }
 

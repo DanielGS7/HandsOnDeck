@@ -4,6 +4,7 @@ using HandsOnDeck2.Interfaces;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using HandsOnDeck2.Classes.Sound;
 
 public class Cannonball : IProjectile
 {
@@ -52,6 +53,16 @@ public class Cannonball : IProjectile
         if (timeAlive >= Lifetime && !IsInViewport())
         {
             IsExpired = true;
+        }
+
+        if (Parent != Map.Instance.player)
+        {
+            float distanceToPlayer = Vector2.Distance(Position.ToVector2(), Map.Instance.player.Position.ToVector2());
+            if (distanceToPlayer < 50 && !IsExpired)
+            {
+                AudioManager.Instance.Play("cannonball_flyby");
+                IsExpired = true;
+            }
         }
     }
 

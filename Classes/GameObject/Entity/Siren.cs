@@ -36,7 +36,7 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
 
         public void Update(GameTime gameTime)
         {
-            Boat playerBoat = Map.Instance.player;
+            PlayerBoat playerBoat = Map.Instance.player;
             Vector2 directionToSiren = Position.GetShortestDirection(playerBoat.Position);
             float distanceToPlayer = directionToSiren.Length();
 

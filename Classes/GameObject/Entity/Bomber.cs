@@ -51,7 +51,7 @@ class Bomber : Enemy
 
     protected override void UpdateTargetRotation(float deltaTime, Vector2 avoidanceForce)
     {
-        Boat playerBoat = Map.Instance.player;
+        PlayerBoat playerBoat = Map.Instance.player;
         Vector2 playerDirection = new Vector2((float)Math.Cos(playerBoat.Rotation), (float)Math.Sin(playerBoat.Rotation));
         Vector2 perpendicularDirection = new Vector2(-playerDirection.Y, playerDirection.X);
         Vector2 leftTarget = playerBoat.Position.ToVector2() - perpendicularDirection * DesiredDistance;
@@ -81,7 +81,7 @@ class Bomber : Enemy
 
     private bool IsInFrontOfPlayer()
     {
-        Boat playerBoat = Map.Instance.player;
+        PlayerBoat playerBoat = Map.Instance.player;
         Vector2 directionToPlayer = GetShortestDirectionToPlayer();
         Vector2 playerForward = new Vector2((float)Math.Cos(playerBoat.Rotation), (float)Math.Sin(playerBoat.Rotation));
 

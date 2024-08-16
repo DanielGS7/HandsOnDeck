@@ -142,7 +142,7 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
 
         protected Vector2 GetShortestDirectionToPlayer()
         {
-            Boat playerBoat = Map.Instance.player;
+            PlayerBoat playerBoat = Map.Instance.player;
             return Position.GetShortestDirection(playerBoat.Position);
         }
 
