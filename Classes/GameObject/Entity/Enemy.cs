@@ -202,7 +202,6 @@ spriteBatch.Draw(HeartTexture, heartPosition, null, Color.White, 0f,
             if (other is Island island)
             {
                 Speed = MathHelper.Clamp(Speed - 0.5f, 70f, 100f);
-                Debug.WriteLine("Speed: " + Speed);
 
                 Vector2 directionAway = Position.ToVector2() - island.Position.ToVector2();
                 directionAway.Normalize();
