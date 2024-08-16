@@ -890,17 +890,17 @@
 /processorParam:Quality=Best
 /build:SFX/cannonball_flyby03.wav
 
-#begin SFX/Creaks01.wav
+#begin SFX/creak01.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:SFX/Creaks01.wav
+/build:SFX/creak01.wav
 
-#begin SFX/Creaks02.wav
+#begin SFX/creak02.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:SFX/Creaks02.wav
+/build:SFX/creak02.wav
 
 #begin SFX/damage01.wav
 /importer:WavImporter
@@ -979,12 +979,6 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:SFX/gong_sink02.wav
-
-#begin SFX/notice.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:SFX/notice.wav
 
 #begin SFX/reload01.wav
 /importer:WavImporter

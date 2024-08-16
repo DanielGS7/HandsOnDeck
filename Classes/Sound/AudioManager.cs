@@ -73,7 +73,7 @@ namespace HandsOnDeck2.Classes.Sound
 
         private void LoadSoundEffects(ContentManager content)
         {
-            string[] sfxCategories = { "notice", "reload", "gong_sink", "Creak", "damage", "explosion", "score", "reward", "cannonball_flyby", "cannon_fire" };
+            string[] sfxCategories = { "reload", "gong_sink", "creak", "damage", "explosion", "score", "reward", "cannonball_flyby", "cannon_fire" };
             foreach (string category in sfxCategories)
             {
                 soundEffects[category] = new List<SoundEffect>();
@@ -226,6 +226,10 @@ namespace HandsOnDeck2.Classes.Sound
             }
         }
 
+        public void UpdateListenerPosition(Vector2 position)
+        {
+            Listener.Update(position);
+        }
         private void UpdateFadeOut(GameTime gameTime)
         {
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;

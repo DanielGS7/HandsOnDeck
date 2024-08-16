@@ -27,6 +27,7 @@ public class GameplayScreen : Screen
     private float timeSurvived;
     private int minutesSurvived;
     private int cannonballsDodged;
+    private float creakTimer;
 
     public GameplayScreen(GraphicsDevice graphicsDevice, ContentManager content) : base(graphicsDevice, content)
     {
@@ -62,10 +63,12 @@ public class GameplayScreen : Screen
                 UpdateWaterLevel(gameTime);
                 gameOverlay.Update(gameTime);
                 UpdateScoring(deltaTime);
+                UpdateCreakSound(gameTime);
                 if (waterLevel >= MaxWaterLevel)
                 {
                     StartSinking();
                 }
+                AudioManager.Instance.UpdateListenerPosition(gameMap.player.Position.ToVector2());
             }
             else
             {
@@ -176,6 +179,7 @@ public class GameplayScreen : Screen
     {
         isSinking = true;
         sinkingTimer = 0f;
+        AudioManager.Instance.Play("gong_sink");
     }
 
     private void UpdateSinkingEffect(GameTime gameTime)
@@ -205,10 +209,26 @@ public class GameplayScreen : Screen
 
     private void EndGame()
     {
+        AudioManager.Instance.Play("reward");
         ScreenManager.Instance.ChangeScreen(ScreenType.GameOver);
         ((GameOverScreen)ScreenManager.Instance.screens[ScreenType.GameOver]).SetScore(GlobalInfo.Score);
     }
 
+    private void UpdateCreakSound(GameTime gameTime)
+    {
+        float creakInterval = MathHelper.Lerp(5f, 1f, waterLevel);
+        float creakVolume = MathHelper.Lerp(0.2f, 1f, waterLevel);
+
+        if (creakTimer <= 0)
+        {
+            AudioManager.Instance.Play("Creak", null, creakVolume);
+            creakTimer = creakInterval;
+        }
+        else
+        {
+            creakTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+        }
+    }
     public int GetHoleCount() => holeCount;
     public float GetWaterLevel() => waterLevel;
 }
