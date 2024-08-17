@@ -18,7 +18,7 @@ namespace HandsOnDeck2.Classes.UI.Screens
 
         public override void Initialize()
         {
-            AddTextElement("Select Difficulty", new Vector2(0.5f, 0.2f), 0f, Color.White, 2f);
+            AddTextElement("Select Difficulty", new Vector2(0.5f, 0.2f), 0f, Color.Black, 2f);
             AddButton("Easy", new Vector2(0.5f, 0.4f), new Vector2(0.3f, 0.1f), 0f, "wood_button", () => StartGame(Difficulty.Easy));
             AddButton("Normal", new Vector2(0.5f, 0.55f), new Vector2(0.3f, 0.1f), 0f, "wood_button", () => StartGame(Difficulty.Normal));
             AddButton("Hard", new Vector2(0.5f, 0.7f), new Vector2(0.3f, 0.1f), 0f, "wood_button", () => StartGame(Difficulty.Hard));
