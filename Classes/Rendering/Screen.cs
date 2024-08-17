@@ -1,3 +1,4 @@
+using HandsOnDeck2.Classes.UI;
 using HandsOnDeck2.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;

@@ -4,33 +4,36 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
 using HandsOnDeck2.Classes.GameObject.Entity.Projectile;
 
-public class PlayerCannonball : Cannonball
+namespace HandsOnDeck2.Classes.GameObject.Entity
 {
-    private bool hasDamaged = false;
-    public PlayerCannonball(ContentManager content, SeaCoordinate position, Vector2 direction, IGameObject parent)
-        : base(content, position, direction, parent)
+    public class PlayerCannonball : Cannonball
     {
-    }
-
-    public override void OnCollision(ICollideable other)
-    {
-        if (!hasDamaged && other != Parent)
+        private bool hasDamaged = false;
+        public PlayerCannonball(ContentManager content, SeaCoordinate position, Vector2 direction, IGameObject parent)
+            : base(content, position, direction, parent)
         {
-            if (other is RivalBoat rivalBoat)
+        }
+
+        public override void OnCollision(ICollideable other)
+        {
+            if (!hasDamaged && other != Parent)
             {
-                rivalBoat.TakeDamage();
-                hasDamaged = true;
-                IsExpired = true;
-            }
-            else if (other is Bomber bomber)
-            {
-                bomber.TakeDamage();
-                hasDamaged = true;
-                IsExpired = true;
-            }
-            else if (other is Bomb)
-            {
-                IsExpired = true;
+                if (other is RivalBoat rivalBoat)
+                {
+                    rivalBoat.TakeDamage();
+                    hasDamaged = true;
+                    IsExpired = true;
+                }
+                else if (other is Bomber bomber)
+                {
+                    bomber.TakeDamage();
+                    hasDamaged = true;
+                    IsExpired = true;
+                }
+                else if (other is Bomb)
+                {
+                    IsExpired = true;
+                }
             }
         }
     }
