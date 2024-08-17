@@ -9,12 +9,14 @@ using HandsOnDeck2.Classes.Rendering;
 using HandsOnDeck2.Classes.Global;
 using HandsOnDeck2.Classes.Sound;
 using HandsOnDeck2.Classes.Factory;
+
 namespace HandsOnDeck2.Classes.GameObject.Entity
 {
     public class PlayerBoat : IEntity, ICollideable, IControllable
     {
         internal const float maxSpeed = 3f;
         internal const float rotationSpeed = 3f;
+        private const float MinSpeedForAnimation = 0.3f;
         public Vector2 Size { get; set; }
         public float Speed { get; set; }
         public VisualElement VisualElement { get; set; }
@@ -27,9 +29,7 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
         public bool IsRightCannonLoaded { get; private set; }
         public bool IsInvincible => invincibilityTimer > 0;
         public event Action OnDamageTaken;
-        private float sirenEffect = 0f;
-        private const float SirenEffectDecay = 0.98f;
-        private bool isCollidingWithIsland = false;
+
         private float rotation;
         private bool anchorDown;
         private bool sailsOpen;
@@ -39,14 +39,19 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
         private bool rightCannonLoaded = true;
         private float reloadTimer;
         private const float ReloadTime = 2f;
+        private float sirenEffect = 0f;
+        private const float SirenEffectDecay = 0.98f;
+        private bool isCollidingWithIsland = false;
 
         private IProjectileFactory playerCannonballFactory;
+        private Texture2D staticBoatTexture;
+        private Animation movingBoatAnimation;
 
         public PlayerBoat(ContentManager content, SeaCoordinate startPosition)
         {
-            var boatTexture = content.Load<Texture2D>("boat");
-            var boatAnimation = new Animation("movingBoat", new Vector2(670, 243), 5, 5, 4f, true);
-            boatAnimation.LoadContent(content);
+            staticBoatTexture = content.Load<Texture2D>("boat");
+            movingBoatAnimation = new Animation("movingBoat", new Vector2(670, 243), 5, 5, 4f, true);
+            movingBoatAnimation.LoadContent(content);
             Position = startPosition;
             rotation = 0f;
             Speed = 0f;
@@ -55,7 +60,7 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
             Size = new Vector2(670, 243);
             Scale = 0.2f;
             Origin = new Vector2(Size.X / 2, Size.Y / 2);
-            VisualElement = new VisualElement(boatAnimation, Color.White, SpriteEffects.None, 0f);
+            VisualElement = new VisualElement(staticBoatTexture, Color.White, SpriteEffects.None, 0f);
             CollisionManager.Instance.AddCollideable(this);
             invincibilityDuration = DifficultySettings.Instance.GetInvincibilityDuration();
             IsLeftCannonLoaded = true;
@@ -82,12 +87,12 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
                     rotation += rotationSpeed / 100;
                     break;
                 case GameAction.ShootLeft:
-                        ShootCannon(true);
-                        IsLeftCannonLoaded = false;
+                    ShootCannon(true);
+                    IsLeftCannonLoaded = false;
                     break;
                 case GameAction.ShootRight:
-                        ShootCannon(false);
-                        IsRightCannonLoaded = false;
+                    ShootCannon(false);
+                    IsRightCannonLoaded = false;
                     break;
                 case GameAction.ToggleAnchor:
                     anchorDown = !anchorDown;
@@ -122,7 +127,7 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
             Vector2 movement = new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation)) * Speed;
             Position = new SeaCoordinate(Position.X + movement.X, Position.Y + movement.Y);
 
-            VisualElement.Update(gameTime);
+            UpdateVisualElement(gameTime);
 
             if (reloadTimer > 0)
             {
@@ -136,11 +141,27 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
             }
             if (invincibilityTimer > 0)
             {
-                invincibilityTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                invincibilityTimer -= deltaTime;
                 if (invincibilityTimer <= 0)
                 {
                     invincibilityTimer = 0;
                 }
+            }
+        }
+
+        private void UpdateVisualElement(GameTime gameTime)
+        {
+            if (Speed >= MinSpeedForAnimation)
+            {
+                if (!(VisualElement.animation is Animation))
+                {
+                    VisualElement = new VisualElement(movingBoatAnimation, Color.White, SpriteEffects.None, 0f);
+                }
+                VisualElement.Update(gameTime);
+            }
+            else
+            {
+                VisualElement = new VisualElement(staticBoatTexture, Color.White, SpriteEffects.None, 0f);
             }
         }
 
@@ -165,6 +186,7 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
             }
             return false;
         }     
+
         public void OnCollision(ICollideable other)
         {
             if (other is Island)
@@ -239,6 +261,7 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
                 AudioManager.Instance.Play("cannon_fire", null, 0.5f);
             }
         }
+
         private void StartReload()
         {
             if ((!leftCannonLoaded || !rightCannonLoaded) && reloadTimer == 0f )

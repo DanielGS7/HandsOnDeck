@@ -11,7 +11,7 @@ namespace HandsOnDeck2.Classes.Rendering
         private SpriteEffects spriteEffects;
         private float layerDepth;
         private Rectangle? sourceRectangle;
-        private Animation animation;
+        internal Animation animation;
 
         public VisualElement(Texture2D texture, Color color, SpriteEffects spriteEffects, float layerDepth, Rectangle? sourceRectangle = null)
         {
