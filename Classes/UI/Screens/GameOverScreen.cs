@@ -19,7 +19,7 @@ namespace HandsOnDeck2.Classes.UI.Screens
         public override void Initialize()
         {
             AddTextElement("Game Over", new Vector2(0.5f, 0.2f), 0f, Color.Black, 2f);
-            scoreText = new TextElement(content, "Score: 0", new Vector2(0.5f, 0.4f), 0f, Color.White, 1.5f);
+            scoreText = new TextElement(content, "Score: 0", new Vector2(0.5f, 0.4f), 0f, Color.Black, 1.5f);
             uiElements.Add(scoreText);
 
             //Didn't get to implemenent Game Reset() logic
