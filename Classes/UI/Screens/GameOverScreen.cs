@@ -30,11 +30,6 @@ namespace HandsOnDeck2.Classes.UI.Screens
             scoreText.SetText($"Score: {score}");
         }
 
-        private void PlayAgain()
-        {
-            ScreenManager.Instance.ChangeScreen(ScreenType.Gameplay);
-        }
-
         private void ReturnToMainMenu()
         {
             ScreenManager.Instance.ChangeScreen(ScreenType.MainMenu);
