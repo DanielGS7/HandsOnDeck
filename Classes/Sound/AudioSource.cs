@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using HandsOnDeck2.Classes.Sound;
 
 namespace HandsOnDeck2.Classes.Sound
 {

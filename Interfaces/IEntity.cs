@@ -1,7 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using HandsOnDeck2.Classes;
-
-namespace HandsOnDeck2.Interfaces
+﻿namespace HandsOnDeck2.Interfaces
 {
     public interface IEntity : IGameObject
     {

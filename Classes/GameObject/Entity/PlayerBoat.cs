@@ -8,8 +8,6 @@ using HandsOnDeck2.Classes.Collision;
 using HandsOnDeck2.Classes.Rendering;
 using HandsOnDeck2.Classes.Global;
 using HandsOnDeck2.Classes.Sound;
-using HandsOnDeck2.Classes.UI.Screens;
-
 namespace HandsOnDeck2.Classes.GameObject.Entity
 {
     public class PlayerBoat : IEntity, ICollideable, IControllable
@@ -28,8 +26,6 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
         public bool IsRightCannonLoaded { get; private set; }
         public bool IsInvincible => invincibilityTimer > 0;
         public event Action OnDamageTaken;
-
-        private Vector2 externalForce;
         private float sirenEffect = 0f;
         private const float SirenEffectDecay = 0.98f;
 
@@ -150,11 +146,6 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
         public void Draw(SpriteBatch spriteBatch)
         {
             VisualElement.Draw(spriteBatch, Position, Origin, Scale, Rotation);
-        }
-
-        public void ApplyExternalForce(Vector2 force)
-        {
-            externalForce += force;
         }
 
         public void ApplySirenEffect(float rotationInfluence)

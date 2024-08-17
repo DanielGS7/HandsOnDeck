@@ -1,4 +1,3 @@
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using HandsOnDeck2.Interfaces;
@@ -70,11 +69,6 @@ namespace HandsOnDeck2.Classes.Global
         public bool IsKeyHeld(Keys key)
         {
             return currentKeyboardState.IsKeyDown(key);
-        }
-
-        public bool IsKeyReleased(Keys key)
-        {
-            return !currentKeyboardState.IsKeyDown(key) && previousKeyboardState.IsKeyDown(key);
         }
     }
 }

@@ -31,7 +31,7 @@ namespace HandsOnDeck2.Classes.Global
 
         public static void DrawRectangle(SpriteBatch spriteBatch, Rectangle rectangle, Color color)
         {
-            spriteBatch.Draw(whiteTexture, rectangle, color * 0.5f); // Semi-transparent
+            spriteBatch.Draw(whiteTexture, rectangle, color * 0.5f);
         }
 
         public static void DrawText(SpriteBatch spriteBatch, string text, Vector2 position, Color color)

@@ -1,7 +1,6 @@
 ﻿using HandsOnDeck2.Classes.Global;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 
 namespace HandsOnDeck2.Classes.Rendering
 {
@@ -71,11 +70,6 @@ namespace HandsOnDeck2.Classes.Rendering
                 new Vector2(pos.X - mapWidth, pos.Y + mapHeight),
                 new Vector2(pos.X + mapWidth, pos.Y + mapHeight)
             };
-        }
-
-        public void SetColor(Color newColor)
-        {
-            color = newColor;
         }
 
         public void SetSourceRectangle(Rectangle? newSourceRectangle)

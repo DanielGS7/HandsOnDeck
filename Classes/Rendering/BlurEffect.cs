@@ -53,7 +53,7 @@ namespace HandsOnDeck2.Classes.Rendering
             graphicsDevice.SetRenderTarget(null);
         }
 
-        public void ApplyVerticalBlur(SpriteBatch spriteBatch)
+        public void ApplyVerticalBlur()
         {
             effect.Parameters["GameTexture"].SetValue(tempTarget);
             effect.CurrentTechnique = effect.Techniques["GaussianBlurTechnique"];

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,11 +9,9 @@ public class VideoBackground
     private int currentFrameIndex;
     private float frameTime;
     private float timeSinceLastFrame;
-    private GraphicsDevice graphicsDevice;
 
-    public VideoBackground(GraphicsDevice graphicsDevice, ContentManager content, string textureBaseName, int frameCount, float fps)
+    public VideoBackground(ContentManager content, string textureBaseName, int frameCount, float fps)
     {
-        this.graphicsDevice = graphicsDevice;
         frames = new List<Texture2D>();
         for (int i = 1; i <= frameCount; i++)
         {

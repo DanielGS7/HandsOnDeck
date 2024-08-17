@@ -1,9 +1,7 @@
 using HandsOnDeck2.Classes.Global;
-using HandsOnDeck2.Classes.GameObject.Entity;
 using HandsOnDeck2.Interfaces;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 public class PlayerCannonball : Cannonball
 {

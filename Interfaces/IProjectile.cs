@@ -1,9 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using HandsOnDeck2.Interfaces;
-using HandsOnDeck2.Classes.Global;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
-
+﻿using HandsOnDeck2.Interfaces;
 public interface IProjectile : IGameObject, ICollideable
 {
     bool IsExpired { get; }

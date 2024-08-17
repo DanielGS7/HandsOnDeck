@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 using HandsOnDeck2.Enums;
-using HandsOnDeck2.Interfaces;
 
 namespace HandsOnDeck2.Classes.Sound
 {
@@ -16,7 +15,6 @@ namespace HandsOnDeck2.Classes.Sound
 
         private Dictionary<GameState, List<Song>> stateMusicMap;
         private Dictionary<string, List<SoundEffect>> soundEffects;
-        private Dictionary<string, SoundEffectInstance> loopingSounds;
         private Dictionary<GameState, int> currentSongIndexPerState;
         private Dictionary<GameState, TimeSpan> musicPositionPerState;
         private Song currentSong;
@@ -38,7 +36,6 @@ namespace HandsOnDeck2.Classes.Sound
         {
             stateMusicMap = new Dictionary<GameState, List<Song>>();
             soundEffects = new Dictionary<string, List<SoundEffect>>();
-            loopingSounds = new Dictionary<string, SoundEffectInstance>();
             currentSongIndexPerState = new Dictionary<GameState, int>();
             musicPositionPerState = new Dictionary<GameState, TimeSpan>();
             Listener = new AudioListener();
@@ -165,48 +162,6 @@ namespace HandsOnDeck2.Classes.Sound
             sfx.Play(volume * SfxVolume, pitch, pan);
         }
 
-        public void PlayLooping(string sfxName, int? specificIndex = null, float volume = 1f, float pitch = 0f, float pan = 0f)
-        {
-            if (!IsSfxEnabled || !soundEffects.ContainsKey(sfxName)) return;
-
-            List<SoundEffect> sfxList = soundEffects[sfxName];
-            if (sfxList.Count == 0) return;
-
-            SoundEffect sfx;
-            if (specificIndex.HasValue && specificIndex.Value >= 0 && specificIndex.Value < sfxList.Count)
-            {
-                sfx = sfxList[specificIndex.Value];
-            }
-            else
-            {
-                sfx = sfxList[random.Next(sfxList.Count)];
-            }
-
-            if (loopingSounds.ContainsKey(sfxName))
-            {
-                loopingSounds[sfxName].Stop();
-                loopingSounds.Remove(sfxName);
-            }
-
-            SoundEffectInstance instance = sfx.CreateInstance();
-            instance.IsLooped = true;
-            instance.Volume = volume * SfxVolume;
-            instance.Pitch = pitch;
-            instance.Pan = pan;
-            instance.Play();
-
-            loopingSounds[sfxName] = instance;
-        }
-
-        public void StopLooping(string sfxName)
-        {
-            if (loopingSounds.ContainsKey(sfxName))
-            {
-                loopingSounds[sfxName].Stop();
-                loopingSounds.Remove(sfxName);
-            }
-        }
-
         public void Update(GameTime gameTime)
         {
             if (isFadingOut)
@@ -262,12 +217,6 @@ namespace HandsOnDeck2.Classes.Sound
             {
                 MediaPlayer.Volume = MusicVolume;
             }
-        }
-
-        public void StopMusic()
-        {
-            MediaPlayer.Stop();
-            currentSong = null;
         }
     }
 }
