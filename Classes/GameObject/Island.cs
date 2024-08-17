@@ -34,7 +34,7 @@ namespace HandsOnDeck2.Classes.GameObject
         private static readonly float colliderSizeMultiplier = 0.6f;
         public Vector2 ColliderSize => Size * Scale * colliderSizeMultiplier;
 
-        public Island(ContentManager content, GraphicsDevice graphicsDevice, int spriteIndex, string name, SeaCoordinate position, float scale, float rotation)
+        public Island(ContentManager content, int spriteIndex, string name, SeaCoordinate position, float scale, float rotation)
         {
             if (islandTexture == null)
             {
@@ -54,11 +54,6 @@ namespace HandsOnDeck2.Classes.GameObject
             VisualElement = new VisualElement(animation, Color.White, SpriteEffects.None, 0f);
         }
 
-        public Island(ContentManager content, GraphicsDevice graphicsDevice)
-            : this(content, graphicsDevice, random.Next(totalIslands), GenerateName(), GenerateRandomPosition(), GenerateRandomScale(), 0)
-        {
-        }
-
         public void Update(GameTime gameTime)
         {
             VisualElement.Update(gameTime);
@@ -70,7 +65,7 @@ namespace HandsOnDeck2.Classes.GameObject
             Siren?.Draw(spriteBatch);
         }
 
-        public static List<Island> GenerateIslands(ContentManager content, GraphicsDevice graphicsDevice, int count)
+        public static List<Island> GenerateIslands(ContentManager content, int count)
         {
             List<Island> islands = new List<Island>();
 
@@ -82,7 +77,7 @@ namespace HandsOnDeck2.Classes.GameObject
                 do
                 {
                     overlaps = false;
-                    newIsland = new Island(content, graphicsDevice, i, GenerateName(), GenerateRandomPosition(), GenerateRandomScale(), 0);
+                    newIsland = new Island(content, i, GenerateName(), GenerateRandomPosition(), GenerateRandomScale(), 0);
 
                     foreach (var island in islands)
                     {

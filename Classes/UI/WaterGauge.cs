@@ -39,9 +39,4 @@ public class WaterGauge : UIElement
 
         spriteBatch.Draw(gaugeTexture, waterRect, new Rectangle(0, 0, 1, 1), waterColor);
     }
-
-    public bool IsFull()
-    {
-        return waterLevel >= 0.99f;
-    }
 }

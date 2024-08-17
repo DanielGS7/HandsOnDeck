@@ -1,5 +1,3 @@
-using Microsoft.Xna.Framework;
-
 namespace HandsOnDeck2.Interfaces
 {
     public interface ICollideable : IGameObject

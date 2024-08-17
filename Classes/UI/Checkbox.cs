@@ -15,7 +15,7 @@ namespace HandsOnDeck2.Classes
         private bool isMouseOver;
         private bool wasMousePressed;
 
-        public Checkbox(GraphicsDevice graphicsDevice, ContentManager content, Vector2 positionPercentage, Vector2 sizePercentage, string label)
+        public Checkbox(ContentManager content, Vector2 positionPercentage, Vector2 sizePercentage, string label)
             : base(positionPercentage, sizePercentage, 0f)
         {
             this.label = label;

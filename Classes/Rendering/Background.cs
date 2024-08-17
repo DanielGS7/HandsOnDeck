@@ -37,7 +37,7 @@ namespace HandsOnDeck2.Classes
             }
         }
 
-        public void Initialize(ContentManager content, GraphicsDevice graphicsDevice)
+        public void Initialize(ContentManager content)
         {
             var spriteSheetName = "water";
             var spriteSize = new Vector2(spriteWidth, spriteHeight);
@@ -57,52 +57,15 @@ namespace HandsOnDeck2.Classes
         {
             scale = newScale;
         }
-
-        public void SetDirection(Vector2 newDirection)
-        {
-            direction = newDirection;
-        }
-
-        public void SetMoveSpeed(float newMoveSpeed)
-        {
-            moveSpeed = newMoveSpeed;
-        }
-
-        public void SetAnimationSpeed(float newSpeed)
-        {
-            animation.SetSpeed(newSpeed);
-        }
-
         public float GetScale()
         {
             return scale;
-        }
-
-        public float GetRotation()
-        {
-            return MathHelper.ToDegrees(rotation);
-        }
-
-        public Vector2 GetDirection()
-        {
-            return direction;
-        }
-
-        public float GetMoveSpeed()
-        {
-            return moveSpeed;
         }
 
         public void Update(GameTime gameTime)
         {
             offset += direction * moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             visualElement.Update(gameTime);
-        }
-
-        public void AdjustPositionForTeleport(Vector2 previousCameraPosition, Vector2 newCameraPosition)
-        {
-            Vector2 relativeOffset = previousCameraPosition - offset;
-            offset = newCameraPosition - relativeOffset;
         }
 
         public void Draw(SpriteBatch spriteBatch, Camera camera, Viewport viewport)

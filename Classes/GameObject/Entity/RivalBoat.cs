@@ -8,7 +8,6 @@ using System;
 
 class RivalBoat : Enemy
 {
-    private const float ShootCooldown = 2f;
     private float timeSinceLastShot = 0f;
     private const float DesiredDistance = 200f;
     private IProjectileFactory cannonballFactory;

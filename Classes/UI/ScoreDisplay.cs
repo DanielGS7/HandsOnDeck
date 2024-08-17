@@ -38,9 +38,4 @@ public class ScoreDisplay : UIElement
     {
         score = newScore;
     }
-
-    public int GetScore()
-    {
-        return score;
-    }
 }

@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using HandsOnDeck2.Classes.GameObject.Entity;
 using HandsOnDeck2.Classes.UI.Screens;
-using System;
 using HandsOnDeck2.Classes;
 
 public class GameOverlay
@@ -23,7 +22,7 @@ public class GameOverlay
     private const float RepairTime = 3f;
     private const float BucketTime = 4f;
 
-    public GameOverlay(ContentManager content, Viewport viewport, PlayerBoat playerBoat, GameplayScreen gameplayScreen)
+    public GameOverlay(ContentManager content, PlayerBoat playerBoat, GameplayScreen gameplayScreen)
     {
         this.playerBoat = playerBoat;
         this.gameplayScreen = gameplayScreen;
@@ -110,9 +109,5 @@ public class GameOverlay
     public void SetWaterLevel(float level)
     {
         waterGauge.SetWaterLevel(level);
-    }
-
-    public bool IsWaterGaugeFull(){
-        return waterGauge.IsFull();
     }
 }

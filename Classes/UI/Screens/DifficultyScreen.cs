@@ -13,7 +13,7 @@ namespace HandsOnDeck2.Classes.UI.Screens
         private VideoBackground videoBackground;
         public DifficultyScreen(GraphicsDevice graphicsDevice, ContentManager content) : base(graphicsDevice, content)
         {
-            videoBackground = new VideoBackground(graphicsDevice, content, "background\\background_frame_", 29, 25);
+            videoBackground = new VideoBackground(content, "background\\background_frame_", 29, 25);
         }
 
         public override void Initialize()
@@ -39,7 +39,7 @@ namespace HandsOnDeck2.Classes.UI.Screens
         private void StartGame(Difficulty difficulty)
         {
 
-            DifficultySettings.Instance.SetDifficulty(Difficulty.Normal);
+            DifficultySettings.Instance.SetDifficulty(difficulty);
             ScreenManager.Instance.ChangeScreen(ScreenType.Gameplay);
         }
 

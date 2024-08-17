@@ -15,7 +15,7 @@ namespace HandsOnDeck2.Classes.UI.Screens
 
         public SettingsScreen(GraphicsDevice graphicsDevice, ContentManager content) : base(graphicsDevice, content)
         {
-            videoBackground = new VideoBackground(graphicsDevice, content, "background\\background_frame_", 29, 25);
+            videoBackground = new VideoBackground(content, "background\\background_frame_", 29, 25);
         }
 
         public override void Initialize()
@@ -23,11 +23,11 @@ namespace HandsOnDeck2.Classes.UI.Screens
             AddTextElement("Settings", new Vector2(0.5f, 0.1f), 0f, Color.White, 2f);
 
             AddTextElement("Volume", new Vector2(0.5f, 0.3f), 0f, Color.White);
-            volumeSlider = new VolumeSlider(graphicsDevice, content, new Vector2(0.5f, 0.35f), new Vector2(0.6f, 0.05f));
+            volumeSlider = new VolumeSlider(content, new Vector2(0.5f, 0.35f), new Vector2(0.6f, 0.05f));
             uiElements.Add(volumeSlider);
 
             AddTextElement("Fullscreen", new Vector2(0.5f, 0.5f), 0f, Color.White);
-            fullscreenCheckbox = new Checkbox(graphicsDevice, content, new Vector2(0.5f, 0.55f), new Vector2(0.05f, 0.05f), "");
+            fullscreenCheckbox = new Checkbox(content, new Vector2(0.5f, 0.55f), new Vector2(0.05f, 0.05f), "");
             uiElements.Add(fullscreenCheckbox);
 
             AddButton("Apply", new Vector2(0.4f, 0.7f), new Vector2(0.2f, 0.1f), 0f, "wood_button", ApplySettings);

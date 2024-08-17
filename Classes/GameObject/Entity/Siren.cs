@@ -18,8 +18,6 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
         public float Scale { get; set; }
         private DifficultySettings difficultySettings;
         private const float AttractionRadius = 1000f;
-        private const float MaxAttractionStrength = 0.02f;
-        private const float AttractionCurve = 2f;
 
         public Siren(ContentManager content, SeaCoordinate position)
         {

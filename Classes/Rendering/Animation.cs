@@ -19,8 +19,6 @@ namespace HandsOnDeck2.Classes.Rendering
 
         private double timeSinceLastFrame = 0;
 
-        public Vector2 SpriteSize => spriteSize;
-
         public Animation(string spriteSheetName, Vector2 spriteSize, int rowCount, int totalSprites, float speed, bool isLooping)
         {
             this.spriteSheetName = spriteSheetName;

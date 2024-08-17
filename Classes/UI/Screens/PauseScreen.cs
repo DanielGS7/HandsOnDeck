@@ -81,7 +81,7 @@ namespace HandsOnDeck2.Classes.UI.Screens
                 graphicsDevice.Viewport.Height);
 
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-            blurEffect.ApplyVerticalBlur(spriteBatch);
+            blurEffect.ApplyVerticalBlur();
             spriteBatch.Draw(blurEffect.TempTarget, destinationRectangle, Color.White);
             spriteBatch.End();
 
