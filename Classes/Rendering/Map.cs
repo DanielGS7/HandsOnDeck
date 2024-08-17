@@ -11,6 +11,7 @@ using HandsOnDeck2.Classes.GameObject;
 using HandsOnDeck2.Classes.Collision;
 using HandsOnDeck2.Classes.Global;
 using System.Linq;
+using HandsOnDeck2.Classes.UI.Screens;
 
 namespace HandsOnDeck2.Classes.Rendering
 {
@@ -304,6 +305,7 @@ namespace HandsOnDeck2.Classes.Rendering
         {
             enemies.Remove(enemy);
             CollisionManager.Instance.RemoveCollideable(enemy);
+            ((GameplayScreen)ScreenManager.Instance.screens[ScreenType.Gameplay]).EnemyDestroyed(enemy);
         }
         public void RemoveProjectile(IProjectile projectile)
         {

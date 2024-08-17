@@ -10,6 +10,8 @@ using HandsOnDeck2.Classes.GameObject;
 using HandsOnDeck2.Classes.Global;
 using HandsOnDeck2.Classes.GameObject.Entity;
 using HandsOnDeck2.Classes.Sound;
+using HandsOnDeck2.Classes.UI.Screens;
+using HandsOnDeck2.Enums;
 
 namespace HandsOnDeck2.Classes.Collision
 {
@@ -124,6 +126,12 @@ namespace HandsOnDeck2.Classes.Collision
                     {
                         AudioManager.Instance.Play("cannonball_flyby");
                         expiredProjectiles.Add(projectile);
+                        
+                        if (!playerBoat.IsInvincible)
+                        {
+                            var gameplayScreen = ScreenManager.Instance.screens[ScreenType.Gameplay] as GameplayScreen;
+                            gameplayScreen?.CannonballDodged();
+                        }
                     }
                 }
             }

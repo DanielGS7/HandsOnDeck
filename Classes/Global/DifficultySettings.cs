@@ -44,8 +44,9 @@ namespace HandsOnDeck2.Classes.Global
             {
                 case Difficulty.Easy: return 5f;
                 case Difficulty.Normal: return 3f;
-                case Difficulty.Hard: return 1.5f;
-                default: throw new ArgumentOutOfRangeException();
+                case Difficulty.Hard:
+                default:
+                return 1.5f;
             }
         }
 
@@ -55,8 +56,9 @@ namespace HandsOnDeck2.Classes.Global
             {
                 case Difficulty.Easy: return 0.005f;
                 case Difficulty.Normal: return 0.01f;
-                case Difficulty.Hard: return 0.02f;
-                default: throw new ArgumentOutOfRangeException();
+                case Difficulty.Hard: 
+                default:
+                return 0.02f;
             }
         }
 
@@ -66,8 +68,9 @@ namespace HandsOnDeck2.Classes.Global
             {
                 case Difficulty.Easy: return 3f;
                 case Difficulty.Normal: return 2f;
-                case Difficulty.Hard: return 1f;
-                default: throw new ArgumentOutOfRangeException();
+                case Difficulty.Hard: 
+                default:
+                return 1f;
             }
         }
 
@@ -77,9 +80,38 @@ namespace HandsOnDeck2.Classes.Global
             {
                 case Difficulty.Easy: return 5;
                 case Difficulty.Normal: return 8;
-                case Difficulty.Hard: return 12;
-                default: throw new ArgumentOutOfRangeException();
+                case Difficulty.Hard: 
+                default:
+                return 10;
             }
         }
+
+        internal float GetInvincibilityDuration()
+        {
+            switch (currentDifficulty)
+            {
+                case Difficulty.Normal:
+                    return 0.5f;
+                case Difficulty.Hard:
+                    return 0.2f;
+                case Difficulty.Easy:
+                default:
+                    return 1f;
+            }
+        }
+
+    internal float GetWaterIncreaseRate()
+    {
+        switch (currentDifficulty)
+        {
+            case Difficulty.Normal:
+                return 0.016f;
+            case Difficulty.Hard:
+                return 0.024f;
+            case Difficulty.Easy:
+            default:
+                return 0.008f;
+        }
+    }
     }
 }

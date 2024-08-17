@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using System;
+using HandsOnDeck2.Classes.Sound;
 
 public class Bomb : IProjectile, ICollideable
 {
@@ -32,6 +33,9 @@ public class Bomb : IProjectile, ICollideable
     private SeaCoordinate initialPosition;
     private Vector2 floatOffset;
 
+    private AudioSource explosionAudioSource;
+    private const float ExplosionSoundRadius = 400f;
+
     public Bomb(ContentManager content, SeaCoordinate position, IGameObject parent)
     {
         Position = position;
@@ -46,6 +50,7 @@ public class Bomb : IProjectile, ICollideable
 
         Rectangle sourceRectangle = new Rectangle(0, 0, (int)Size.X, (int)Size.Y);
         VisualElement = new VisualElement(spriteSheet, Color.White, SpriteEffects.None, 0f, sourceRectangle);
+        explosionAudioSource = new AudioSource("explosion", position.ToVector2(), ExplosionSoundRadius, 1f);
     }
 
     public void Update(GameTime gameTime)
@@ -103,7 +108,8 @@ public class Bomb : IProjectile, ICollideable
     private void Explode()
     {
         IsExpired = true;
-
+        explosionAudioSource.Position = Position.ToVector2();
+        explosionAudioSource.Play();
         foreach (var collideable in Map.Instance.GetCollideables())
         {
             if (collideable != this && collideable != Parent)
