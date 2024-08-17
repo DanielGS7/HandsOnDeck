@@ -177,7 +177,7 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
 
                 float angleDifference = MathHelper.WrapAngle(angleAway - rotation);
 
-                float maxTurnAngle = 0.01f; 
+                float maxTurnAngle = 0.03f; 
 
                 float clampedAngleDifference = MathHelper.Clamp(angleDifference, -maxTurnAngle, maxTurnAngle);
 
