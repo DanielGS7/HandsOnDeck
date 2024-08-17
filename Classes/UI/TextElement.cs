@@ -17,7 +17,7 @@ namespace HandsOnDeck2.Classes
             this.text = text;
             this.color = color;
             this.textScale = textScale;
-            font = content.Load<SpriteFont>("default");
+            font = content.Load<SpriteFont>("MyCatholicon");
         }
 
         public override void Update(GameTime gameTime, Viewport viewport)

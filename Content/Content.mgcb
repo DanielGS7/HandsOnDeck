@@ -794,6 +794,13 @@
 /processorParam:Quality=Best
 /build:Music/Play03.mp3
 
+#begin MyCatholicon.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:MyCatholicon.spritefont
+
 #begin ocean.png
 /importer:TextureImporter
 /processor:TextureProcessor

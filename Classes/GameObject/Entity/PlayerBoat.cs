@@ -164,8 +164,6 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
         {
             if (other is Island)
             {
-
-
                 Speed = MathHelper.Clamp(Speed - 0.05f, 1f, 5f);
 
                 Vector2 directionAway = Position.ToVector2() - other.Position.ToVector2();
@@ -173,7 +171,15 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
 
                 float angleAway = (float)Math.Atan2(directionAway.Y, directionAway.X);
 
-                rotation = MathHelper.Lerp(rotation, angleAway, 0.01f);
+                float angleDifference = MathHelper.WrapAngle(angleAway - rotation);
+
+                float maxTurnAngle = 0.01f; 
+
+                float clampedAngleDifference = MathHelper.Clamp(angleDifference, -maxTurnAngle, maxTurnAngle);
+
+                rotation += clampedAngleDifference;
+
+                rotation = MathHelper.WrapAngle(rotation);
             }
         }
 

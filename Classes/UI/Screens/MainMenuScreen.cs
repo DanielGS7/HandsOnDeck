@@ -17,7 +17,7 @@ namespace HandsOnDeck2.Classes.UI.Screens
 
         public override void Initialize()
         {
-            AddTextElement("Hands on Deck", new Vector2(0.5f, 0.2f), 0f, Color.White, 2f);
+            AddTextElement("Hands on Deck", new Vector2(0.5f, 0.2f), 0f, Color.Black, 2f);
             AddButton("Start Game", new Vector2(0.5f, 0.4f), new Vector2(0.3f, 0.1f), -0.2f, "wood_arrow", StartGame);
             AddButton("Settings", new Vector2(0.5f, 0.55f), new Vector2(0.3f, 0.1f), 0.1f, "wood_button", OpenSettings);
             AddButton("Quit", new Vector2(0.5f, 0.7f), new Vector2(0.3f, 0.1f), -0.14f, "wood_button", QuitGame);

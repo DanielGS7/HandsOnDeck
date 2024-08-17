@@ -20,16 +20,13 @@ namespace HandsOnDeck2.Classes.UI.Screens
 
         public override void Initialize()
         {
-            AddTextElement("Settings", new Vector2(0.5f, 0.1f), 0f, Color.White, 2f);
-
-            AddTextElement("Volume", new Vector2(0.5f, 0.3f), 0f, Color.White);
+            AddTextElement("Settings", new Vector2(0.5f, 0.1f), 0f, Color.Black, 2f);
+            AddTextElement("Volume", new Vector2(0.47f, 0.28f), 0f, Color.Black);
             volumeSlider = new VolumeSlider(content, new Vector2(0.5f, 0.35f), new Vector2(0.6f, 0.05f));
             uiElements.Add(volumeSlider);
-
-            AddTextElement("Fullscreen", new Vector2(0.5f, 0.5f), 0f, Color.White);
+            AddTextElement("Fullscreen", new Vector2(0.47f, 0.48f), 0f, Color.Black);
             fullscreenCheckbox = new Checkbox(content, new Vector2(0.5f, 0.55f), new Vector2(0.05f, 0.05f), "");
             uiElements.Add(fullscreenCheckbox);
-
             AddButton("Apply", new Vector2(0.4f, 0.7f), new Vector2(0.2f, 0.1f), 0f, "wood_button", ApplySettings);
             AddButton("Back", new Vector2(0.6f, 0.7f), new Vector2(0.2f, 0.1f), 0f, "wood_arrow", GoBack);
         }
