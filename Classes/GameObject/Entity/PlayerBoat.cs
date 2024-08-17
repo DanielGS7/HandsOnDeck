@@ -29,7 +29,7 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
         public event Action OnDamageTaken;
         private float sirenEffect = 0f;
         private const float SirenEffectDecay = 0.98f;
-
+        private bool isCollidingWithIsland = false;
         private float rotation;
         private bool anchorDown;
         private bool sailsOpen;
@@ -169,6 +169,12 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
         {
             if (other is Island)
             {
+                if (!isCollidingWithIsland)
+                {
+                    TakeDamage();
+                    isCollidingWithIsland = true;
+                }
+
                 Speed = MathHelper.Clamp(Speed - 0.05f, 1f, 5f);
 
                 Vector2 directionAway = Position.ToVector2() - other.Position.ToVector2();
@@ -202,6 +208,10 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
                 rotation += clampedAngleDifference;
 
                 rotation = MathHelper.WrapAngle(rotation);
+            }
+            else
+            {
+                isCollidingWithIsland = false;
             }
         }
 
