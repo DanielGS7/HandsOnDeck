@@ -12,6 +12,7 @@ using HandsOnDeck2.Classes.Collision;
 using HandsOnDeck2.Classes.Global;
 using System.Linq;
 using HandsOnDeck2.Classes.UI.Screens;
+using HandsOnDeck2.Classes.Factory;
 
 namespace HandsOnDeck2.Classes.Rendering
 {

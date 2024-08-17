@@ -1,4 +1,5 @@
 using System;
+using HandsOnDeck2.Enums;
 
 namespace HandsOnDeck2.Classes.Global
 {
@@ -99,18 +100,18 @@ namespace HandsOnDeck2.Classes.Global
             }
         }
 
-    internal float GetWaterIncreaseRate()
-    {
-        switch (currentDifficulty)
+        internal float GetWaterIncreaseRate()
         {
-            case Difficulty.Normal:
-                return 0.016f;
-            case Difficulty.Hard:
-                return 0.024f;
-            case Difficulty.Easy:
-            default:
-                return 0.008f;
+            switch (currentDifficulty)
+            {
+                case Difficulty.Normal:
+                    return 0.016f;
+                case Difficulty.Hard:
+                    return 0.024f;
+                case Difficulty.Easy:
+                default:
+                    return 0.008f;
+            }
         }
-    }
     }
 }

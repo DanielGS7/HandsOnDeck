@@ -1,3 +1,5 @@
+using HandsOnDeck2.Enums;
+
 namespace HandsOnDeck2.Classes
 {
     public class GlobalInfo
@@ -31,12 +33,5 @@ namespace HandsOnDeck2.Classes
             Score = 0;
             CurrentDifficulty = Difficulty.Normal;
         }
-    }
-
-    public enum Difficulty
-    {
-        Easy,
-        Normal,
-        Hard
     }
 }
