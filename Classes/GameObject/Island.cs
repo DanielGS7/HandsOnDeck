@@ -2,6 +2,7 @@ using HandsOnDeck2.Classes.Collision;
 using HandsOnDeck2.Classes.GameObject.Entity;
 using HandsOnDeck2.Classes.Global;
 using HandsOnDeck2.Classes.Rendering;
+using HandsOnDeck2.Enums;
 using HandsOnDeck2.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;

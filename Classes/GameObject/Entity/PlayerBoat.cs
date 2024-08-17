@@ -8,6 +8,7 @@ using HandsOnDeck2.Classes.Collision;
 using HandsOnDeck2.Classes.Rendering;
 using HandsOnDeck2.Classes.Global;
 using HandsOnDeck2.Classes.Sound;
+using HandsOnDeck2.Classes.Factory;
 namespace HandsOnDeck2.Classes.GameObject.Entity
 {
     public class PlayerBoat : IEntity, ICollideable, IControllable
