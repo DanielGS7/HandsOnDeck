@@ -15,7 +15,7 @@ namespace HandsOnDeck2.Classes.UI.Screens
 
         public SettingsScreen(GraphicsDevice graphicsDevice, ContentManager content) : base(graphicsDevice, content)
         {
-            videoBackground = new VideoBackground(content, "background\\background_frame_", 29, 25);
+            videoBackground = new VideoBackground(content, "background\\background_frame_", 49, 25);
         }
 
         public override void Initialize()
