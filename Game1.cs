@@ -1,8 +1,13 @@
-﻿using HandsOnDeck2.Classes;
-using HandsOnDeck2.Enums;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using HandsOnDeck2.Classes;
+using HandsOnDeck2.Enums;
+using HandsOnDeck2.Classes.UI.Screens;
+using HandsOnDeck2.Classes.CodeAccess;
+using Microsoft.Xna.Framework.Media;
+using HandsOnDeck2.Classes.GameObject.Entity;
+using HandsOnDeck2.Classes.Rendering;
 
 namespace HandsOnDeck2
 {
@@ -10,13 +15,15 @@ namespace HandsOnDeck2
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private Boat _boat;
-        private Map _map;
-        private Camera _camera;
-        private bool _isFullscreen = false;
+        private KeyboardState _previousKeyboardState;
+        public PlayerBoat PlayerBoat { get; private set; }
+        private static Game1 instance;
+        public static Game1 Instance => instance;
+        private PauseScreen pauseScreen;
 
         public Game1()
         {
+            instance = this;
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
@@ -24,80 +31,92 @@ namespace HandsOnDeck2
             _graphics.PreferredBackBufferHeight = 600;
             _graphics.IsFullScreen = false;
             Window.AllowUserResizing = true;
+            Window.ClientSizeChanged += Window_ClientSizeChanged;
         }
 
         protected override void Initialize()
         {
-            _camera = new Camera();
             base.Initialize();
+            GraphDev.Initialize(GraphicsDevice);
+            ScreenManager.Instance.Initialize(GraphicsDevice, Content);
+            ScreenManager.Instance.ChangeScreen(ScreenType.MainMenu);
+            PlayerBoat = Map.Instance.player;
+            pauseScreen = (PauseScreen) ScreenManager.Instance.screens[ScreenType.Pause];
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            var boatTexture = Content.Load<Texture2D>("boat");
-            var boatAnimation = new Animation("movingBoat", new Vector2(670, 243), 5, 5, 4f, true);
-            boatAnimation.LoadContent(Content);
-            _boat = new Boat(boatAnimation, new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2));
-
-            var islandTexture = Content.Load<Texture2D>("island");
-            _map = new Map(islandTexture, GraphicsDevice.Viewport.Width * 10, GraphicsDevice.Viewport.Height * 10);
-            Background.Instance.Initialize(Content, GraphicsDevice);
-            Background.Instance.SetScale(1f); // Set initial scale
-            Background.Instance.SetRotation(90f); // Set initial rotation
-            Background.Instance.SetDirection(new Vector2(1, -1)); // Move Up and Right
-            Background.Instance.SetMoveSpeed(30f); // Set initial move speed
-            Background.Instance.SetAnimationSpeed(7f); // Set initial animation speed
-
-            DebugTools.Initialize(GraphicsDevice, Content);
         }
 
         protected override void Update(GameTime gameTime)
         {
-            var keyboardState = Keyboard.GetState();
+            KeyboardState currentKeyboardState = Keyboard.GetState();
+            GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
 
-            // Toggle fullscreen mode when F is pressed
-            if (keyboardState.IsKeyDown(Keys.F))
+            if ((gamePadState.Buttons.Back == ButtonState.Pressed && _previousKeyboardState.IsKeyUp(Keys.Escape)) ||
+                (currentKeyboardState.IsKeyDown(Keys.Escape) && _previousKeyboardState.IsKeyUp(Keys.Escape)))
             {
-                _isFullscreen = !_isFullscreen;
-                _graphics.IsFullScreen = _isFullscreen;
-                _graphics.ApplyChanges();
+                HandleEscapeInput();
             }
 
-            if (keyboardState.IsKeyDown(Keys.W)) _boat.HandleInput(GameAction.SailsOpen);
-            if (keyboardState.IsKeyDown(Keys.S)) _boat.HandleInput(GameAction.SailsClosed);
-            if (keyboardState.IsKeyDown(Keys.A)) _boat.HandleInput(GameAction.SteerLeft);
-            if (keyboardState.IsKeyDown(Keys.D)) _boat.HandleInput(GameAction.SteerRight);
-            if (keyboardState.IsKeyDown(Keys.Q)) _boat.HandleInput(GameAction.ShootLeft);
-            if (keyboardState.IsKeyDown(Keys.E)) _boat.HandleInput(GameAction.ShootRight);
-            if (keyboardState.IsKeyDown(Keys.Space)) _boat.HandleInput(GameAction.ToggleAnchor);
+            ScreenManager.Instance.Update(gameTime);
 
-            _boat.Update(gameTime);
-            _camera.Update(_boat.Position, GraphicsDevice.Viewport);
-
-            Background.Instance.Update(gameTime);
+            _previousKeyboardState = currentKeyboardState;
 
             base.Update(gameTime);
+        }
+
+        private void HandleEscapeInput()
+        {
+            switch (ScreenManager.Instance.CurrentScreenType)
+            {
+                case ScreenType.Gameplay:
+                    pauseScreen.CaptureGameScreen(_spriteBatch);
+                    ScreenManager.Instance.ChangeScreen(ScreenType.Pause);
+                    break;
+                case ScreenType.Pause:
+                    ScreenManager.Instance.ChangeScreen(ScreenType.Gameplay);
+                    break;
+            }
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            _spriteBatch.Begin(transformMatrix: _camera.Transform);
-            Background.Instance.Draw(_spriteBatch, _camera, GraphicsDevice.Viewport);
-            _map.Draw(_spriteBatch);
-            _boat.Draw(_spriteBatch);
-            DebugTools.DrawRectangle(_spriteBatch, _boat, Color.Red);
-            _spriteBatch.End();
-
-            // Draw debug info
-            _spriteBatch.Begin();
-            DebugTools.DrawObjectInfo(_spriteBatch, _boat.Position, "boatposition", Color.FloralWhite);
-            _spriteBatch.End();
+            if (ScreenManager.Instance.CurrentScreenType == ScreenType.Pause)
+            {
+                pauseScreen.Draw(_spriteBatch);
+            }
+            else
+            {
+                _spriteBatch.Begin();
+                ScreenManager.Instance.Draw(_spriteBatch);
+                _spriteBatch.End();
+            }
 
             base.Draw(gameTime);
+        }
+
+        public void ApplySettings(float volume, bool fullscreen)
+        {
+            GlobalInfo.MusicVolume = volume/2;
+            GlobalInfo.SfxVolume = volume;
+            MediaPlayer.Volume = volume;
+            if (_graphics.IsFullScreen != fullscreen) _graphics.IsFullScreen = fullscreen;
+            _graphics.ApplyChanges();
+        }
+        private void Window_ClientSizeChanged(object sender, System.EventArgs e)
+        {
+            if (pauseScreen != null)
+            {
+                pauseScreen.RecreateRenderTarget();
+            }
+            if (pauseScreen.blurEffect != null)
+            {
+                pauseScreen.blurEffect.RecreateRenderTarget(GraphicsDevice);
+            }
         }
     }
 }
