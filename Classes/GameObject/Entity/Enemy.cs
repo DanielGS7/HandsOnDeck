@@ -217,6 +217,16 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
             {
                 IsCollidingWithIsland = false;
             }
+
+            if (other is PlayerBoat playerBoat)
+            {
+                Vector2 directionAway = Position.ToVector2() - playerBoat.Position.ToVector2();
+                directionAway.Normalize();
+
+                float angleAway = (float)Math.Atan2(directionAway.Y, directionAway.X);
+                Rotation = MathHelper.Lerp(Rotation, angleAway, 0.03f);
+
+            }
         }
     }
 }
