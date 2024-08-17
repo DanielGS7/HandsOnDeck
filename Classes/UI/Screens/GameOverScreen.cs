@@ -20,7 +20,8 @@ namespace HandsOnDeck2.Classes.UI.Screens
             scoreText = new TextElement(content, "Score: 0", new Vector2(0.5f, 0.4f), 0f, Color.White, 1.5f);
             uiElements.Add(scoreText);
 
-            AddButton("Play Again", new Vector2(0.5f, 0.6f), new Vector2(0.3f, 0.1f), 0f, "wood_arrow", PlayAgain);
+            //Didn't get to implemenent Game Reset() logic
+            //AddButton("Play Again", new Vector2(0.5f, 0.6f), new Vector2(0.3f, 0.1f), 0f, "wood_arrow", PlayAgain);
             AddButton("Main Menu", new Vector2(0.5f, 0.75f), new Vector2(0.3f, 0.1f), 0f, "wood_button", ReturnToMainMenu);
         }
 
