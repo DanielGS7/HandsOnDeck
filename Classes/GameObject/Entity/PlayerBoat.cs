@@ -137,6 +137,10 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
             if (invincibilityTimer > 0)
             {
                 invincibilityTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (invincibilityTimer <= 0)
+                {
+                    invincibilityTimer = 0;
+                }
             }
         }
 
@@ -174,7 +178,24 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
 
                 float angleDifference = MathHelper.WrapAngle(angleAway - rotation);
 
-                float maxTurnAngle = 0.01f; 
+                float maxTurnAngle = 0.03f; 
+
+                float clampedAngleDifference = MathHelper.Clamp(angleDifference, -maxTurnAngle, maxTurnAngle);
+
+                rotation += clampedAngleDifference;
+
+                rotation = MathHelper.WrapAngle(rotation);
+            }
+            else if (other is Enemy)
+            {
+                Vector2 directionAway = Position.ToVector2() - other.Position.ToVector2();
+                directionAway.Normalize();
+
+                float angleAway = (float)Math.Atan2(directionAway.Y, directionAway.X);
+
+                float angleDifference = MathHelper.WrapAngle(angleAway - rotation);
+
+                float maxTurnAngle = 0.05f;
 
                 float clampedAngleDifference = MathHelper.Clamp(angleDifference, -maxTurnAngle, maxTurnAngle);
 
