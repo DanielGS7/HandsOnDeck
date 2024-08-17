@@ -13,7 +13,7 @@ public class VolumeSlider : UIElement
     private float knobScale = 1f;
     private float bottomOffset;
 
-    public VolumeSlider(GraphicsDevice graphicsDevice, ContentManager content, Vector2 positionPercentage, Vector2 sizePercentage)
+    public VolumeSlider(ContentManager content, Vector2 positionPercentage, Vector2 sizePercentage)
         : base(positionPercentage, sizePercentage, 0f)
     {
         backgroundTexture = content.Load<Texture2D>("wood_slider");
@@ -59,11 +59,5 @@ public class VolumeSlider : UIElement
     public float GetValue()
     {
         return value;
-    }
-
-    public void SetKnobScale(float scale)
-    {
-        knobScale = scale;
-        bottomOffset = knobTexture.Height * 0.5f * knobScale;
     }
 }

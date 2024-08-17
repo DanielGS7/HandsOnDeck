@@ -1,5 +1,4 @@
 using HandsOnDeck2.Classes.CodeAccess;
-using HandsOnDeck2.Classes.Rendering;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;

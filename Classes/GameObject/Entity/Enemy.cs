@@ -25,8 +25,6 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
         protected bool IsCollidingWithIsland { get; set; }
         protected Texture2D HeartTexture { get; set; }
         public Collider Collider { get; protected set; }
-        public Island lastCollidedIsland { get;  set; }
-
         protected float targetRotation;
         protected const float RotationSpeed = 0.8f;
         protected const float MinDistanceToPlayer = 100f;
@@ -159,7 +157,7 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
                 Vector2 heartPosition = pos;
                 for (int i = 0; i < Lives; i++)
                 {
-spriteBatch.Draw(HeartTexture, heartPosition, null, Color.White, 0f,
+                    spriteBatch.Draw(HeartTexture, heartPosition, null, Color.White, 0f,
                         new Vector2(HeartTexture.Width / 2f, HeartTexture.Height / 2f), 1f,
                         SpriteEffects.None, 0f);
                     heartPosition.X += HeartTexture.Width + 5;

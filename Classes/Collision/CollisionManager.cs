@@ -7,7 +7,6 @@ using HandsOnDeck2.Classes.CodeAccess;
 using HandsOnDeck2.Classes.Rendering;
 using System.Linq;
 using HandsOnDeck2.Classes.GameObject;
-using HandsOnDeck2.Classes.Global;
 using HandsOnDeck2.Classes.GameObject.Entity;
 using HandsOnDeck2.Classes.Sound;
 using HandsOnDeck2.Classes.UI.Screens;
@@ -38,18 +37,6 @@ namespace HandsOnDeck2.Classes.Collision
             }
         }
 
-        public bool CheckCollisionAtNextPosition(ICollideable a, ICollideable b, Vector2 nextPosition)
-        {
-            SeaCoordinate originalPosition = a.Position;
-            a.Position = new SeaCoordinate(nextPosition.X, nextPosition.Y);
-
-            bool collisionDetected = CheckCollision(a, b);
-
-            a.Position = originalPosition;
-
-            return collisionDetected;
-        }
-
         public void AddCollideable(ICollideable collideable)
         {
             if (!collideables.Contains(collideable))
@@ -68,7 +55,7 @@ namespace HandsOnDeck2.Classes.Collision
             collideables.Clear();
         }
 
-        public void Update(GameTime gameTime)
+        public void Update()
         {
             var currentCollideables = collideables.ToList();
             var projectiles = Map.Instance.GetProjectiles();

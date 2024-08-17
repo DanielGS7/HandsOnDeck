@@ -1,6 +1,3 @@
-using HandsOnDeck2.Classes.Sound;
-using HandsOnDeck2.Enums;
-
 namespace HandsOnDeck2.Classes
 {
     public class GlobalInfo

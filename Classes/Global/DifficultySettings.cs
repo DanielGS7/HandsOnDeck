@@ -1,5 +1,4 @@
 using System;
-using HandsOnDeck2.Enums;
 
 namespace HandsOnDeck2.Classes.Global
 {

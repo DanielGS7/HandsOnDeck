@@ -21,10 +21,9 @@ namespace HandsOnDeck2.Classes
         private const float BaseScale = 1.0f;
         private const float HoverScale = 1.1f;
         private const float ClickScale = 0.9f;
-        private const float TextPadding = 20f;
         private const float ClickDelay = 0.15f;
 
-        public Button(GraphicsDevice graphicsDevice, ContentManager content, string text, Vector2 positionPercentage, Vector2 sizePercentage, float rotation, string textureName, Action onClick)
+        public Button(ContentManager content, string text, Vector2 positionPercentage, Vector2 sizePercentage, float rotation, string textureName, Action onClick)
             : base(positionPercentage, sizePercentage, rotation)
         {
             this.text = text;
@@ -85,8 +84,8 @@ namespace HandsOnDeck2.Classes
             spriteBatch.Draw(texture, position, null, Color.White, rotation, origin, buttonScale, SpriteEffects.None, 0f);
 
             Vector2 textSize = font.MeasureString(text);
-            float textScaleX = (size.X * TextScaleFactor) / textSize.X;
-            float textScaleY = (size.Y * TextScaleFactor) / textSize.Y;
+            float textScaleX = size.X * TextScaleFactor / textSize.X;
+            float textScaleY = size.Y * TextScaleFactor / textSize.Y;
             float textScale = Math.Min(textScaleX, textScaleY);
             
             Vector2 textPosition = position;

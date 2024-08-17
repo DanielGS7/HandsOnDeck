@@ -6,9 +6,7 @@ using HandsOnDeck2.Enums;
 using HandsOnDeck2.Classes.UI.Screens;
 using HandsOnDeck2.Classes.CodeAccess;
 using Microsoft.Xna.Framework.Media;
-using HandsOnDeck2.Classes.Sound;
 using HandsOnDeck2.Classes.GameObject.Entity;
-using System.Collections.Generic;
 using HandsOnDeck2.Classes.Rendering;
 
 namespace HandsOnDeck2
@@ -18,7 +16,6 @@ namespace HandsOnDeck2
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private KeyboardState _previousKeyboardState;
-        private Difficulty currentDifficulty;
         public PlayerBoat PlayerBoat { get; private set; }
         private static Game1 instance;
         public static Game1 Instance => instance;
@@ -100,10 +97,6 @@ namespace HandsOnDeck2
             }
 
             base.Draw(gameTime);
-        }
-        public void SetDifficulty(Difficulty difficulty)
-        {
-            currentDifficulty = difficulty;
         }
 
         public void ApplySettings(float volume, bool fullscreen)

@@ -39,7 +39,7 @@ public class GameplayScreen : Screen
         {
             gameMap = Map.Instance;
             gameMap.Initialize(content, graphicsDevice);
-            gameOverlay = new GameOverlay(content, graphicsDevice.Viewport, gameMap.player, this);
+            gameOverlay = new GameOverlay(content, gameMap.player, this);
             waterIncreaseRate = DifficultySettings.Instance.GetWaterIncreaseRate();
             gameMap.player.OnDamageTaken += AddDamage;
             base.Initialize();

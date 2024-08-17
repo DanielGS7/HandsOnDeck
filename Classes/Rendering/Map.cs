@@ -74,7 +74,7 @@ namespace HandsOnDeck2.Classes.Rendering
             enemies = new List<Enemy>();
             projectiles = new List<IProjectile>();
             sirens = new List<Siren>();
-            islands = Island.GenerateIslands(content, graphicsDevice, Island.totalIslands);
+            islands = Island.GenerateIslands(content, Island.totalIslands);
             cannonballFactory = new CannonballFactory(content);
             bombFactory = new BombFactory(content);
             enemySpeedMultiplier = GetEnemySpeedMultiplier();
@@ -82,7 +82,7 @@ namespace HandsOnDeck2.Classes.Rendering
 
         public void LoadContent()
         {
-            Background.Instance.Initialize(content, graphicsDevice);
+            Background.Instance.Initialize(content);
         }
 
 
@@ -100,20 +100,12 @@ namespace HandsOnDeck2.Classes.Rendering
             {
                 island.Update(gameTime);
             }
-            CollisionManager.Instance.Update(gameTime);
 
             foreach (var siren in sirens)
             {
                 siren.Update(gameTime);
             }
-            CollisionManager.Instance.Update(gameTime);
-
-            if (InputManager.Instance.IsKeyHeld(Keys.OemPlus))
-                Background.Instance.SetScale(Background.Instance.GetScale() + 0.01f);
-            if (InputManager.Instance.IsKeyHeld(Keys.OemMinus))
-                Background.Instance.SetScale(Background.Instance.GetScale() - 0.01f);
-            /*if (InputManager.Instance.IsKeyPressed(Keys.R))
-                Background.Instance.SetRotation((Background.Instance.GetRotation() + 90f) % 360f);*/
+            CollisionManager.Instance.Update();
 
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             timeSinceLastSpawn += deltaTime;
