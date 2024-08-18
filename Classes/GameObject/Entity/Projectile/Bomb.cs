@@ -46,7 +46,7 @@ namespace HandsOnDeck2.Classes.GameObject.Entity.Projectile
             Scale = 1f;
             Origin = Size / 2f;
 
-            spriteSheet = content.Load<Texture2D>("bomb");
+            spriteSheet = content.Load<Texture2D>("Sprites\\bomb");
             timePerFrame = ExplosionDelay / TotalFrames;
 
             Rectangle sourceRectangle = new Rectangle(0, 0, (int)Size.X, (int)Size.Y);

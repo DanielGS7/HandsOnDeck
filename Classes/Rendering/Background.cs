@@ -39,7 +39,7 @@ namespace HandsOnDeck2.Classes
 
         public void Initialize(ContentManager content)
         {
-            var spriteSheetName = "water";
+            var spriteSheetName = "background\\water";
             var spriteSize = new Vector2(spriteWidth, spriteHeight);
 
             animation = new Animation(spriteSheetName, spriteSize, columns, totalSprites, speed, isLooping);

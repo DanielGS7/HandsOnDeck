@@ -22,9 +22,9 @@ namespace HandsOnDeck2.Classes.UI.Screens
         public override void Initialize()
         {
             AddTextElement("Paused", new Vector2(0.5f, 0.2f), 0f, Color.White, 2f);
-            AddButton("Resume", new Vector2(0.5f, 0.4f), new Vector2(0.3f, 0.1f), 0.2f, "wood_arrow", ResumeGame);
-            AddButton("Options", new Vector2(0.5f, 0.55f), new Vector2(0.3f, 0.1f), -0.2f, "wood_button", OpenOptions);
-            AddButton("Main Menu", new Vector2(0.5f, 0.7f), new Vector2(0.3f, 0.1f), 0.2f, "wood_button", ReturnToMainMenu);
+            AddButton("Resume", new Vector2(0.5f, 0.4f), new Vector2(0.3f, 0.1f), 0.2f, "UI\\wood_arrow", ResumeGame);
+            AddButton("Options", new Vector2(0.5f, 0.55f), new Vector2(0.3f, 0.1f), -0.2f, "UI\\wood_button", OpenOptions);
+            AddButton("Main Menu", new Vector2(0.5f, 0.7f), new Vector2(0.3f, 0.1f), 0.2f, "UI\\wood_button", ReturnToMainMenu);
         }
 
         public void RecreateRenderTarget()

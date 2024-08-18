@@ -24,7 +24,7 @@ namespace HandsOnDeck2.Classes.UI.Screens
 
             //Didn't get to implemenent Game Reset() logic
             //AddButton("Play Again", new Vector2(0.5f, 0.6f), new Vector2(0.3f, 0.1f), 0f, "wood_arrow", PlayAgain);
-            AddButton("Main Menu", new Vector2(0.5f, 0.75f), new Vector2(0.3f, 0.1f), 0f, "wood_button", ReturnToMainMenu);
+            AddButton("Main Menu", new Vector2(0.5f, 0.75f), new Vector2(0.3f, 0.1f), 0f, "UI\\wood_button", ReturnToMainMenu);
         }
 
         public override void Update(GameTime gameTime)

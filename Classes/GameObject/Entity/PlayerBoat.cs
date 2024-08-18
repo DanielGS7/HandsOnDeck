@@ -44,8 +44,8 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
 
         public PlayerBoat(ContentManager content, SeaCoordinate startPosition)
         {
-            var boatTexture = content.Load<Texture2D>("boat");
-            var boatAnimation = new Animation("movingBoat", new Vector2(670, 243), 5, 5, 4f, true);
+            var boatTexture = content.Load<Texture2D>("Sprites\\boat");
+            var boatAnimation = new Animation("Sprites\\movingBoat", new Vector2(670, 243), 5, 5, 4f, true);
             boatAnimation.LoadContent(content);
             Position = startPosition;
             rotation = 0f;

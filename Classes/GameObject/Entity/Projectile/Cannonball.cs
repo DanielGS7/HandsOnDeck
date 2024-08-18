@@ -36,7 +36,7 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
             Size = new Vector2(35, 35);
             Scale = 1f;
             Origin = Size / 2f;
-            var texture = content.Load<Texture2D>("cannonball");
+            var texture = content.Load<Texture2D>("Sprites\\cannonball");
             VisualElement = new VisualElement(texture, Color.White, SpriteEffects.None, 0f);
             viewport = Map.Instance.Camera.GetViewport();
         }

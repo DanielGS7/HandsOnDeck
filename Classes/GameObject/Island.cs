@@ -39,7 +39,7 @@ namespace HandsOnDeck2.Classes.GameObject
         {
             if (islandTexture == null)
             {
-                islandTexture = content.Load<Texture2D>("island");
+                islandTexture = content.Load<Texture2D>("Sprites\\island");
             }
 
             SpriteIndex = spriteIndex;
@@ -49,7 +49,7 @@ namespace HandsOnDeck2.Classes.GameObject
             Size = new Vector2(islandSpriteSize, islandSpriteSize);
             Scale = scale;
             Origin = new Vector2(islandSpriteSize / 2, islandSpriteSize / 2);
-            var animation = new Animation("island", Size, islandGridSize, spriteIndex, spriteIndex, 0f, false);
+            var animation = new Animation("Sprites\\island", Size, islandGridSize, spriteIndex, spriteIndex, 0f, false);
             animation.LoadContent(content);
 
             VisualElement = new VisualElement(animation, Color.White, SpriteEffects.None, 0f);

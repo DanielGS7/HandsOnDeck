@@ -19,8 +19,8 @@ namespace HandsOnDeck2.Classes
             : base(positionPercentage, sizePercentage, 0f)
         {
             this.label = label;
-            checkboxTexture = content.Load<Texture2D>("cannon_empty");
-            checkmarkTexture = content.Load<Texture2D>("cannon_loaded");
+            checkboxTexture = content.Load<Texture2D>("UI\\cannon_empty");
+            checkmarkTexture = content.Load<Texture2D>("UI\\cannon_loaded");
             font = content.Load<SpriteFont>("default");
             isChecked = false;
             isMouseOver = false;

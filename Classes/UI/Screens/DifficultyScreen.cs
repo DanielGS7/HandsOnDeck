@@ -19,10 +19,10 @@ namespace HandsOnDeck2.Classes.UI.Screens
         public override void Initialize()
         {
             AddTextElement("Select Difficulty", new Vector2(0.5f, 0.2f), 0f, Color.Black, 2f);
-            AddButton("Easy", new Vector2(0.5f, 0.4f), new Vector2(0.3f, 0.1f), 0f, "wood_button", () => StartGame(Difficulty.Easy));
-            AddButton("Normal", new Vector2(0.5f, 0.55f), new Vector2(0.3f, 0.1f), 0f, "wood_button", () => StartGame(Difficulty.Normal));
-            AddButton("Hard", new Vector2(0.5f, 0.7f), new Vector2(0.3f, 0.1f), 0f, "wood_button", () => StartGame(Difficulty.Hard));
-            AddButton("Back", new Vector2(0.5f, 0.85f), new Vector2(0.2f, 0.08f), 0f, "wood_button", GoBack);
+            AddButton("Easy", new Vector2(0.5f, 0.4f), new Vector2(0.3f, 0.1f), 0f, "UI\\wood_button", () => StartGame(Difficulty.Easy));
+            AddButton("Normal", new Vector2(0.5f, 0.55f), new Vector2(0.3f, 0.1f), 0f, "UI\\wood_button", () => StartGame(Difficulty.Normal));
+            AddButton("Hard", new Vector2(0.5f, 0.7f), new Vector2(0.3f, 0.1f), 0f, "UI\\wood_button", () => StartGame(Difficulty.Hard));
+            AddButton("Back", new Vector2(0.5f, 0.85f), new Vector2(0.2f, 0.08f), 0f, "UI\\wood_button", GoBack);
         }
 
         public override void Update(GameTime gameTime)

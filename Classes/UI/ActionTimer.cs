@@ -22,7 +22,7 @@ public class ActionTimer : UIElement
         this.label = label;
         this.maxTime = maxTime;
         this.finishedEvent = finishedEvent;
-        timerTexture = content.Load<Texture2D>("timer");
+        timerTexture = content.Load<Texture2D>("UI\\timer");
         font = content.Load<SpriteFont>("default");
 
         VisualElement = new VisualElement(timerTexture, Color.White, SpriteEffects.None, 0f);

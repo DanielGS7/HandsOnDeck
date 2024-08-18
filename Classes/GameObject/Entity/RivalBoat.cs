@@ -22,7 +22,7 @@ class RivalBoat : Enemy
         : base(content, position, new Vector2(200, 85), RivalBoatSpeed, 3, 6)
     {
         this.cannonballFactory = projectileFactory;
-        var texture = content.Load<Texture2D>("rival_boat");
+        var texture = content.Load<Texture2D>("Sprites\\rival_boat");
         VisualElement = new VisualElement(texture, Color.White, SpriteEffects.None, 0f);
     }
 

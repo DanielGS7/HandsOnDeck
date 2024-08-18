@@ -17,8 +17,8 @@ namespace HandsOnDeck2.Classes.UI
         public CannonStatus(ContentManager content, Vector2 positionPercentage, Vector2 sizePercentage, PlayerBoat playerBoat, bool isLeftCannon)
             : base(positionPercentage, sizePercentage, 0f)
         {
-            loadedTexture = content.Load<Texture2D>("cannon_loaded");
-            emptyTexture = content.Load<Texture2D>("cannon_empty");
+            loadedTexture = content.Load<Texture2D>("UI\\cannon_loaded");
+            emptyTexture = content.Load<Texture2D>("UI\\cannon_empty");
             this.playerBoat = playerBoat;
             this.isLeftCannon = isLeftCannon;
 

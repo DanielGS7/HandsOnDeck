@@ -27,7 +27,7 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
             Origin = Size / 2f;
             Rotation = 0f;
 
-            var texture = content.Load<Texture2D>("siren");
+            var texture = content.Load<Texture2D>("Sprites\\siren");
             difficultySettings = DifficultySettings.Instance;
             VisualElement = new VisualElement(texture, Color.White, SpriteEffects.None, 0f);
         }

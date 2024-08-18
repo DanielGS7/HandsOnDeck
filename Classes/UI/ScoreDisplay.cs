@@ -14,7 +14,7 @@ namespace HandsOnDeck2.Classes.UI
         public ScoreDisplay(ContentManager content, Vector2 positionPercentage, Vector2 sizePercentage) 
             : base(positionPercentage, sizePercentage, 0f)
         {
-            woodTexture = content.Load<Texture2D>("wood_name");
+            woodTexture = content.Load<Texture2D>("UI\\wood_name");
             font = content.Load<SpriteFont>("default");
             score = 0;
         }

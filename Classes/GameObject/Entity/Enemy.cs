@@ -44,7 +44,7 @@ namespace HandsOnDeck2.Classes.GameObject.Entity
             Scale = 1f;
             Origin = Size / 2f;
             Lives = lives;
-            HeartTexture = content.Load<Texture2D>("heart");
+            HeartTexture = content.Load<Texture2D>("UI\\heart");
             Collider = new Collider(new Rectangle(0, 0, (int)size.X, (int)size.Y), false);
             PointValue = pointValue;
             CollisionManager.Instance.AddCollideable(this);

@@ -20,7 +20,7 @@ class Bomber : Enemy
         : base(content, position, new Vector2(150, 78), BomberSpeed, 2, 4)
     {
         this.projectileFactory = projectileFactory;
-        var texture = content.Load<Texture2D>("bomber");
+        var texture = content.Load<Texture2D>("Sprites\\bomber");
         VisualElement = new VisualElement(texture, Color.White, SpriteEffects.None, 0f);
     }
 

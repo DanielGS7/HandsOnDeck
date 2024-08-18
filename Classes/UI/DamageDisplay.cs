@@ -23,9 +23,9 @@ namespace HandsOnDeck2.Classes.UI
             : base(positionPercentage, sizePercentage, 0f)
         {
             this.gameplayScreen = gameplayScreen;
-            hullBackgroundTexture = content.Load<Texture2D>("hull_background");
-            holeTexture = content.Load<Texture2D>("hole");
-            plankTexture = content.Load<Texture2D>("plank");
+            hullBackgroundTexture = content.Load<Texture2D>("UI\\hull_background");
+            holeTexture = content.Load<Texture2D>("UI\\hole");
+            plankTexture = content.Load<Texture2D>("UI\\plank");
             holes = new List<DamageHole>();
         }
 

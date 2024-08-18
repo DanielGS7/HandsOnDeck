@@ -17,8 +17,8 @@ namespace HandsOnDeck2.Classes.UI
         public VolumeSlider(ContentManager content, Vector2 positionPercentage, Vector2 sizePercentage)
             : base(positionPercentage, sizePercentage, 0f)
         {
-            backgroundTexture = content.Load<Texture2D>("wood_slider");
-            knobTexture = content.Load<Texture2D>("wood_peg");
+            backgroundTexture = content.Load<Texture2D>("UI\\wood_slider");
+            knobTexture = content.Load<Texture2D>("UI\\wood_peg");
             value = 0.5f;
             bottomOffset = knobTexture.Height * 0.17f * knobScale;
         }

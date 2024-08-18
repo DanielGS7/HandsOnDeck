@@ -14,7 +14,7 @@ namespace HandsOnDeck2.Classes.UI
         public WaterGauge(ContentManager content, Vector2 positionPercentage, Vector2 sizePercentage) 
             : base(positionPercentage, sizePercentage, 0f)
         {
-            gaugeTexture = content.Load<Texture2D>("water_gauge");
+            gaugeTexture = content.Load<Texture2D>("UI\\water_gauge");
             waterLevel = 0f;
         }
 
